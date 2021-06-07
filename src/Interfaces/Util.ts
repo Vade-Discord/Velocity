@@ -48,6 +48,8 @@ export default class Util {
                     .setColor(`#F00000`)
                     .setTimestamp()
                     .setFooter(`Vade`, this.client.user.avatarURL)
+
+                return message.channel.createMessage({embed: notOwnerEmbed, messageReferenceID: message.id });
             }
         }
 
