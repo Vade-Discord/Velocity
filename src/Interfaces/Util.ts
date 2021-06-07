@@ -26,13 +26,27 @@ export default class Util {
         return filteredRoles.sort((a, b) => b.position - a.position)[0];
     }
 
+    cleanPerms(perm) {
+        const perms: Object = {
+            "banMembers": "Ban Members",
+            "kickMembers": "Kick Members"
+        }
+        if(perms[perm]) {
+            return perms[perm];
+        } else {
+            return perm;
+        }
+    }
+
     runPreconditions(message, command: Command) {
+
+
 
         if(command.botPerms) {
             for(const perm of command.botPerms) {
                 let noPermEmbed = new RichEmbed()
                     .setTitle(`Missing Permissions!`)
-                    .setDescription(`I am missing the ${perm} Permission! I need it for you to run this Command!`)
+                    .setDescription(`I am missing the ${this.cleanPerms(perm)} Permission! I need it for you to run this Command!`)
                     .setColor(`#F00000`)
                     .setTimestamp()
                     .setFooter(`Vade`, this.client.user.avatarURL)
@@ -49,7 +63,7 @@ export default class Util {
             for(const perm of command.userPerms) {
                 let noPermEmbed = new RichEmbed()
                     .setTitle(`Missing Permissions!`)
-                    .setDescription(`You are missing the ${perm} Permission! You need it to run this Command!`)
+                    .setDescription(`You are missing the ${this.cleanPerms(perm)} Permission! You need it to run this Command!`)
                     .setColor(`#F00000`)
                     .setTimestamp()
                     .setFooter(`Vade`, this.client.user.avatarURL)
