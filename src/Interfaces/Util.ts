@@ -40,7 +40,16 @@ export default class Util {
 
     runPreconditions(message, command: Command) {
 
-
+        if(command.devOnly) {
+            if(!this.client.owners.includes(message.author.id)) {
+                let notOwnerEmbed = new RichEmbed()
+                    .setTitle(`Developer Only Command!`)
+                    .setDescription(`Only a Bot Developer can run this Command!`)
+                    .setColor(`#F00000`)
+                    .setTimestamp()
+                    .setFooter(`Vade`, this.client.user.avatarURL)
+            }
+        }
 
         if(command.botPerms) {
             for(const perm of command.botPerms) {

@@ -13,7 +13,6 @@ export default class PingCommand extends Command {
 
     await message.channel.createMessage("Pinging...").then((m) => {
         let ping = m.createdAt - message.createdAt;
-        console.log(ping)
         const pingEmbed = new RichEmbed()
             .setTitle(`Pong!`)
             .setDescription(`Bot Latency: ${ping}ms`)
