@@ -1,0 +1,12 @@
+{"source":"Cluster Manager","meta":[],"level":"info","message":"Initialising clusters...","timestamp":"07/06/2021|23:51:55"}
+{"source":"Cluster Manager","meta":[],"level":"info","message":"Starting 1 clusters with 1 shards","timestamp":"07/06/2021|23:51:55"}
+{"source":"Cluster Manager","meta":[],"level":"info","message":"Started cluster 0","timestamp":"07/06/2021|23:51:55"}
+{"source":"Cluster Manager","meta":[],"level":"info","message":"Started all clusters, connecting shards...","timestamp":"07/06/2021|23:51:55"}
+{"source":"Cluster Manager","meta":[],"level":"info","message":"All shards spread","timestamp":"07/06/2021|23:51:55"}
+{"source":"Cluster 0","meta":[],"level":"info","message":"Connecting with 1 shards","timestamp":"07/06/2021|23:51:56"}
+{"source":"Cluster Manager","meta":[],"level":"info","message":"Initialising clusters...","timestamp":"07/06/2021|23:55:21"}
+{"source":"Cluster Manager","meta":[],"level":"info","message":"Starting 1 clusters with 1 shards","timestamp":"07/06/2021|23:55:22"}
+{"source":"Cluster Manager","meta":[],"level":"info","message":"Started cluster 0","timestamp":"07/06/2021|23:55:22"}
+{"source":"Cluster Manager","meta":[],"level":"info","message":"Started all clusters, connecting shards...","timestamp":"07/06/2021|23:55:22"}
+{"source":"Cluster Manager","meta":[],"level":"info","message":"All shards spread","timestamp":"07/06/2021|23:55:22"}
+{"source":"Cluster 0","meta":[],"level":"info","message":"Connecting with 1 shards","timestamp":"07/06/2021|23:55:22"}

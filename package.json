@@ -7,6 +7,7 @@
     "@dimensional-fun/logger": "^1.0.1",
     "@discordjs/collection": "^0.1.6",
     "@extreme_hero/deeptype": "^1.0.1",
+    "@nedbot/sharder": "^0.0.12",
     "@types/node": "*",
     "eris": "^0.15.1",
     "path": "^0.12.7",
@@ -15,7 +16,8 @@
     "util": "^0.12.4"
   },
   "scripts": {
-    "start": "ts-node-dev --respawn --transpile-only --poll ./src/index.ts"
+    "start": "ts-node-dev --respawn --transpile-only --poll ./src/index.ts",
+    "shard": "ts-node-dev --respawn --transpile-only --poll ./src/main.ts"
   },
   "devDependencies": {
     "ts-node-dev": "^1.1.6",
