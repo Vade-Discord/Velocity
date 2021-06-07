@@ -12,7 +12,6 @@ export default class UnbanCommand extends Command {
         });
     }
     async run(message, args) {
-    console.log(args)
     if(!args.length || isNaN(parseInt(args[0]))) return message.channel.createMessage({ content: "You need to specify a members ID.", messageReferenceID: message.id});
     const locate_bans = await message.channel.guild.getBans();
     if(!locate_bans) return message.channel.createMessage({content: "This Guild has no banned members.", messageReferenceID: message.id});
