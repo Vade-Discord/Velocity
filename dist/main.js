@@ -4,8 +4,10 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 const sharder_1 = require("@nedbot/sharder");
+const Client_1 = require("./client/Client");
 const config_json_1 = __importDefault(require("./config.json"));
-const manager = new sharder_1.ClusterManager(config_json_1.default.token, "dist/index.js", {
+const manager = new sharder_1.ClusterManager(config_json_1.default.token, "index.js", {
+    client: Client_1.Bot,
     shardCount: "auto",
     clusterCount: "auto",
     guildsPerShard: 1200,
@@ -20,10 +22,4 @@ const manager = new sharder_1.ClusterManager(config_json_1.default.token, "dist/
         enableErrorLogs: true,
         enableInfoLogs: true
     },
-    webhooks: {
-        shard: {
-            id: "webhook id",
-            token: "webhook token"
-        }
-    }
 });

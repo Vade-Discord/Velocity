@@ -36,6 +36,7 @@ pluris_1.default(eris_1.default);
 class Bot extends eris_1.default.Client {
     constructor(options = {}) {
         super(config_json_1.default.token);
+        // public static __instance__?: Bot;
         this.logger = new logger_1.Logger("vade");
         this.commands = new collection_1.default();
         this.token = config_json_1.default.token;
@@ -45,9 +46,13 @@ class Bot extends eris_1.default.Client {
         this.cooldowns = new collection_1.default();
         this.owners = ["473858248353513472"];
         this.utils = new Util_1.default(this);
-        if (Bot.__instance__)
-            throw new Error("Another client was created.");
-        Bot.__instance__ = this;
+        // if (Bot.__instance__) throw new Error("Another client was created.");
+        //
+        // Bot.__instance__ = this;
+    }
+    async connect() {
+        await this.start(this.config);
+        return super.connect();
     }
     async start(config) {
         this.logger.info("hi");
@@ -69,9 +74,6 @@ class Bot extends eris_1.default.Client {
             this.events.set(file.name, file);
             this.on(file.name, file.run.bind(null, this));
         });
-    }
-    static get instance() {
-        return Bot.__instance__;
     }
 }
 exports.Bot = Bot;

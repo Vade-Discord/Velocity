@@ -1,4 +1,3 @@
-import "eris";
 import Config from "./config.json";
 import { Bot } from "./client/Client";
 

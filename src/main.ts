@@ -2,7 +2,8 @@ import { ClusterManager } from "@nedbot/sharder";
 import { Bot } from "./client/Client";
 import config from './config.json';
 
-const manager = new ClusterManager(config.token, "dist/index.js", {
+const manager = new ClusterManager(config.token, "index.js", {
+    client: Bot,
     shardCount: "auto",
     clusterCount: "auto",
     guildsPerShard: 1200,

@@ -37,10 +37,10 @@
   dependencies:
     winston "^3.3.3"
 
-"@nedbot/sharder@^0.0.12":
-  version "0.0.12"
-  resolved "https://registry.yarnpkg.com/@nedbot/sharder/-/sharder-0.0.12.tgz#098702a98620e3706a3f13b84bebaab7b08908d8"
-  integrity sha512-JSUB93isv9+iuilRGRTcl5isI9MqONO1ZHe0SteI+/uNkSfFRPT5RmJDiCfq0Ibw+t9L7M9z+0Hh7mlGnZhXog==
+"@nedbot/sharder@^0.1.1":
+  version "0.1.1"
+  resolved "https://registry.yarnpkg.com/@nedbot/sharder/-/sharder-0.1.1.tgz#54386aa06f3106103d6f99046b90ee915beb3b6e"
+  integrity sha512-tWIcWDGKNjWyylJ5AMqRRxf+nQUzxlcpNGMqaRHinsZQIS73q1ObQFWN7bIdl8A205xIJDSyY5ElbkMNEeV0xg==
   dependencies:
     "@nedbot/logger" "^1.0.1"
 
@@ -64,10 +64,10 @@
   resolved "https://registry.yarnpkg.com/@tsconfig/node16/-/node16-1.0.1.tgz#a6ca6a9a0ff366af433f42f5f0e124794ff6b8f1"
   integrity sha512-FTgBI767POY/lKNDNbIzgAX6miIDBs6NTCbdlDb8TrWovHsSvaVIZDlTqym29C6UqhzwcJx4CYr+AlrMywA0cA==
 
-"@types/node@*":
-  version "15.12.1"
-  resolved "https://registry.yarnpkg.com/@types/node/-/node-15.12.1.tgz#9b60797dee1895383a725f828a869c86c6caa5c2"
-  integrity sha512-zyxJM8I1c9q5sRMtVF+zdd13Jt6RU4r4qfhTd7lQubyThvLfx6yYekWSQjGCGV2Tkecgxnlpl/DNlb6Hg+dmEw==
+"@types/node@^15.12.2":
+  version "15.12.2"
+  resolved "https://registry.yarnpkg.com/@types/node/-/node-15.12.2.tgz#1f2b42c4be7156ff4a6f914b2fb03d05fa84e38d"
+  integrity sha512-zjQ69G564OCIWIOHSXyQEEDpdpGl+G348RAKY0XXy9Z5kU9Vzv1GMNnkar/ZJ8dzXB3COzD9Mo9NtRZ4xfgUww==
 
 "@types/strip-bom@^3.0.0":
   version "3.0.0"

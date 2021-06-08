@@ -13,7 +13,7 @@ const globPromise = promisify(glob);
 pluris(Eris);
 
 export class Bot extends Eris.Client {
-    public static __instance__?: Bot;
+    // public static __instance__?: Bot;
     public logger: Logger = new Logger("vade");
     public commands: Collection<string, Command> = new Collection();
     public token = Config.token;
@@ -26,9 +26,9 @@ export class Bot extends Eris.Client {
     public utils: Util = new Util(this)
     public constructor(options: Eris.ClientOptions = {}) {
         super(Config.token);
-        if (Bot.__instance__) throw new Error("Another client was created.");
-
-        Bot.__instance__ = this;
+        // if (Bot.__instance__) throw new Error("Another client was created.");
+        //
+        // Bot.__instance__ = this;
     }
 
 
@@ -60,7 +60,7 @@ export class Bot extends Eris.Client {
         });
     }
 
-    static get instance() {
-        return Bot.__instance__;
-    }
+    // static get instance() {
+    //     return Bot.__instance__;
+    // }
 }
