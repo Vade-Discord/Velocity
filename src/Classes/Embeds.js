@@ -37,7 +37,6 @@ class RichEmbed {
      * @param {String} description
      */
     setDescription(description) {
-        if (typeof description !== 'string') throw new TypeError(`Expected type 'string', received type '${typeof description}'`);
         if (description.length > 2048) throw new RangeError('Embed descriptions cannot exceed 2048 characters');
         this.description = description;
         return this;

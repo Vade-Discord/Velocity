@@ -7,7 +7,8 @@ export default class BanCommand extends Command {
             description: "Ban a member from the server.",
             category: "Moderation",
             userPerms: ['banMembers'],
-            botPerms: ['banMembers']
+            botPerms: ['banMembers'],
+            guildOnly: true,
         });
     }
     async run(message, args) {

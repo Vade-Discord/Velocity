@@ -1,6 +1,7 @@
 import type  { Bot } from '../client/Client'
 import Command from "./Command";
 import {RichEmbed} from "eris";
+import axios from 'axios';
 
 export default class Util {
     public readonly client: Bot;
@@ -49,6 +50,22 @@ export default class Util {
         return member[0];
     }
 
+    getRandomDadJoke(joke) {
+        let config = {
+            url: 'https://icanhazdadjoke.com/',
+            headers: {
+                Accept: 'application/json',
+            },
+        };
+        axios(config)
+            .then((response) => {
+                return response.data.joke;
+            })
+            .catch((err) => {
+                console.log(err);
+            });
+    };
+
     runPreconditions(message, command: Command) {
 
         if(command.devOnly) {
@@ -63,6 +80,20 @@ export default class Util {
                 return message.channel.createMessage({embed: notOwnerEmbed, messageReferenceID: message.id });
             }
         }
+        if(command.guildOnly) {
+            if(!message.channel.guild) {
+                let noGuild = new RichEmbed()
+                    .setTitle(`Guild Only!`)
+                    .setDescription(`This Command can only be ran in a Guild!`)
+                    .setColor(`#F00000`)
+                    .setTimestamp()
+                    .setFooter(`Vade`, this.client.user.avatarURL)
+                return message.channel.createMessage({embed: noGuild, messageReferenceID: message.id });
+            }
+
+        }
+
+        if(!message.channel.guild) return;
 
         if(command.botPerms) {
             for(const perm of command.botPerms) {
@@ -81,7 +112,6 @@ export default class Util {
             }
         }
         if(command.userPerms) {
-
             for(const perm of command.userPerms) {
                 let noPermEmbed = new RichEmbed()
                     .setTitle(`Missing Permissions!`)
@@ -93,19 +123,6 @@ export default class Util {
                     return message.channel.createMessage({embed: noPermEmbed, messageReferenceID: message.id });
                 }
             }
-        }
-
-        if(command.guildOnly) {
-            if(!message.channel.guild) {
-                let noGuild = new RichEmbed()
-                    .setTitle(`Guild Only!`)
-                    .setDescription(`This Command can only be ran in a Guild!`)
-                    .setColor(`#F00000`)
-                    .setTimestamp()
-                    .setFooter(`Vade`, this.client.user.avatarURL)
-                return message.channel.createMessage({embed: noGuild, messageReferenceID: message.id });
-            }
-
         }
 
     }

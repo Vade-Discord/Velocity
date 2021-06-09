@@ -8,7 +8,8 @@ export default class UnbanCommand extends Command {
             description: "Remove member(s) bans.",
             category: "Moderation",
             userPerms: ['banMembers'],
-            botPerms: ['banMembers']
+            botPerms: ['banMembers'],
+            guildOnly: true,
         });
     }
     async run(message, args) {
