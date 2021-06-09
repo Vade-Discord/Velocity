@@ -1,4 +1,5 @@
 import Command from "../../Interfaces/Command";
+import { VoiceChannel } from 'eris'
 
 export default class JoinCommand extends Command {
     constructor(client) {

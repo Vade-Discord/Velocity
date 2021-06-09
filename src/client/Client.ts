@@ -37,7 +37,7 @@ export class Bot extends Eris.Client {
     public async start(config: typeof Config): Promise<void> {
         this.logger.info("hi");
         this.config = config;
-        Database();
+        await Database();
         await pluris(Eris);
         await this.connect();
         /* load command files */
