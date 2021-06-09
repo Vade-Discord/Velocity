@@ -9,8 +9,6 @@ export default class RollCommand extends Command {
         });
     }
     async run(message, args) {
-
-
         let roll = Math.floor(Math.random() * 6) + 1;
        await message.channel.createMessage({ content: `You rolled a ${roll}!`, messageReference: { messageID: message.id }});
 
