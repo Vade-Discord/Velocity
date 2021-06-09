@@ -8,12 +8,13 @@ import  Config from "../config.json";
 import Command from "../interfaces/Command";
 import type { Event } from "../interfaces/Event";
 import Util from '../Interfaces/Util';
+import Database from '../Interfaces/Database';
+import { RichEmbed } from '../Classes/Embeds';
 
 const globPromise = promisify(glob);
-pluris(Eris);
 
 export class Bot extends Eris.Client {
-    // public static __instance__?: Bot;
+    public static __instance__?: Bot;
     public logger: Logger = new Logger("vade");
     public commands: Collection<string, Command> = new Collection();
     public token = Config.token;
@@ -23,24 +24,22 @@ export class Bot extends Eris.Client {
     public cooldowns: Collection<string, number> = new Collection();
     public config: typeof Config;
     public owners: string[] = ["473858248353513472"];
-    public utils: Util = new Util(this)
+    public utils: Util = new Util(this);
+    public embed: typeof RichEmbed = RichEmbed;
     public constructor(options: Eris.ClientOptions = {}) {
         super(Config.token);
-        // if (Bot.__instance__) throw new Error("Another client was created.");
-        //
-        // Bot.__instance__ = this;
-    }
+        if (Bot.__instance__) throw new Error("Another client was created.");
 
-    public async connect() {
-        await this.start(this.config);
-        return super.connect();
+        Bot.__instance__ = this;
     }
 
 
     public async start(config: typeof Config): Promise<void> {
         this.logger.info("hi");
         this.config = config;
-        await this.connect()
+        Database();
+        await pluris(Eris);
+        await this.connect();
         /* load command files */
         const commandFiles: string[] = await globPromise(
             `${__dirname}/../Commands/**/*{.ts,.js}`
@@ -65,7 +64,7 @@ export class Bot extends Eris.Client {
         });
     }
 
-    // static get instance() {
-    //     return Bot.__instance__;
-    // }
+    static get instance() {
+        return Bot.__instance__;
+    }
 }

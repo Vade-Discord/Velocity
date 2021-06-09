@@ -7,10 +7,13 @@
     "@dimensional-fun/logger": "^1.0.1",
     "@discordjs/collection": "^0.1.6",
     "@extreme_hero/deeptype": "^1.0.1",
-    "@nedbot/sharder": "^0.1.1",
+    "@nedbot/sharder": "^0.1.2",
     "eris": "^0.15.1",
+    "imageapi.js": "^1.7.0",
+    "mongoose": "^5.12.13",
     "path": "^0.12.7",
     "pluris": "^0.3.5",
+    "superagent": "^6.1.0",
     "util": "^0.12.4"
   },
   "scripts": {

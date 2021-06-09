@@ -38,6 +38,17 @@ export default class Util {
         }
     }
 
+    async getMember(message, args) {
+        let member = message.mentions.length ? message.guild.members.get(message.mentions[0]) : await message.channel.guild.searchMembers(args, 1);
+        if(!member || Number(+args)) {
+            return message.channel.createMessage({
+                content: `Unable to locate "${args[0]}".`,
+                messageReference: {messageID: message.id}
+            });
+        }
+        return member[0];
+    }
+
     runPreconditions(message, command: Command) {
 
         if(command.devOnly) {

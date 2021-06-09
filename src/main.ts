@@ -4,8 +4,8 @@ import config from './config.json';
 
 const manager = new ClusterManager(config.token, "index.js", {
     client: Bot,
-    shardCount: "auto",
-    clusterCount: "auto",
+    shardCount: 1,
+    clusterCount: 1,
     guildsPerShard: 1200,
     shardsPerCluster: 10,
     clusterTimeout: 5000,
