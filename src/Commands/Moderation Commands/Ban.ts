@@ -6,6 +6,7 @@ export default class BanCommand extends Command {
             aliases: ["addban", 'guildban'],
             description: "Ban a member from the server.",
             category: "Moderation",
+            modCommand: true,
             userPerms: ['banMembers'],
             botPerms: ['banMembers'],
             guildOnly: true,

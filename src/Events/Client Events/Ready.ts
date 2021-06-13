@@ -1,6 +1,6 @@
 import type { RunFunction } from "../../interfaces/Event";
 import type { Bot } from "../../client/Client";
-import { mongo } from '../../Interfaces/Database';
+import mongo from '../../Interfaces/Database';
 
 export const run: RunFunction = async (
   client: Bot,

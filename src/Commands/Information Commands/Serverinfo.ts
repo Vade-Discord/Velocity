@@ -28,7 +28,7 @@ export default class ServerinfoCommand extends Command {
         const embed = new RichEmbed()
             .setTitle(`${message.guild.name}'s Server Information`)
             .addField('Owner Info', `Guild Owner: <@${message.channel.guild.ownerID}> (${message.channel.guild.ownerID})`)
-            .addField('Member Info', `Total: ${message.channel.guild.memberCount}\n\n ${onlineEmoji} Online: ${online}\n${idleEmoji} Idle: ${idle}\n${dndEmoji} Do not Disturb: ${dnd}\n${offlineEmoji} Offline: ${offline}`)
+            .addField('Member Info', `Total: ${message.channel.guild.memberCount}\n\n${onlineEmoji} Online: ${online}\n${idleEmoji} Idle: ${idle}\n${dndEmoji} Do not Disturb: ${dnd}\n${offlineEmoji} Offline: ${offline}`)
             .addField('Role Info', `Roles: ${totalRoles}`)
             .addField('General Info', `Placeholder`)
             .setColor("#f3f0f0")

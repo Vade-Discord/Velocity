@@ -8,6 +8,9 @@ export const run: RunFunction = async (
 ) => {
     if(message.author.bot) return;
 
+   const check = await client.utils.checkModerator(message);
+   console.log(check);
+
     const prefix = client.config.prefix;
     if(message.content?.toLowerCase().startsWith(prefix)) {
 

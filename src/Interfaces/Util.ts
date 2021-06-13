@@ -1,7 +1,9 @@
 import type  { Bot } from '../client/Client'
 import Command from "./Command";
-import {RichEmbed} from "eris";
+import { RichEmbed, Member } from "eris";
 import axios from 'axios';
+
+import guild_schema from '../Schemas/Main Guilds/GuildSchema';
 
 export default class Util {
     public readonly client: Bot;
@@ -21,6 +23,16 @@ export default class Util {
             return true;
         }
     }
+
+    async checkModerator(message) {
+        const guildModRoles = await guild_schema.findOne({ guildID: message.channel.guild.id });
+        console.log(guildModRoles)
+        if(!guildModRoles || !guildModRoles.ModRole.length) {
+            return message.member.permissions.has("manageMessages");
+        }
+        return message.member.roles.some(role => guildModRoles?.ModRole.includes(role));
+    }
+
     capitalise(string: string) {
         if (string)
             return string
@@ -74,10 +86,10 @@ export default class Util {
             });
     };
 
-    runPreconditions(message, command: Command) {
+    async runPreconditions(message, command: Command) {
 
-        if(command.devOnly) {
-            if(!this.client.owners.includes(message.author.id)) {
+        if (command.devOnly) {
+            if (!this.client.owners.includes(message.author.id)) {
                 let notOwnerEmbed = new RichEmbed()
                     .setTitle(`Developer Only Command!`)
                     .setDescription(`Only a Bot Developer can run this Command!`)
@@ -85,26 +97,39 @@ export default class Util {
                     .setTimestamp()
                     .setFooter(`Vade`, this.client.user.avatarURL)
 
-                return message.channel.createMessage({embed: notOwnerEmbed, messageReferenceID: message.id });
+                return message.channel.createMessage({embed: notOwnerEmbed, messageReferenceID: message.id});
             }
         }
-        if(command.guildOnly) {
-            if(!message.channel.guild) {
+        if (command.guildOnly) {
+            if (!message.channel.guild) {
                 let noGuild = new RichEmbed()
                     .setTitle(`Guild Only!`)
                     .setDescription(`This Command can only be ran in a Guild!`)
                     .setColor(`#F00000`)
                     .setTimestamp()
                     .setFooter(`Vade`, this.client.user.avatarURL)
-                return message.channel.createMessage({embed: noGuild, messageReferenceID: message.id });
+                return message.channel.createMessage({embed: noGuild, messageReferenceID: message.id});
             }
 
         }
 
-        if(!message.channel.guild) return;
+        if (!message.channel.guild) return;
 
-        if(command.botPerms) {
-            for(const perm of command.botPerms) {
+        if (command.modCommand) {
+            if(!(await this.checkModerator(message))) {
+                let noMod = new RichEmbed()
+                    .setTitle(`Moderator Only!`)
+                    .setDescription(`This Command requires you to be a Moderator!`)
+                    .setColor(`#F00000`)
+                    .setTimestamp()
+                    .setFooter(`Vade`, this.client.user.avatarURL);
+
+                return message.channel.createMessage({embed: noMod, messageReferenceID: message.id});
+            }
+        }
+
+        if (command.botPerms) {
+            for (const perm of command.botPerms) {
                 let noPermEmbed = new RichEmbed()
                     .setTitle(`Missing Permissions!`)
                     .setDescription(`I am missing the ${this.cleanPerms(perm)} Permission! I need it for you to run this Command!`)
@@ -113,22 +138,22 @@ export default class Util {
                     .setFooter(`Vade`, this.client.user.avatarURL)
 
                 const getMember = message.channel.guild.members.get(this.client.user.id);
-                if(!getMember?.permissions.has(perm)) {
-                    return message.channel.createMessage({embed: noPermEmbed, messageReferenceID: message.id });
+                if (!getMember?.permissions.has(perm)) {
+                    return message.channel.createMessage({embed: noPermEmbed, messageReferenceID: message.id});
                 }
 
             }
         }
-        if(command.userPerms) {
-            for(const perm of command.userPerms) {
+        if (command.userPerms) {
+            for (const perm of command.userPerms) {
                 let noPermEmbed = new RichEmbed()
                     .setTitle(`Missing Permissions!`)
                     .setDescription(`You are missing the ${this.cleanPerms(perm)} Permission! You need it to run this Command!`)
                     .setColor(`#F00000`)
                     .setTimestamp()
                     .setFooter(`Vade`, this.client.user.avatarURL)
-                if(!message.member.permissions.has(perm)) {
-                    return message.channel.createMessage({embed: noPermEmbed, messageReferenceID: message.id });
+                if (!message.member.permissions.has(perm)) {
+                    return message.channel.createMessage({embed: noPermEmbed, messageReferenceID: message.id});
                 }
             }
         }

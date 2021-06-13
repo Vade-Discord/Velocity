@@ -2,11 +2,11 @@ import { Logger } from "@dimensional-fun/logger";
 import mongoose from "mongoose";
 import config from "../config.json";
 
-export async function mongo() {
+export default async function mongo() {
     const logger = new Logger("mongodb");
     try {
-        mongoose.connect(
-            "mongodb+srv://ClanModDevelopment16:ClanModDevelopment16@alpha.6vfjf.mongodb.net/myFirstDatabase?retryWrites=true&w=majority",
+       await mongoose.connect(
+            config.mongoURI,
             {
                 useNewUrlParser: true,
                 useUnifiedTopology: true,
