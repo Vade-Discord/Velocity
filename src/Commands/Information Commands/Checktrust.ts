@@ -10,7 +10,5 @@ export default class TrustCommand extends Command {
     async run(message, args) {
 
 
-
-
         }
     }

@@ -8,8 +8,7 @@ import  Config from "../config.json";
 import Command from "../interfaces/Command";
 import type { Event } from "../interfaces/Event";
 import Util from '../Interfaces/Util';
-import Database from '../Interfaces/Database';
-import { RichEmbed } from '../Classes/Embeds';
+import MessageEmbed = require('../Classes/Embeds');
 
 const globPromise = promisify(glob);
 
@@ -25,7 +24,7 @@ export class Bot extends Eris.Client {
     public config: typeof Config;
     public owners: string[] = ["473858248353513472"];
     public utils: Util = new Util(this);
-    public embed: typeof RichEmbed = RichEmbed;
+    public embed: typeof MessageEmbed = MessageEmbed;
     public constructor(options: Eris.ClientOptions = {}) {
         super(Config.token);
         if (Bot.__instance__) throw new Error("Another client was created.");
@@ -37,7 +36,6 @@ export class Bot extends Eris.Client {
     public async start(config: typeof Config): Promise<void> {
         this.logger.info("hi");
         this.config = config;
-        await Database();
         await pluris(Eris);
         await this.connect();
         /* load command files */

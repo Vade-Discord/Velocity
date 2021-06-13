@@ -21,6 +21,14 @@ export default class Util {
             return true;
         }
     }
+    capitalise(string: string) {
+        if (string)
+            return string
+                .split(" ")
+                .map((str) => str.slice(0, 1).toUpperCase() + str.slice(1))
+                .join(" ");
+    }
+
     getHighestRole(member, guild) {
         member = member.id ? member : guild.members.get(member);
         const filteredRoles = guild.roles.filter(r => member.roles.includes(r.id));

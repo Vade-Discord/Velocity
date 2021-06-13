@@ -1,166 +1,458 @@
+'use strict';
+
+const { Util } = require('./Util');
+
 /**
- * @typedef {import('eris').EmbedOptions} EmbedData
- * @typedef {typeof import('eris')} Eris
+ * Represents an embed in a message (image/video preview, rich embed, etc.)
  */
-
-const HEX_REGEX = /^#?([a-fA-F0-9]{6})$/;
-const URL_REGEX = /^http(s)?:\/\/[\w.-]+(?:\.[\w.-]+)+[\w\-._~:/?#[\]@!$&'()*+,;=.]+$/;
-
-class RichEmbed {
+class MessageEmbed {
     /**
-     * @param {EmbedData} data
+     * @name MessageEmbed
+     * @kind constructor
+     * @memberof MessageEmbed
+     * @param {MessageEmbed|MessageEmbedOptions} [data={}] MessageEmbed to clone or raw embed data
      */
-    constructor(data = {}) {
-        if (data.title) this.title = data.title;
-        if (data.description) this.description = data.description;
-        if (data.url) this.url = data.url;
-        if (data.timestamp) this.timestamp = data.timestamp;
-        if (data.color) this.color = data.color;
-        if (data.footer) this.footer = data.footer;
-        if (data.image) this.image = data.image;
-        if (data.thumbnail) this.thumbnail = data.thumbnail;
-        if (data.author) this.author = data.author;
-        this.fields = data.fields || [];
+
+    /**
+     * Represents the possible options for a MessageEmbed
+     * @typedef {Object} MessageEmbedOptions
+     * @property {string} [title] The title of this embed
+     * @property {string} [description] The description of this embed
+     * @property {string} [url] The URL of this embed
+     * @property {Date|number} [timestamp] The timestamp of this embed
+     * @property {ColorResolvable} [color] The color of this embed
+     * @property {EmbedFieldData[]} [fields] The fields of this embed
+     * @property {Partial<MessageEmbedAuthor>} [author] The author of this embed
+     * @property {Partial<MessageEmbedThumbnail>} [thumbnail] The thumbnail of this embed
+     * @property {Partial<MessageEmbedImage>} [image] The image of this embed
+     * @property {Partial<MessageEmbedVideo>} [video] The video of this embed
+     * @property {Partial<MessageEmbedFooter>} [footer] The footer of this embed
+     */
+
+    constructor(data = {}, skipValidation = false) {
+        this.setup(data, skipValidation);
+    }
+
+    setup(data, skipValidation) {
+        /**
+         * The type of this embed, either:
+         * * `rich` - a rich embed
+         * * `image` - an image embed
+         * * `video` - a video embed
+         * * `gifv` - a gifv embed
+         * * `article` - an article embed
+         * * `link` - a link embed
+         * @type {string}
+         * @deprecated
+         */
+        this.type = data.type || 'rich';
+
+        /**
+         * The title of this embed
+         * @type {?string}
+         */
+        this.title = 'title' in data ? data.title : null;
+
+        /**
+         * The description of this embed
+         * @type {?string}
+         */
+        this.description = 'description' in data ? data.description : null;
+
+        /**
+         * The URL of this embed
+         * @type {?string}
+         */
+        this.url = 'url' in data ? data.url : null;
+
+        /**
+         * The color of this embed
+         * @type {?number}
+         */
+        this.color = 'color' in data ? Util.resolveColor(data.color) : null;
+
+        /**
+         * The timestamp of this embed
+         * @type {?number}
+         */
+        this.timestamp = 'timestamp' in data ? new Date(data.timestamp).getTime() : null;
+
+        /**
+         * Represents a field of a MessageEmbed
+         * @typedef {Object} EmbedField
+         * @property {string} name The name of this field
+         * @property {string} value The value of this field
+         * @property {boolean} inline If this field will be displayed inline
+         */
+
+        /**
+         * The fields of this embed
+         * @type {EmbedField[]}
+         */
+        this.fields = [];
+        if (data.fields) {
+            this.fields = skipValidation ? data.fields.map(Util.cloneObject) : this.constructor.normalizeFields(data.fields);
+        }
+
+        /**
+         * Represents the thumbnail of a MessageEmbed
+         * @typedef {Object} MessageEmbedThumbnail
+         * @property {string} url URL for this thumbnail
+         * @property {string} proxyURL ProxyURL for this thumbnail
+         * @property {number} height Height of this thumbnail
+         * @property {number} width Width of this thumbnail
+         */
+
+        /**
+         * The thumbnail of this embed (if there is one)
+         * @type {?MessageEmbedThumbnail}
+         */
+        this.thumbnail = data.thumbnail
+            ? {
+                url: data.thumbnail.url,
+                proxyURL: data.thumbnail.proxyURL || data.thumbnail.proxy_url,
+                height: data.thumbnail.height,
+                width: data.thumbnail.width,
+            }
+            : null;
+
+        /**
+         * Represents the image of a MessageEmbed
+         * @typedef {Object} MessageEmbedImage
+         * @property {string} url URL for this image
+         * @property {string} proxyURL ProxyURL for this image
+         * @property {number} height Height of this image
+         * @property {number} width Width of this image
+         */
+
+        /**
+         * The image of this embed, if there is one
+         * @type {?MessageEmbedImage}
+         */
+        this.image = data.image
+            ? {
+                url: data.image.url,
+                proxyURL: data.image.proxyURL || data.image.proxy_url,
+                height: data.image.height,
+                width: data.image.width,
+            }
+            : null;
+
+        /**
+         * Represents the video of a MessageEmbed
+         * @typedef {Object} MessageEmbedVideo
+         * @property {string} url URL of this video
+         * @property {string} proxyURL ProxyURL for this video
+         * @property {number} height Height of this video
+         * @property {number} width Width of this video
+         */
+
+        /**
+         * The video of this embed (if there is one)
+         * @type {?MessageEmbedVideo}
+         * @readonly
+         */
+        this.video = data.video
+            ? {
+                url: data.video.url,
+                proxyURL: data.video.proxyURL || data.video.proxy_url,
+                height: data.video.height,
+                width: data.video.width,
+            }
+            : null;
+
+        /**
+         * Represents the author field of a MessageEmbed
+         * @typedef {Object} MessageEmbedAuthor
+         * @property {string} name The name of this author
+         * @property {string} url URL of this author
+         * @property {string} iconURL URL of the icon for this author
+         * @property {string} proxyIconURL Proxied URL of the icon for this author
+         */
+
+        /**
+         * The author of this embed (if there is one)
+         * @type {?MessageEmbedAuthor}
+         */
+        this.author = data.author
+            ? {
+                name: data.author.name,
+                url: data.author.url,
+                iconURL: data.author.iconURL || data.author.icon_url,
+                proxyIconURL: data.author.proxyIconURL || data.author.proxy_icon_url,
+            }
+            : null;
+
+        /**
+         * Represents the provider of a MessageEmbed
+         * @typedef {Object} MessageEmbedProvider
+         * @property {string} name The name of this provider
+         * @property {string} url URL of this provider
+         */
+
+        /**
+         * The provider of this embed (if there is one)
+         * @type {?MessageEmbedProvider}
+         */
+        this.provider = data.provider
+            ? {
+                name: data.provider.name,
+                url: data.provider.name,
+            }
+            : null;
+
+        /**
+         * Represents the footer field of a MessageEmbed
+         * @typedef {Object} MessageEmbedFooter
+         * @property {string} text The text of this footer
+         * @property {string} iconURL URL of the icon for this footer
+         * @property {string} proxyIconURL Proxied URL of the icon for this footer
+         */
+
+        /**
+         * The footer of this embed
+         * @type {?MessageEmbedFooter}
+         */
+        this.footer = data.footer
+            ? {
+                text: data.footer.text,
+                iconURL: data.footer.iconURL || data.footer.icon_url,
+                proxyIconURL: data.footer.proxyIconURL || data.footer.proxy_icon_url,
+            }
+            : null;
     }
 
     /**
-     * @param {String} title
+     * The date displayed on this embed
+     * @type {?Date}
+     * @readonly
      */
-    setTitle(title) {
-        if (typeof title !== 'string') throw new TypeError(`Expected type 'string', received type '${typeof title}'`);
-        if (title.length > 256) throw new RangeError('Embed titles cannot exceed 256 characters');
-        this.title = title;
+    get createdAt() {
+        return this.timestamp ? new Date(this.timestamp) : null;
+    }
+
+    /**
+     * The hexadecimal version of the embed color, with a leading hash
+     * @type {?string}
+     * @readonly
+     */
+    get hexColor() {
+        return this.color ? `#${this.color.toString(16).padStart(6, '0')}` : null;
+    }
+
+    /**
+     * The accumulated length for the embed title, description, fields, footer text, and author name
+     * @type {number}
+     * @readonly
+     */
+    get length() {
+        return (
+            (this.title?.length ?? 0) +
+            (this.description?.length ?? 0) +
+            (this.fields.length >= 1
+                ? this.fields.reduce((prev, curr) => prev + curr.name.length + curr.value.length, 0)
+                : 0) +
+            (this.footer?.text.length ?? 0) +
+            (this.author?.name.length ?? 0)
+        );
+    }
+
+    /**
+     * Adds a field to the embed (max 25).
+     * @param {string} name The name of this field
+     * @param {string} value The value of this field
+     * @param {boolean} [inline=false] If this field will be displayed inline
+     * @returns {MessageEmbed}
+     */
+    addField(name, value, inline) {
+        return this.addFields({ name, value, inline });
+    }
+
+    /**
+     * Adds fields to the embed (max 25).
+     * @param {...EmbedFieldData|EmbedFieldData[]} fields The fields to add
+     * @returns {MessageEmbed}
+     */
+    addFields(...fields) {
+        this.fields.push(...this.constructor.normalizeFields(fields));
         return this;
     }
 
     /**
-     * @param {String} description
+     * Removes, replaces, and inserts fields in the embed (max 25).
+     * @param {number} index The index to start at
+     * @param {number} deleteCount The number of fields to remove
+     * @param {...EmbedFieldData|EmbedFieldData[]} [fields] The replacing field objects
+     * @returns {MessageEmbed}
+     */
+    spliceFields(index, deleteCount, ...fields) {
+        this.fields.splice(index, deleteCount, ...this.constructor.normalizeFields(...fields));
+        return this;
+    }
+
+    /**
+     * Sets the author of this embed.
+     * @param {string} name The name of the author
+     * @param {string} [iconURL] The icon URL of the author
+     * @param {string} [url] The URL of the author
+     * @returns {MessageEmbed}
+     */
+    setAuthor(name, iconURL, url) {
+        this.author = { name: Util.verifyString(name, 'Idek', 'EMBED_AUTHOR_NAME'), iconURL, url };
+        return this;
+    }
+
+    /**
+     * Sets the color of this embed.
+     * @param {ColorResolvable} color The color of the embed
+     * @returns {MessageEmbed}
+     */
+    setColor(color) {
+        this.color = Util.resolveColor(color);
+        return this;
+    }
+
+    /**
+     * Sets the description of this embed.
+     * @param {string} description The description
+     * @returns {MessageEmbed}
      */
     setDescription(description) {
-        if (description.length > 2048) throw new RangeError('Embed descriptions cannot exceed 2048 characters');
-        this.description = description;
+       // this.description = Util.verifyString(description, RangeError, 'EMBED_DESCRIPTION');
         return this;
     }
 
     /**
-     * @param {String} url
+     * Sets the footer of this embed.
+     * @param {string} text The text of the footer
+     * @param {string} [iconURL] The icon URL of the footer
+     * @returns {MessageEmbed}
+     */
+    setFooter(text, iconURL) {
+        this.footer = { text: Util.verifyString(text, RangeError, 'EMBED_FOOTER_TEXT'), iconURL };
+        return this;
+    }
+
+    /**
+     * Sets the image of this embed.
+     * @param {string} url The URL of the image
+     * @returns {MessageEmbed}
+     */
+    setImage(url) {
+        this.image = { url };
+        return this;
+    }
+
+    /**
+     * Sets the thumbnail of this embed.
+     * @param {string} url The URL of the thumbnail
+     * @returns {MessageEmbed}
+     */
+    setThumbnail(url) {
+        this.thumbnail = { url };
+        return this;
+    }
+
+    /**
+     * Sets the timestamp of this embed.
+     * @param {Date|number} [timestamp=Date.now()] The timestamp or date
+     * @returns {MessageEmbed}
+     */
+    setTimestamp(timestamp = Date.now()) {
+        if (timestamp instanceof Date) timestamp = timestamp.getTime();
+        this.timestamp = timestamp;
+        return this;
+    }
+
+    /**
+     * Sets the title of this embed.
+     * @param {string} title The title
+     * @returns {MessageEmbed}
+     */
+    setTitle(title) {
+        this.title = Util.verifyString(title, RangeError, 'EMBED_TITLE');
+        return this;
+    }
+
+    /**
+     * Sets the URL of this embed.
+     * @param {string} url The URL
+     * @returns {MessageEmbed}
      */
     setURL(url) {
-        if (typeof url !== 'string') throw new TypeError(`Expected type 'string', received type '${typeof url}'`);
-        if (!URL_REGEX.test(url)) throw new Error('Not a well formed URL');
         this.url = url;
         return this;
     }
 
     /**
-     * @param {DateConstructor} [timestamp]
+     * Transforms the embed to a plain object.
+     * @returns {Object} The raw data of this embed
      */
-    setTimestamp(timestamp = new Date()) {
-        if (Number.isNaN(new Date(timestamp).getTime())) throw new Error('Invalid Date');
-        this.timestamp = new Date(timestamp);
-        return this;
+    toJSON() {
+        return {
+            title: this.title,
+            type: 'rich',
+            description: this.description,
+            url: this.url,
+            timestamp: this.timestamp ? new Date(this.timestamp) : null,
+            color: this.color,
+            fields: this.fields,
+            thumbnail: this.thumbnail,
+            image: this.image,
+            author: this.author
+                ? {
+                    name: this.author.name,
+                    url: this.author.url,
+                    icon_url: this.author.iconURL,
+                }
+                : null,
+            footer: this.footer
+                ? {
+                    text: this.footer.text,
+                    icon_url: this.footer.iconURL,
+                }
+                : null,
+        };
     }
 
     /**
-     * @param {String|Number} color
+     * Normalizes field input and resolves strings.
+     * @param {string} name The name of the field
+     * @param {string} value The value of the field
+     * @param {boolean} [inline=false] Set the field to display inline
+     * @returns {EmbedField}
      */
-    setColor(color) {
-        if (typeof color !== 'string' && typeof color !== 'number') throw new TypeError(`Expected types 'string' or 'number', received type ${typeof color} instead`);
-        if (typeof color === 'number') {
-            if (color > 16777215 || color < 0) throw new RangeError('Invalid color');
-            this.color = color;
-        } else {
-            const match = color.match(HEX_REGEX);
-            if (!match) throw new Error('Invalid color');
-            this.color = parseInt(match[1], 16);
-        }
-
-        return this;
+    static normalizeField(name, value, inline = false) {
+        return {
+            name: Util.verifyString(name, RangeError, 'EMBED_FIELD_NAME', false),
+            value: Util.verifyString(value, RangeError, 'EMBED_FIELD_VALUE', false),
+            inline,
+        };
     }
 
     /**
-     * @param {String} text
-     * @param {String} [iconURL]
+     * @typedef {Object} EmbedFieldData
+     * @property {string} name The name of this field
+     * @property {string} value The value of this field
+     * @property {boolean} [inline] If this field will be displayed inline
      */
-    setFooter(text, iconURL) {
-        if (typeof text !== 'string') throw new TypeError(`Expected type 'string', received type ${typeof text}`);
-        if (text.length > 2048) throw new RangeError('Embed footer texts cannot exceed 2048 characters');
-        this.footer = { text };
-
-        if (iconURL !== undefined) {
-            if (typeof iconURL !== 'string') throw new TypeError(`Expected type 'string', received type '${typeof iconURL}'`);
-            if (!iconURL.startsWith('attachment://') && !URL_REGEX.test(iconURL)) throw new Error('Not a well formed URL');
-            this.footer.icon_url = iconURL;
-        }
-
-        return this;
-    }
 
     /**
-     * @param {String} imageURL
+     * Normalizes field input and resolves strings.
+     * @param  {...EmbedFieldData|EmbedFieldData[]} fields Fields to normalize
+     * @returns {EmbedField[]}
      */
-    setImage(imageURL) {
-        if (typeof imageURL !== 'string') throw new TypeError(`Expected type 'string', received type ${typeof imageURL}`);
-        if (!imageURL.startsWith('attachment://') && !URL_REGEX.test(imageURL)) throw new Error('Not a well formed URL');
-        this.image = { url: imageURL };
-        return this;
-    }
-
-    /**
-     * @param {String} thumbnailURL
-     */
-    setThumbnail(thumbnailURL) {
-        if (typeof thumbnailURL !== 'string') throw new TypeError(`Expected type 'string', received type ${typeof thumbnailURL}`);
-        if (!thumbnailURL.startsWith('attachment://') && !URL_REGEX.test(thumbnailURL)) throw new Error('Not a well formed URL');
-        this.thumbnail = { url: thumbnailURL };
-        return this;
-    }
-
-    /**
-     * @param {String} name
-     * @param {String} [url]
-     * @param {String} [iconURL]
-     */
-    setAuthor(name, url, iconURL) {
-        if (typeof name !== 'string') throw new TypeError(`Expected type 'string', received type ${typeof name}`);
-        if (name.length > 256) throw new RangeError('Embed author names cannot exceed 256 characters');
-        this.author = { name };
-
-        if (url !== undefined) {
-            if (typeof url !== 'string') throw new TypeError(`Expected type 'string', received type '${typeof url}'`);
-            if (!URL_REGEX.test(url)) throw new Error('Not a well formed URL');
-            this.author.url = url;
-        }
-
-        if (iconURL !== undefined) {
-            if (typeof iconURL !== 'string') throw new TypeError(`Expected type 'string', received type '${typeof iconURL}'`);
-            if (!iconURL.startsWith('attachment://') && !URL_REGEX.test(iconURL)) throw new Error('Not a well formed URL');
-            this.author.icon_url = iconURL;
-        }
-
-        return this;
-    }
-
-    /**
-     * @param {String} name
-     * @param {String} value
-     * @param {Boolean} [inline]
-     */
-    addField(name, value, inline = false) {
-        if (this.fields.length >= 25) throw new RangeError('Embeds cannot contain more than 25 fields');
-        if (typeof name !== 'string') throw new TypeError(`Expected type 'string', received type ${typeof name}`);
-        if (typeof value !== 'string') throw new TypeError(`Expected type 'string', received type ${typeof value}`);
-        if (typeof inline !== 'boolean') throw new TypeError(`Expected type 'boolean', received type ${typeof inline}`);
-        if (name.length > 256) throw new RangeError('Embed field names cannot exceed 256 characters');
-        if (value.length > 1024) throw new RangeError('Embed field descriptions cannot exceed 1024 characters');
-
-        this.fields.push({ name, value, inline });
-        return this;
+    static normalizeFields(...fields) {
+        return fields
+            .flat(2)
+            .map(field =>
+                this.normalizeField(
+                    field && field.name,
+                    field && field.value,
+                    field && typeof field.inline === 'boolean' ? field.inline : false,
+                ),
+            );
     }
 }
 
-module.exports.RichEmbed = RichEmbed;
-
-/**
- * @param {Eris} E
- */
+module.exports = MessageEmbed;
