@@ -52,11 +52,7 @@ export default class Util {
             "banMembers": "Ban Members",
             "kickMembers": "Kick Members"
         }
-        if(perms[perm]) {
-            return perms[perm];
-        } else {
-            return perm;
-        }
+        return perms[perm] ?? perm;
     }
 
     async getMember(message, args) {
