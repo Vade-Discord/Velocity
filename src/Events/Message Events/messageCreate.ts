@@ -27,6 +27,7 @@ export const run: RunFunction = async (
            let embed = new client.embed()
                .setTitle(`An error has occured!`)
                .setDescription(`\`${e}\``)
+               .setColor(`#f00000`);
            return message.channel.createMessage({ embed: embed, messageReference: { messageID: message.id }});
        }
 

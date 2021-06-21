@@ -15,10 +15,8 @@ export default class KickCommand extends Command {
 
         if(!args.length) return message.channel.createMessage({ content: `You need to provide a member.`, messageReference: { messageID: message.id }})
         const member = await this.client.utils.getMember(message, args[0]);
-        if(!member) return;
+        if(!member || Array.isArray(member) ? !member.length : false) return;
         message.channel.createMessage({ content: `Located ${member.username}#${member.discriminator}`})
-
-
 
 
      }

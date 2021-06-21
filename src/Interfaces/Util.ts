@@ -57,25 +57,23 @@ export default class Util {
     async getMember(message, args) {
         if(!args.length) return new TypeError(`No args provided.`);
         if(Number(+args)) {
-           let id = message.guild.members.get(args);
+           let id = message.channel.guild.members.get(args);
            if(!id) return message.channel.createMessage({
                content: `Unable to locate "${args}".`,
                messageReference: { messageID: message.id }
            });
 
            let memberArray: string[] = Array();
-           console.log(id)
            return id;
         }
-        let member = message.mentions.length ? message.guild.members.get(message.mentions[0]) : await message.channel.guild.searchMembers(args, 1);
-        if(!member || !member.length) {
-            return message.channel.createMessage({
+        let member = message.mentions.length ? message.guild.members.get(message.mentions[0].id) : await message.channel.guild.searchMembers(args, 1);
+        if(!member || Array.isArray(member) ? !member.length : false) {
+            message.channel.createMessage({
                 content: `Unable to locate "${args}".`,
                 messageReference: { messageID: message.id }
             });
         }
-        console.log(member[0])
-        return member[0];
+        return Array.isArray(member) ? member?.length ? member[0] : null : member;
     }
 
     getRandomDadJoke(joke) {

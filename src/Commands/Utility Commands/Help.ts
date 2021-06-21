@@ -19,12 +19,11 @@ export default class HelpCommand extends Command {
         const checkOrCross = (bool) =>
             bool ? constants.emojis.check : constants.emojis.x;
 
-        const prefix = "!"
+        const prefix = "-"
         const totalCommands = this.client.commands.size;
         const allCategories = [
             ...new Set(this.client.commands.map((cmd) => cmd.category)),
         ];
-
 
         const categories = allCategories.filter((_, idx) => allCategories[idx]);
 
@@ -33,9 +32,8 @@ export default class HelpCommand extends Command {
                 .setDescription(
                     `Prefix: ** ${prefix} **\n
                     Total Commands: **${totalCommands}**\n
-                    [Support Server](https://discord.gg/FwBUBzBkYt)`,
+                    [Support Server](https://discord.gg/FwBUBzBkYt)  **|** [Website](https://vade-bot.com) **|**  [Dashboard](https://vade-bot.com/dashboard)`,
                 )
-
             for (const category of categories) {
                 mainEmbed.addField(
                     `**${this.client.utils.capitalise(category)} [${
