@@ -13,6 +13,12 @@ export default class KickCommand extends Command {
     async run(message, args) {
 
 
+        if(!args.length) return message.channel.createMessage({ content: `You need to provide a member.`, messageReference: { messageID: message.id }})
+        const member = await this.client.utils.getMember(message, args[0]);
+        if(!member) return;
+        message.channel.createMessage({ content: `Located ${member.username}#${member.discriminator}`})
+
+
 
 
      }

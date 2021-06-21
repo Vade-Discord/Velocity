@@ -3,7 +3,7 @@ import { stripIndents } from 'common-tags';
 import FuzzySearch from 'fuse.js';
 import constants from '../../Interfaces/Constants';
 import { Paginate } from '@the-nerd-cave/paginate';
-import paginationEmbed from 'eris-pagination';
+import { createPaginationEmbed } from '../../Classes/Pagination';
 
 export default class HelpCommand extends Command {
     constructor(client) {
@@ -45,7 +45,6 @@ export default class HelpCommand extends Command {
                     true
                 );
             }
-            // @ts-ignore
             return message.channel.createMessage({ embed: mainEmbed, messageReference: { messageID: message.id } });
         }
 
@@ -71,7 +70,6 @@ export default class HelpCommand extends Command {
         }).search(input);
 
         const [match] = result;
-
         const noMatchEmbed = new this.client.embed()
             .setDescription(
                 `No match found for that input. Please try an input closer to one of the command/category names.`
@@ -85,7 +83,6 @@ export default class HelpCommand extends Command {
         const { item } = match;
 
         if (allCategories.includes(item)) {
-
             const commandsToPaginate = this.client.commands
                 .filter((cmd) => cmd.category === item)
                 .map(
@@ -94,9 +91,7 @@ export default class HelpCommand extends Command {
                             command.description
                         }\n`
                 );
-
-            const pages = new Paginate(commandsToPaginate, 8)?.getPaginatedArray();
-
+            const pages = new Paginate(commandsToPaginate, 8).getPaginatedArray();
             const embeds = pages.map((page, index) => {
 
                 return new this.client.embed()
@@ -111,10 +106,8 @@ export default class HelpCommand extends Command {
             if(embeds.length <= 1) {
                 return message.channel.createMessage({ embed: embeds[0] })
             }
-            // @ts-ignore
-            return await paginationEmbed.createPaginationEmbed(message, embeds, {});
+            return await createPaginationEmbed(message, embeds, {});
         }
-
         const command =
             this.client.commands.get(item) ??
             this.client.commands.find(({ aliases }) => aliases.includes(item));
@@ -126,16 +119,18 @@ export default class HelpCommand extends Command {
                 )
                 .setColor('#F00000');
 
-            return await message.channel.createMessage({ embed: noMatchEmbed2, messageReference: { messageID: message.id }});
+            return message.channel.createMessage({ embed: noMatchEmbed2, messageReference: { messageID: message.id }});
         }
-
         const commandEmbed = new this.client.embed()
             .setTimestamp()
             .setThumbnail(this.client.user.avatarURL)
-            .setFooter(`Requested by ${message.author.username}#${message.author.discriminator}`)
-            .setDescription(stripIndents`Name: ${command.name}`)
+            .setDescription(`Name: ${command.name}\nDescription: ${command.description}\nAliases: ${command.aliases.join(", ") ?? 'None'}
+            \nMember Permissions: ${this.client.utils.cleanPerms(command.userPerms) ?? 'No permissions needed.'}
+            \nBot Permissions: ${this.client.utils.cleanPerms(command.botPerms) ?? 'No permissions needed.'}
+            `)
+            .setFooter(`Requested by ${message.author.username}#${message.author.discriminator}`);
 
-        return await message.channel.createMessage({ embed: commandEmbed, messageReference: { messageID: message.id }});
+        await message.channel.createMessage({ embed: commandEmbed, messageReference: { messageID: message.id }});
 
      }
 

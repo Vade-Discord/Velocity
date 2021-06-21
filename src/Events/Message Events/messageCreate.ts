@@ -9,8 +9,6 @@ export const run: RunFunction = async (
     if(message.author.bot) return;
 
    const check = await client.utils.checkModerator(message);
-   console.log(check);
-
     const prefix = client.config.prefix;
     if(message.content?.toLowerCase().startsWith(prefix)) {
 
@@ -23,7 +21,14 @@ export const run: RunFunction = async (
        const check =  await client.utils.runPreconditions(message, command);
        if(check) return;
 
-        await command.run(message, args);
+       try {
+           await command.run(message, args);
+       } catch (e) {
+           let embed = new client.embed()
+               .setTitle(`An error has occured!`)
+               .setDescription(`\`${e}\``)
+           return message.channel.createMessage({ embed: embed, messageReference: { messageID: message.id }});
+       }
 
     }
 
