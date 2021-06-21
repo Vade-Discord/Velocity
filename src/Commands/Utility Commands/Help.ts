@@ -93,12 +93,10 @@ export default class HelpCommand extends Command {
                 );
             const pages = new Paginate(commandsToPaginate, 8).getPaginatedArray();
             const embeds = pages.map((page, index) => {
-
                 return new this.client.embed()
                     .setTitle(`${this.client.utils.capitalise(item)}'s Help Menu`)
                     .setDescription(
-                        // @ts-ignore
-                        page ?? `No more Commands to be listed on page ${index + 1}`
+                        page.join("\n") ?? `No more Commands to be listed on page ${index + 1}`
                     )
                     .setTimestamp();
             });
@@ -124,11 +122,13 @@ export default class HelpCommand extends Command {
         const commandEmbed = new this.client.embed()
             .setTimestamp()
             .setThumbnail(this.client.user.avatarURL)
-            .setDescription(`Name: ${command.name}\nDescription: ${command.description}\nAliases: ${command.aliases.join(", ") ?? 'None'}
-            \nMember Permissions: ${this.client.utils.cleanPerms(command.userPerms) ?? 'No permissions needed.'}
-            \nBot Permissions: ${this.client.utils.cleanPerms(command.botPerms) ?? 'No permissions needed.'}
+            .setDescription(`**❯** Name: **${command.name}**
+            **❯** Description: **${command.description}**
+            **❯** Aliases: **${command.aliases.join(", ") ?? 'None'}**
+            **❯** Member Permissions: **${this.client.utils.cleanPerms(command.userPerms) ?? 'No permissions needed.'}**
+            **❯** Bot Permissions: **${this.client.utils.cleanPerms(command.botPerms) ?? 'No permissions needed.'}**
             `)
-            .setFooter(`Requested by ${message.author.username}#${message.author.discriminator}`);
+            .setFooter(`Requested by ${message.author.username}#${message.author.discriminator}`, message.author.avatarURL);
 
         await message.channel.createMessage({ embed: commandEmbed, messageReference: { messageID: message.id }});
 
