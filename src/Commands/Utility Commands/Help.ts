@@ -11,7 +11,6 @@ export default class HelpCommand extends Command {
             aliases: ["commands", "cmds"],
             description: "Get help on Commands!",
             category: "Utility",
-            guildOnly: true,
         });
     }
     async run(message, args) {

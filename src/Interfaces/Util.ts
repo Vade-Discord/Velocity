@@ -25,11 +25,22 @@ export default class Util {
     }
 
     async checkModerator(message) {
+       if(!message.channel.guildID) return true;
         const guildModRoles = await guild_schema.findOne({ guildID: message.channel.guild.id });
         if(!guildModRoles || !guildModRoles.ModRole.length) {
             return message.member.permissions.has("manageMessages");
         }
         return message.member.roles.some(role => guildModRoles?.ModRole.includes(role));
+    }
+
+    generateKey() {
+        var length = 15,
+            charset = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789@!$£",
+            retVal = "";
+        for (var i = 0, n = charset.length; i < length; ++i) {
+            retVal += charset.charAt(Math.floor(Math.random() * n));
+        }
+        return `Vade_` + retVal;
     }
 
     capitalise(string: string) {

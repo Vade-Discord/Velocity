@@ -16,6 +16,7 @@
     "fuse.js": "^6.4.6",
     "give-me-a-joke": "^0.4.0",
     "hastebin-gen": "^2.0.5",
+    "humanize-duration": "^3.27.0",
     "imageapi.js": "^1.7.0",
     "mongoose": "^5.12.13",
     "path": "^0.12.7",
