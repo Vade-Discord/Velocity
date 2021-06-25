@@ -19,6 +19,7 @@ export default class GenerateCommand extends Command {
             return message.channel.createMessage({ content: `The key shouldn't last longer than one year.`, messageRefernece: { messageID: message.id }});
 
         }
+
         const key = this.client.utils.generateKey();
 
         message.channel.createMessage({ content: `Here is the generated key with an expiration time of \`${humanize(ms(length))}\`\n\n\`${key}\``, messageRefernece: { messageID: message.id }});

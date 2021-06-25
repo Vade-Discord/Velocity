@@ -31,8 +31,6 @@ export class Bot extends Eris.Client {
 
         Bot.__instance__ = this;
     }
-
-
     public async start(config: typeof Config): Promise<void> {
         this.logger.info("hi");
         this.config = config;
@@ -54,14 +52,12 @@ export class Bot extends Eris.Client {
         const eventFiles: string[] = await globPromise(
             `${__dirname}/../events/**/*{.ts,.js}`
         );
-
         eventFiles.map(async (value: string) => {
             const file: Event = await import(value);
             this.events.set(file.name, file);
             this.on(file.name, file.run.bind(null, this));
         });
     }
-
     static get instance() {
         return Bot.__instance__;
     }
