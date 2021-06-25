@@ -53,9 +53,9 @@ export class Bot extends Eris.Client {
             `${__dirname}/../events/**/*{.ts,.js}`
         );
         eventFiles.map(async (value: string) => {
-            const file: Event = await import(value);
+            const file: Event = new ((await import(value)).default)(this);
             this.events.set(file.name, file);
-            this.on(file.name, file.run.bind(null, this));
+            file.emitter[file.type](file.name, (...args) => file.run(...args))
         });
     }
     static get instance() {
