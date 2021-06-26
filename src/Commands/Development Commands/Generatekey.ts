@@ -1,6 +1,9 @@
 import Command from "../../Interfaces/Command";
 import ms from 'ms';
 import humanize from 'humanize-duration';
+import keyStorage from '../../Schemas/Premium Schemas/KeyStorage';
+import { Schema } from 'mongoose';
+
 
 export default class GenerateCommand extends Command {
     constructor(client) {
@@ -21,6 +24,15 @@ export default class GenerateCommand extends Command {
         }
 
         const key = this.client.utils.generateKey();
+        const newSchema = new keyStorage({
+        _id: Schema.Types.ObjectId,
+        key,
+        expirationTime: ms(length),
+        createdBy: message.author.id,
+        createdOn: Date.now(),
+    });
+
+    await newSchema.save();
 
         message.channel.createMessage({ content: `Here is the generated key with an expiration time of \`${humanize(ms(length))}\`\n\n\`${key}\``, messageRefernece: { messageID: message.id }});
 
