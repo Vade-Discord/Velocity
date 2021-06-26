@@ -30,6 +30,14 @@ export interface IGuild extends mongoose.Document {
     Starboard: string;
     StarAmount: number;
     Automod: boolean;
+    Premium: {
+        key: string;
+        redeemedOn: number;
+        expiresOn: number,
+        redeemedBy: string;
+        active: boolean;
+        stacked: boolean;
+    }
 }
 
 const guildSchema = new mongoose.Schema({
@@ -62,6 +70,14 @@ const guildSchema = new mongoose.Schema({
     colour: String,
     footer: String,
     Automod: Boolean,
+    Premium: {
+        key: String,
+        redeemedOn: String,
+        expiresOn: Number,
+        redeemedBy: String,
+        active: Boolean,
+        stacked: Boolean,
+    }
 });
 
 const guilds = mongoose.model<IGuild>(`Guild`, guildSchema, "guilds");

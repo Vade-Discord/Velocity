@@ -1,9 +1,13 @@
 import type  { Bot } from '../client/Client'
 import Command from "./Command";
+
+// Package imports
 import { RichEmbed, Member } from "eris";
 import axios from 'axios';
 import { distance, closest } from 'fastest-levenshtein';
+import { Types } from 'mongoose';
 
+// File imports
 import guild_schema from '../Schemas/Main Guilds/GuildSchema';
 
 export default class Util {
@@ -50,6 +54,27 @@ export default class Util {
             return channel[0];
         }
         return null;
+    }
+
+    async guildPremium(guild) {
+        const guildSchema = await guild_schema.findOne({ guildID: guild.id });
+        if(!guildSchema) return false;
+        if(!guildSchema?.Premium.active) return false;
+        if(guildSchema.Premium.expiresOn > Date.now()) return false;
+        return true;
+    }
+
+    async createGuildSchema(guild) {
+        const newSchema = new guild_schema({
+            _id: Types.ObjectId(),
+            guildID: guild.id,
+            guildName: guild.name,
+            prefix: "!"
+        });
+
+        await newSchema.save();
+
+        return newSchema;
     }
 
     async checkModerator(message) {
