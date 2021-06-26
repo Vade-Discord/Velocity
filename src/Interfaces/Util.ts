@@ -32,7 +32,11 @@ export default class Util {
         return channel;
     }
 
-    getChannel(e, guild) {
+    getChannel(e, message, guild) {
+        if(message.mentions.length >= 1) {
+            const channel = guild.channels.get(message.mentions[0]);
+            return channel;
+        }
         if(Number.isInteger(+e)) {
             // ID provided. Validate ID here.
             const channel = guild.channels.get(e);
