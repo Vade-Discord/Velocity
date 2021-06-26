@@ -44,6 +44,7 @@ export default class Util {
             if(!check.length) return null;
             return check[0];
         }
+        return null;
     }
 
     async checkModerator(message) {
