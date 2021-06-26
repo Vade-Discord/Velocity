@@ -32,9 +32,11 @@ export default class Util {
         return channel;
     }
 
-    getChannel(e, message, guild) {
-        if(message.mentions.length >= 1) {
-            const channel = guild.channels.get(message.mentions[0]);
+    getChannel(e, guild) {
+       const mentionRegex = /^<#[0-9]+>$/;
+        if(mentionRegex.test(e)) {
+            const id = e.substring(2, e.length - 1);
+            const channel = guild.channels.get(id);
             return channel;
         }
         if(Number.isInteger(+e)) {
@@ -43,10 +45,9 @@ export default class Util {
             return channel;
         }
         if(isNaN(e)) {
-            const check = guild.channels.filter(c => distance(e, c.name) < 2.5);
-            console.log(check)
-            if(!check.length) return null;
-            return check[0];
+            const channel = guild.channels.filter(c => distance(e, c.name) < 2.5);
+            if(!channel.length) return null;
+            return channel[0];
         }
         return null;
     }

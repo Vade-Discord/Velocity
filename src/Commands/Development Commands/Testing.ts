@@ -10,7 +10,7 @@ export default class TestingCommand extends Command {
     }
     async run(message, args) {
 
-    const channel = await this.client.utils.getChannel(args[0], message, message.channel.guild);
+    const channel = await this.client.utils.getChannel(args[0], message.channel.guild);
     if(!channel) return message.channel.createMessage({ content: `No channel was located.`, messageReference: { messageID: message.id }});
         message.channel.createMessage({ content: `Locatad channel: ${channel.name}`, messageReference: { messageID: message.id }});
      }
