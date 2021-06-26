@@ -3,10 +3,8 @@ import { Event } from "../../interfaces/Event";
     export default class MessageEvent extends Event {
             constructor(client) {
                 super(client, "messageCreate", {
-  
                 });
             }
-    
             async run(message) {
                 if(message.author.bot) return;
 

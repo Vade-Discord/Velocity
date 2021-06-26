@@ -2,6 +2,7 @@ import type  { Bot } from '../client/Client'
 import Command from "./Command";
 import { RichEmbed, Member } from "eris";
 import axios from 'axios';
+import { distance, closest } from 'fastest-levenshtein';
 
 import guild_schema from '../Schemas/Main Guilds/GuildSchema';
 
@@ -21,6 +22,27 @@ export default class Util {
            return memberRole > targetRole;
         } else {
             return true;
+        }
+    }
+
+    async loggingChannel(guild) {
+        const locatedGuild = await guild_schema.findOne({ guildID: guild.id });
+        if(!locatedGuild) return null;
+        const channel = guild.channels.get(locatedGuild?.logChannelID);
+        return channel;
+    }
+
+    getChannel(e, guild) {
+        if(Number.isInteger(+e)) {
+            // ID provided. Validate ID here.
+            const channel = guild.channels.get(e);
+            return channel;
+        }
+        if(isNaN(e)) {
+            const check = guild.channels.filter(c => distance(e, c.name) < 2.5);
+            console.log(check)
+            if(!check.length) return null;
+            return check[0];
         }
     }
 
