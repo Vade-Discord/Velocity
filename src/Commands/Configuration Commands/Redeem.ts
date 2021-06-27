@@ -67,7 +67,11 @@ export default class RedeemCommand extends Command {
             const newTime = currentTime + checkKey.length;
             await locateGuild.updateOne({
                 Premium: {
+                    key: checkKey.key,
+                    redeemedOn: Date.now(),
                     expiresOn: newTime,
+                    redeemedBy: message.author.id,
+                    active: true,
                     stacked: true,
                 }
             });
