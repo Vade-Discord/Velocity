@@ -6,7 +6,6 @@ import { Paginate } from "@the-nerd-cave/paginate";
 import { createPaginationEmbed } from "../../Classes/Pagination";
 
 export default class HelpCommand extends Command {
-<<<<<<< HEAD
   constructor(client) {
     super(client, "help", {
       aliases: ["commands", "cmds"],
@@ -29,32 +28,6 @@ export default class HelpCommand extends Command {
     if (!args.length) {
       const mainEmbed = new this.client.embed().setDescription(
         `Prefix: ** ${prefix} **\n
-=======
-    constructor(client) {
-        super(client, 'help', {
-            aliases: ["commands", "cmds"],
-            description: "Get help on Commands!",
-            category: "Utility",
-        });
-    }
-    async run(message, args) {
-
-        const checkOrCross = (bool) =>
-            bool ? constants.emojis.check.mention : constants.emojis.x.mention;
-
-        const prefix = "-"
-        const totalCommands = this.client.commands.size;
-        const allCategories = [
-            ...new Set(this.client.commands.map((cmd) => cmd.category)),
-        ];
-
-        const categories = allCategories.filter((_, idx) => allCategories[idx]);
-
-        if (!args.length) {
-            const mainEmbed = new this.client.embed()
-                .setDescription(
-                    `Prefix: ** ${prefix} **\n
->>>>>>> 71a094fb5e31384015414db07988236af2e00f8e
                     Total Commands: **${totalCommands}**\n
                     [Support Server](https://discord.gg/FwBUBzBkYt)  **|** [Website](https://vade-bot.com) **|**  [Dashboard](https://vade-bot.com/dashboard)`
       );
