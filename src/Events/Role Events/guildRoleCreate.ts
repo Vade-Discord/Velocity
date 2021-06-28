@@ -11,7 +11,7 @@
 
               const embed = new this.client.embed()
                   .setTitle(`@${role.name}`)
-                  .setColor("YELLOW")
+                  .setColor("#00C09A")
                   .setAuthor(`Role Created`, guild.iconURL)
                   .setURL('https://vade-bot.com')
                   .setTimestamp();

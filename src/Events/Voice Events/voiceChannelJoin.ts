@@ -20,7 +20,7 @@ export default class VcJoinEvent extends Event {
                         .setColor(`#00C09A`)
                         .setTimestamp();
 
-                    const logChannel = await this.client.utils.loggingChannel(newChannel.guild);
+                    const logChannel = await this.client.utils.loggingChannel(newChannel.guild, 'channel');
                     if(!logChannel) return;
                     logChannel.send(embed);
                 } catch (e) {

@@ -15,7 +15,7 @@ export default class LogCommand extends Command {
             return message.channel.createMessage({ content: `You need to provide a valid logging type. You can type \`!${this.name} help\` for assistance.`, messageReference: { messageID: message.id }});
         }
 
-        const valid: string[] = ['moderation', 'message', 'voice', 'user', 'role'];
+        const valid: string[] = ['moderation', 'message', 'voice', 'user', 'role', 'channel', 'giveaway'];
 
         if(args[0]?.toLowerCase() === 'help') {
             let helpEmbed = new this.client.embed()
@@ -91,6 +91,22 @@ export default class LogCommand extends Command {
                 await thingToUpdate.updateOne({
                     Logging: {
                         role: channel.id
+                    }
+                });
+                break;
+            }
+            case "channel": {
+                await thingToUpdate.updateOne({
+                    Logging: {
+                        channel: channel.id
+                    }
+                });
+                break;
+            }
+            case "giveaway": {
+                await thingToUpdate.updateOne({
+                    Logging: {
+                        giveaway: channel.id
                     }
                 });
                 break;
