@@ -24,8 +24,16 @@ export default {
         see_through: "#2f3136",
     },
     emojis: {
-        check: "<:vade_check:834423303711227966>",
-        x: "<:vade_x:834428827795062873>",
+        check: {
+            name: "vade_check",
+            id: "834423303711227966",
+            mention: "<:vade_check:834423303711227966>",
+        },
+        x: {
+            name: "vade_x",
+            id: "834428827795062873",
+            mention: "<:vade_x:834428827795062873>",
+        },
     },
     perms: {
         admin: "ADMINISTRATOR",

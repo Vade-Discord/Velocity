@@ -16,7 +16,7 @@ export default class HelpCommand extends Command {
     async run(message, args) {
 
         const checkOrCross = (bool) =>
-            bool ? constants.emojis.check : constants.emojis.x;
+            bool ? constants.emojis.check.mention : constants.emojis.x.mention;
 
         const prefix = "-"
         const totalCommands = this.client.commands.size;
