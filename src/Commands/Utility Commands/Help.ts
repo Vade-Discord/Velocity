@@ -1,5 +1,4 @@
 import Command from "../../Interfaces/Command";
-import { stripIndents } from "common-tags";
 import FuzzySearch from "fuse.js";
 import constants from "../../Interfaces/Constants";
 import { Paginate } from "@the-nerd-cave/paginate";

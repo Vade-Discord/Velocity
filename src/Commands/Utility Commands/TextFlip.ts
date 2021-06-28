@@ -1,5 +1,4 @@
 import Command from "../../Interfaces/Command";
-import { RichEmbed } from "eris";
 import dic from "custom-translate";
 let dictionary = {
   a: "ɐ",

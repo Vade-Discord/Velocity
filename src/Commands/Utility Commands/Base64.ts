@@ -1,8 +1,5 @@
 import Command from "../../Interfaces/Command";
 import { RichEmbed } from "eris";
-import main_schema from "../../Schemas/Main Guilds/GuildSchema";
-import fetch from "node-fetch";
-
 export default class ServerinfoCommand extends Command {
   constructor(client) {
     super(client, "base64", {
