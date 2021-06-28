@@ -5,8 +5,8 @@ export default class ServerinfoCommand extends Command {
   constructor(client) {
     super(client, "color", {
       aliases: ["test", "test"],
-      description: "View the server information!",
-      category: "Development",
+      description: "Advertising",
+      category: "Advertising",
       guildOnly: true,
     });
   }

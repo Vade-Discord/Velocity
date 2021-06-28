@@ -6,7 +6,7 @@ export default class ServerinfoCommand extends Command {
     super(client, "serverinfo", {
       aliases: ["servinfo", "si"],
       description: "View the server information!",
-      category: "Development",
+      category: "Information",
       guildOnly: true,
     });
   }
