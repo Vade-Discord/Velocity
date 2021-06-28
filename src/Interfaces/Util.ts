@@ -41,11 +41,13 @@ export default class Util {
     }
   }
 
-  async loggingChannel(guild) {
+  async loggingChannel(guild, type: string) {
+    if(!type) throw new TypeError(`No type provided.`);
     const locatedGuild = await guild_schema.findOne({ guildID: guild.id });
     if (!locatedGuild) return null;
-    const channel = guild.channels.get(locatedGuild?.logChannelID);
-    return channel;
+    let locatedType = locatedGuild.Logging[type];
+    if(!locatedType) return null;
+    return locatedType ? guild.channels.get(locatedType) : null;
   }
 
   getChannel(e, guild) {
@@ -75,6 +77,7 @@ export default class Util {
     if (guildSchema.Premium.expiresOn > Date.now()) return false;
     return true;
   }
+
 
   async createGuildSchema(guild) {
     const newSchema = new guild_schema({
