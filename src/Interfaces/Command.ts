@@ -60,6 +60,7 @@ export default class Command {
     this.adminCommand = options.adminCommand || false;
   }
 
+<<<<<<< HEAD
   async run(message, args) {
     throw new Error(`Command ${this.name} doesn't provide a run method!`);
   }
@@ -68,3 +69,13 @@ export default class Command {
     throw new Error(`Command ${this.name} doesn't provide a run method!`);
   }
 }
+=======
+    async run(message, args) {
+        throw new Error(`Command ${this.name} doesn't provide a run method!`);
+    }
+
+    async runInteraction(interaction, args) {
+        throw new Error(`Command ${this.name} doesn't provide a run method!`);
+    }
+};
+>>>>>>> 71a094fb5e31384015414db07988236af2e00f8e
