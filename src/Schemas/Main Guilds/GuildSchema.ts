@@ -30,20 +30,20 @@ export interface IGuild extends mongoose.Document {
     Starboard: string;
     StarAmount: number;
     Automod: boolean;
-    Premium: {
-        key: string;
-        redeemedOn: number;
-        expiresOn: number,
-        redeemedBy: string;
-        active: boolean;
-        stacked: boolean;
+    Premium?: {
+        key?: string;
+        redeemedOn?: number;
+        expiresOn?: number,
+        redeemedBy?: string;
+        active?: boolean;
+        stacked?: boolean;
     }
-    Logging: {
-        message: string;
-        voice: string;
-        role: string;
-        moderation: string;
-        user: string;
+    Logging?: {
+        message?: string;
+        voice?: string;
+        role?: string;
+        moderation?: string;
+        user?: string;
     }
 }
 
