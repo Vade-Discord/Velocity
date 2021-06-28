@@ -35,9 +35,6 @@ export default class LogCommand extends Command {
         const channel = this.client.utils.getChannel(args[1], message.channel.guild);
         if(!channel) return message.channel.createMessage({ content: `You need to provide a valid channel. You can type \`!${this.name} help\` for assistance.`, messageReference: { messageID: message.id }});
 
-    console.log(type)
-
-
         const locateGuild = (await guild_schema.findOne({ guildID: message.guildID })) ?? await this.client.utils.createGuildSchema(message.channel.guild).then(async (guild) => {
             await updateThing(guild, type, channel);
             newGuild = true;
