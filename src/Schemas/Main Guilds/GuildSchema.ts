@@ -38,6 +38,13 @@ export interface IGuild extends mongoose.Document {
         active: boolean;
         stacked: boolean;
     }
+    Logging: {
+        message: string;
+        voice: string;
+        role: string;
+        moderation: string;
+        user: string;
+    }
 }
 
 const guildSchema = new mongoose.Schema({
@@ -77,6 +84,13 @@ const guildSchema = new mongoose.Schema({
         redeemedBy: String,
         active: Boolean,
         stacked: Boolean,
+    },
+    Logging: {
+        message: String,
+        voice: String,
+        role: String,
+        moderation: String,
+        user: String,
     }
 });
 
