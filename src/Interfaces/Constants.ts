@@ -29,24 +29,10 @@ export default {
       id: "834423303711227966",
       mention: "<:vade_check:834423303711227966>",
     },
-<<<<<<< HEAD
     x: {
       name: "vade_x",
       id: "834428827795062873",
       mention: "<:vade_x:834428827795062873>",
-=======
-    emojis: {
-        check: {
-            name: "vade_check",
-            id: "834423303711227966",
-            mention: "<:vade_check:834423303711227966>",
-        },
-        x: {
-            name: "vade_x",
-            id: "834428827795062873",
-            mention: "<:vade_x:834428827795062873>",
-        },
->>>>>>> 71a094fb5e31384015414db07988236af2e00f8e
     },
   },
   perms: {
