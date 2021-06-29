@@ -9,7 +9,7 @@ import Command from "../interfaces/Command";
 import type { Event } from "../interfaces/Event";
 import Util from "../Interfaces/Util";
 import MessageEmbed = require("../Classes/Embeds");
-
+import Constants from '../Interfaces/Constants';
 
 const globPromise = promisify(glob);
 
@@ -25,8 +25,8 @@ export class Bot extends Eris.Client {
   public config: typeof Config;
   public owners: string[] = ["473858248353513472"];
   public utils: Util = new Util(this);
+  public constants: typeof Constants = Constants;
   public embed: typeof MessageEmbed = MessageEmbed;
-  music: any;
   public constructor(options: Eris.ClientOptions = {}) {
     super(Config.token);
     if (Bot.__instance__) throw new Error("Another client was created.");

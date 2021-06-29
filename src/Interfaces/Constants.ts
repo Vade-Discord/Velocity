@@ -29,6 +29,11 @@ export default {
       id: "834423303711227966",
       mention: "<:vade_check:834423303711227966>",
     },
+    moderation: {
+      name: "moderation",
+      id: "858884725484552223",
+      mention: "<:moderation:858884725484552223>"
+    },
     x: {
       name: "vade_x",
       id: "834428827795062873",

@@ -9,6 +9,7 @@ export default class VcJoinEvent extends Event {
             async run(member, newChannel) {
                 if(!newChannel) return;
 
+
                 try {
                     let tag = `${member.user.username}#${member.user.discriminator}`
                     let embed = new this.client.embed()
