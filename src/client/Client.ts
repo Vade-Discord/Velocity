@@ -10,6 +10,7 @@ import type { Event } from "../interfaces/Event";
 import Util from "../Interfaces/Util";
 import MessageEmbed = require("../Classes/Embeds");
 
+
 const globPromise = promisify(glob);
 
 export class Bot extends Eris.Client {

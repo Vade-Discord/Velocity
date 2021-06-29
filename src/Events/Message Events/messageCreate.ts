@@ -1,5 +1,6 @@
 import { Event } from "../../interfaces/Event";
 
+
     export default class MessageEvent extends Event {
             constructor(client) {
                 super(client, "messageCreate", {

@@ -50,6 +50,23 @@ export default class Util {
     return locatedType ? guild.channels.get(locatedType) : null;
   }
 
+  createButton(message, label: string = '', style: number, url: string = '', id: string, emotes = {}) {
+      message.channel.createMessage({
+        content: `Hey!`,
+        messageReference: { messageID: message.id },
+        components: [{
+          "type": 1,
+          "components": [{
+            "type": 2,
+            "label": label,
+            "style": style,
+            "custom_id": id
+          }]
+        }]
+      })
+  }
+
+
   getChannel(e, guild) {
     const mentionRegex = /^<#[0-9]+>$/;
     if (mentionRegex.test(e)) {

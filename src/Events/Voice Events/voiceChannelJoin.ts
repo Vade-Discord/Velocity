@@ -14,15 +14,14 @@ export default class VcJoinEvent extends Event {
                     let embed = new this.client.embed()
                         .setAuthor(tag, member.user.avatarURL)
                         .setTitle(`📥 Joined Voice Channel`)
-                        .setDescription(`**Channel:** ${newChannel}`)
+                        .setDescription(`**Channel:** ${newChannel.mention}`)
                         .setThumbnail(member.user.avatarURL)
                         .setFooter(`Vade Logging System`)
                         .setColor(`#00C09A`)
                         .setTimestamp();
 
-                    const logChannel = await this.client.utils.loggingChannel(newChannel.guild, 'channel');
-                    if(!logChannel) return;
-                    logChannel.send(embed);
+                    const logChannel = await this.client.utils.loggingChannel(newChannel.guild, 'voice');
+                    logChannel ? logChannel.createMessage({ embed: embed }) : null;
                 } catch (e) {
                     console.log(e)
                 }

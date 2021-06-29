@@ -8,11 +8,16 @@ export default class TestingCommand extends Command {
             category: "Development",
         });
     }
+
     async run(message, args) {
 
-    const channel = await this.client.utils.getChannel(args[0], message.channel.guild);
-    if(!channel) return message.channel.createMessage({ content: `No channel was located.`, messageReference: { messageID: message.id }});
-        message.channel.createMessage({ content: `Located channel: ${channel.name}`, messageReference: { messageID: message.id }});
-     }
+   this.client.utils.createButton(message, 'Testing aha', 1, null, 'testing#1')
 
     }
+
+    async runInteraction(interaction, member) {
+        interaction.createMessage({ content: `This button was clicked!`});
+
+    }
+
+}
