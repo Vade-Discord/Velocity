@@ -143,8 +143,8 @@ class PaginationEmbed {
     /**
      * Updates the embed's content with the new page
      */
-    update() {
-        return this.message.interaction.editParent({
+    update(interaction) {
+        return interaction.editParent({
             content: (this.showPages) ? `Page **${this.page}** of **${this.pages.length}**` : undefined,
             embed: this.pages[this.page - 1],
         });
@@ -167,7 +167,7 @@ class PaginationEmbed {
                 case "first": {
                     if (this.page > 1) {
                         this.page = 1;
-                        this.update();
+                        this.update(interaction);
                     }
                     break;
                 }
@@ -175,10 +175,10 @@ class PaginationEmbed {
                 case "back": { 
                     if (this.page > 1) {
                         this.page--;
-                        this.update();
+                        this.update(interaction);
                     } else if (this.page === 1 && this.cycling) {
                         this.page = this.pages.length;
-                        this.update();
+                        this.update(interaction);
                     }
                     break;
                 }
@@ -186,10 +186,10 @@ class PaginationEmbed {
                 case "forth": {
                     if (this.page < this.pages.length) {
                         this.page++;
-                        this.update();
+                        this.update(interaction);
                     } else if (this.page === this.pages.length && this.cycling) {
                         this.page = 1;
-                        this.update();
+                        this.update(interaction);
                     }
                     break;
                 }
@@ -197,17 +197,20 @@ class PaginationEmbed {
                 case "last": {
                     if (this.page < this.pages.length) {
                         this.page = this.pages.length;
-                        this.update();
+                        this.update(interaction);
                     }
                     break;
                 }
 
                 case "delete": {
-                    interaction.editParent({ components: [] });
+                    await interaction.editParent({ components: [] });
                     break;
                 }
+                default: {
+                    await interaction.acknowledge();
+                }
             }
-           await interaction.acknowledge();
+
         });
     }
 }
