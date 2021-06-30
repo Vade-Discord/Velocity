@@ -1,6 +1,4 @@
 'use strict';
-
-import { isGeneratorFunction } from 'util/types';
 import constants from '../Interfaces/Constants';
 
 /**
