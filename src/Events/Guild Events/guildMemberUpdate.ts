@@ -33,7 +33,6 @@
                   let removed = oldMember.roles.length ? oldMember.roles.filter(role => !member.roles.includes(role)) : null;
                   let added = member.roles.length ? member.roles.filter(role => !oldMember.roles.includes(role)) : null;
                   if(!added.length && removed.length) {
-                      console.log(removed[0])
                       let removedRole = guild.roles.get(removed[0]);
                       logEmbed
                           .setTitle(`${roleEmoji} Role Removed`)
@@ -42,7 +41,6 @@
 
                       logChannel.createMessage({ embed: logEmbed });
                   } else if(added.length && !removed.length) {
-                      console.log(added[0])
                       let addedRole = guild.roles.get(added[0]);
                       logEmbed
                           .setTitle(`${roleEmoji} Role Added`)
