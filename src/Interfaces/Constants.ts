@@ -39,6 +39,16 @@ export default {
       id: "834428827795062873",
       mention: "<:vade_x:834428827795062873>",
     },
+    role: {
+      name: "role",
+      id: "825769238736273420",
+      mention: "<:role:825769238736273420>",
+    },
+    boost: {
+      name: "boost",
+      id: "859808624804233317",
+      mention: "<:boost:859808624804233317>",
+    }
   },
   perms: {
     admin: "ADMINISTRATOR",
