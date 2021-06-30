@@ -1,4 +1,4 @@
- import { Event } from '../../Interfaces/Event';
+import { Event } from '../../Interfaces/Event';
 import { createPaginationEmbed } from '../../Classes/Pagination';
 import { Interaction } from 'eris';
 
@@ -11,14 +11,16 @@ import { Interaction } from 'eris';
 
           async run(interaction: Interaction) {
 
-              const { member } = interaction;
+            if(!interaction) return;
+
               if(!interaction.data) return;
+              const { member } = interaction;
               const split = interaction.data.custom_id;
               const cmd = split.split("#")[0];
+              if(cmd === 'paginate') return;
               const command = this.client.commands.get(cmd);
-              if(command && command.runInteraction) {
+              if(!command || !command.runInteraction) return;
                   command.runInteraction(interaction, member);
-              }
           }
 
       }

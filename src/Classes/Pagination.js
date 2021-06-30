@@ -45,12 +45,79 @@ class PaginationEmbed {
         this.cycling     = options.cycling       || true
         this.showPages   = (typeof options.showPageNumbers !== 'undefined') ? options.showPageNumbers : true;
         this.advanced    = (typeof options.extendedButtons !== 'undefined') ? options.extendedButtons : false;
+        this.components = undefined;
+
+        this.invoker._client.on("interactionCreate", async (interaction) => {
+            
+                await interaction.acknowledge().then(a => { console.log(a)})
+         //        if(!interaction) return
+                 if(!interaction.data) return;
+                 if (interaction.member.id !== this.invoker.author.id) {
+                     //interaction.createMessage({content: "You must have run the command in order to use the buttons!", flags: 64})
+                     return;
+                 }
+     
+                 const event = interaction.data.custom_id.split("#")[1];
+                 switch (event.toLowerCase()) {
+                     case "first": {
+                         if (this.page > 1) {
+                             this.page = 1;
+                          await   this.update(interaction);
+                         }
+                         break;
+                     }
+     
+                     case "back": { 
+                         if (this.page > 1) {
+                             this.page--;
+                           await  this.update(interaction);
+                         } else if (this.page === 1 && this.cycling) {
+                             this.page = this.pages.length;
+                           await  this.update(interaction);
+                         }
+                         break;
+                     }
+     
+                     case "forth": {
+                         if (this.page < this.pages.length) {
+                             this.page++;
+                            await this.update(interaction);
+                         } else if (this.page === this.pages.length && this.cycling) {
+                             this.page = 1;
+                           await  this.update(interaction);
+                         }
+                         break;
+                     }
+     
+                     case "last": {
+                         if (this.page < this.pages.length) {
+                             this.page = this.pages.length;
+                            await this.update(interaction);
+                         }
+                         break;
+                     }
+     
+                     case "delete": {
+                         interaction.editParent({ components: [] });
+                         break;
+                     }
+                     default:
+                         return;
+                 }
+                
+
+         
+
+        });
     }
 
     /**
      * Runs a set of initialization checks, sets up the reaction listener for continuous listening and displays the initial Embed
      * @async
      */
+
+  
+
     async initialize() {
         if (this.pages.length < 2) {
             return Promise.reject(new Error('A Pagination Embed must contain at least 2 pages!'));
@@ -60,7 +127,7 @@ class PaginationEmbed {
             return Promise.reject(new Error(`Invalid start page! Must be between 1 (first) and ${this.pages.length} (last)`));
         }
 
-        let components
+ 
 
         if (this.advanced) {
             //await this.message.addReaction(this.firstPage);
@@ -68,7 +135,7 @@ class PaginationEmbed {
             //await this.message.addReaction(this.forth);
             //await this.message.addReaction(this.lastPage);
             //await this.message.addReaction(this.delete);
-            components = [{
+            this.components = [{
                 type: 1,
                 components: [{
                     custom_id: `pagination#first`,
@@ -105,7 +172,7 @@ class PaginationEmbed {
         } else {
             //await this.message.addReaction(this.back);
             //await this.message.addReaction(this.forth);
-            components = [{
+            this.components = [{
                 type: 1,
                 components: [{
                     custom_id: `pagination#back`,
@@ -126,7 +193,7 @@ class PaginationEmbed {
         const messageContent = {
             content: (this.showPages) ? `Page **${this.page}** of **${this.pages.length}**` : undefined,
             embed: this.pages[this.page - 1],
-            components: components
+            components: this.components
         }
 
         if (this.invoker.author.id === this.invoker._client.user.id) {
@@ -139,75 +206,19 @@ class PaginationEmbed {
 
 
     }
+    //      content: (this.showPages) ? `Page **${this.page}** of **${this.pages.length}**` : undefined,
 
     /**
      * Updates the embed's content with the new page
      */
-    update() {
-        return this.message.interaction.editParent({
+    //             components: interaction.message.components
+    update(interaction) {
+
+        if(!interaction.data) return;
+        return interaction.message.edit({
             content: (this.showPages) ? `Page **${this.page}** of **${this.pages.length}**` : undefined,
             embed: this.pages[this.page - 1],
-        });
-    }
-
-    /**
-     * Main method handling the reaction listening and content updating
-     */
-    async run() {
-        this.invoker._client.on("interactionCreate", async (interaction) => {
-            if(!interaction.data) return;
-            if (interaction.member.id !== this.invoker.author.id) {
-                interaction.createMessage({content: "You must have run the command in order to use the buttons!", flags: 64})
-                return;
-            }
-
-            const event = interaction.data.custom_id.split("#")[1];
-            
-            switch (event.toLowerCase()) {
-                case "first": {
-                    if (this.page > 1) {
-                        this.page = 1;
-                        this.update();
-                    }
-                    break;
-                }
-
-                case "back": { 
-                    if (this.page > 1) {
-                        this.page--;
-                        this.update();
-                    } else if (this.page === 1 && this.cycling) {
-                        this.page = this.pages.length;
-                        this.update();
-                    }
-                    break;
-                }
-
-                case "forth": {
-                    if (this.page < this.pages.length) {
-                        this.page++;
-                        this.update();
-                    } else if (this.page === this.pages.length && this.cycling) {
-                        this.page = 1;
-                        this.update();
-                    }
-                    break;
-                }
-
-                case "last": {
-                    if (this.page < this.pages.length) {
-                        this.page = this.pages.length;
-                        this.update();
-                    }
-                    break;
-                }
-
-                case "delete": {
-                    interaction.editParent({ components: [] });
-                    break;
-                }
-            }
-           await interaction.acknowledge();
+            components: this.components
         });
     }
 }
@@ -222,7 +233,7 @@ class PaginationEmbed {
 export const createPaginationEmbed = async (message, pages, options) => {
     const paginationEmbed = new PaginationEmbed(message, pages, options);
     await paginationEmbed.initialize();
-    paginationEmbed.run();
+  //  paginationEmbed.run();
 
     return Promise.resolve(paginationEmbed.message);
 }
