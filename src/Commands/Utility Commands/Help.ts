@@ -13,6 +13,7 @@ export default class HelpCommand extends Command {
     });
   }
   async run(message, args) {
+    const websiteButton = this.client.utils.createButton(message, 'Website', 5, 'https://vade-bot.com', 'help#websiteurl');
     const checkOrCross = (bool) =>
       bool ? constants.emojis.check.mention : constants.emojis.x.mention;
 
@@ -42,6 +43,7 @@ export default class HelpCommand extends Command {
       return message.channel.createMessage({
         embed: mainEmbed,
         messageReference: { messageID: message.id },
+        components: websiteButton
       });
     }
 
@@ -103,7 +105,7 @@ export default class HelpCommand extends Command {
       });
 
       if (embeds.length <= 1) {
-        return message.channel.createMessage({ embed: embeds[0] });
+        return message.channel.createMessage({ embed: embeds[0], components: websiteButton });
       }
       return await createPaginationEmbed(message, embeds, {});
     }
@@ -145,11 +147,11 @@ export default class HelpCommand extends Command {
         message.author.avatarURL
       );
 
-    let btn1 = this.client.utils.createButton(message, 'Website', 5, 'https://vade-bot.com', 'help#websiteurl');
+
     await message.channel.createMessage({
       embed: commandEmbed,
       messageReference: { messageID: message.id },
-      components: btn1
+      components: websiteButton
     });
   }
 }
