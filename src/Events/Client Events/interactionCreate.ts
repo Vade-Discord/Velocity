@@ -14,7 +14,6 @@
               const split = interaction.data.custom_id;
               const cmd = split.split("#")[0];
               const command = this.client.commands.get(cmd);
-              console.log(cmd)
               if(command) {
                   command.runInteraction(interaction, member);
               }
