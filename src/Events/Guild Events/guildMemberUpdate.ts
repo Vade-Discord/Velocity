@@ -73,6 +73,13 @@
                   logChannel.createMessage({ embed: logEmbed });
               }
 
+              if(oldMember.pending && !member.pending) {
+                  logEmbed
+                      .setTitle(`Passed Membership Screening `)
+                      .setDescription(`**They passed the membership screening!**`)
+                      .setColor(`#00C09A`)
+              }
+
           }
 
       }
