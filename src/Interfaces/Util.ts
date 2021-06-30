@@ -51,19 +51,26 @@ export default class Util {
   }
 
   createButton(message, label: string = '', style: number, url: string = '', id: string, emotes = {}) {
-      message.channel.createMessage({
-        content: `Hey!`,
-        messageReference: { messageID: message.id },
-        components: [{
+    if(url) {
+      return [{
+        "type": 1,
+        "components": [{
+          "type": 2,
+          "label": label,
+          "style": style,
+          "url": url,
+        }]
+      }]
+    }
+     return [{
           "type": 1,
           "components": [{
             "type": 2,
             "label": label,
             "style": style,
-            "custom_id": id
+            "custom_id": id,
           }]
         }]
-      })
   }
 
 

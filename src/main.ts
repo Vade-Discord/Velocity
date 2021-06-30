@@ -2,7 +2,9 @@ import { ClusterManager } from "@nedbot/sharder";
 import { Bot } from "./client/Client";
 import config from './config.json';
 
+
 const manager = new ClusterManager(config.token, "index.js", {
+    // @ts-ignore
     client: Bot,
     shardCount: 1,
     clusterCount: 1,

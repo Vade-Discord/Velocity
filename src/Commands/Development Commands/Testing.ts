@@ -11,7 +11,8 @@ export default class TestingCommand extends Command {
 
     async run(message, args) {
 
-   this.client.utils.createButton(message, 'Testing aha', 1, null, 'testing#1')
+   let button = this.client.utils.createButton(message, 'Testing aha', 1, null, 'testing#1');
+   message.channel.createMessage({ content: 'Here you go!', components: button });
 
     }
 

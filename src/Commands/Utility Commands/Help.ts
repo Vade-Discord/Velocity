@@ -145,9 +145,11 @@ export default class HelpCommand extends Command {
         message.author.avatarURL
       );
 
+    let btn1 = this.client.utils.createButton(message, 'Website', 5, 'https://vade-bot.com', 'help#websiteurl');
     await message.channel.createMessage({
       embed: commandEmbed,
       messageReference: { messageID: message.id },
+      components: btn1
     });
   }
 }
