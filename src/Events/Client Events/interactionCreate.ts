@@ -12,7 +12,6 @@ import { Interaction } from 'eris';
           async run(interaction: Interaction) {
 
               if(!interaction.data) return;
-              console.log(interaction)
               const { member } = interaction;
               const split = interaction.data.custom_id;
               const cmd = split.split("#")[0];
