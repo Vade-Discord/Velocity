@@ -33,7 +33,7 @@ export async function Lavalink(client: Bot) {
         autoPlay: true,
         send: (id, payload) => {
             const guild = client.guilds.get(id) as Guild;
-            if(guild) guild.shard.ws.send(payload.op, payload.d);
+            if(guild)  guild.shard.sendWS(payload.op, payload.d)
         },
     });
 
@@ -49,6 +49,50 @@ export async function Lavalink(client: Bot) {
         );
     });
 
-    client.on("raw", (d) => client.manager.updateVoiceState(d));
+    client.on("rawWS", (d) => client.manager.updateVoiceState(d));
 
+    client.manager.on("trackStart", async (player, track, payload) => {
+
+        if (
+            client.autoplay.indexOf(payload.guildId) >= 0 &&
+            !player.queue.length &&
+            !player.trackRepeat &&
+            !player.queueRepeat
+        ) {
+            let res = await player.search(
+                `https://www.youtube.com/watch?v=${track.identifier}&list=RD${track.identifier}`,
+                track.requester
+            );
+            await player.queue.add(res.tracks.filter((t) => t.identifier !== track.identifier));
+        }
+        //Embed sent after the track starts playing.
+        let np = new client.embed()
+            .setTitle("🎵 Now Playing:")
+            // @ts-ignore
+            .setDescription(
+                `[${track.title}](${track.uri})\nRequested by: [ ${
+                    // @ts-ignore
+                    track.requester?.id ? track.requester.mention : `<@${track.requester.id}>`
+                } ]`
+            )
+            .setThumbnail(
+                `https://img.youtube.com/vi/${track.identifier}/mqdefault.jpg`
+            )
+            .setFooter(
+                `🎤 ${track.author}  •  ${
+                    track.isStream
+                        ? `◉ LIVE`
+                        : `🕒 ${client.utils.msConversion(track.duration)}`
+                }`
+            );
+
+        let playingMessage;
+        try {
+            playingMessage = await client.createMessage(player.textChannel, {embed: np});
+            // @ts-ignore
+            player.npMessage = playingMessage.id;
+        } catch (error) {
+            console.error(error);
+        }
+    });
 }
