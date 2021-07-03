@@ -11,8 +11,6 @@ import { Interaction } from 'eris';
 
           async run(interaction: Interaction) {
 
-            if(!interaction) return;
-
               if(!interaction.data) return;
               const { member } = interaction;
               const split = interaction.data.custom_id;
@@ -20,7 +18,7 @@ import { Interaction } from 'eris';
               if(cmd === 'paginate') return;
               const command = this.client.commands.get(cmd);
               if(!command || !command.runInteraction) return;
-                  command.runInteraction(interaction, member);
+                  await command.runInteraction(interaction, member);
           }
 
       }
