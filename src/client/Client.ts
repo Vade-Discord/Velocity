@@ -27,6 +27,7 @@ export class Bot extends Eris.Client {
   public utils: Util = new Util(this);
   public constants: typeof Constants = Constants;
   public embed: typeof MessageEmbed = MessageEmbed;
+  public manager = undefined;
   public constructor(options: Eris.ClientOptions = {}) {
     super(Config.token);
     if (Bot.__instance__) throw new Error("Another client was created.");
