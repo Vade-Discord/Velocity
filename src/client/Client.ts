@@ -22,6 +22,7 @@ export class Bot extends Eris.Client {
   public categories: Set<string> = new Set();
   public events: Collection<string, Event> = new Collection();
   public cooldowns: Collection<string, number> = new Collection();
+  public autoplay: string[] = Array();
   public config: typeof Config;
   public owners: string[] = ["473858248353513472"];
   public utils: Util = new Util(this);
