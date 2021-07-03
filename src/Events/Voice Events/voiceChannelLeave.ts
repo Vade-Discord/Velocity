@@ -12,6 +12,15 @@
               if(!oldChannel) return;
 
               try {
+                  if(member.id === this.client.user.id) {
+                      console.log(`Registered the client`)
+                      let player = this.client.manager.players.get(oldChannel.guild.id);
+                      if(player) {
+                          console.log(`Located player`)
+                          await player.destroy();
+                      }
+                  }
+
                   let tag = `${member.user.username}#${member.user.discriminator}`
                   let embed = new this.client.embed()
                       .setAuthor(tag, member.user.avatarURL)
@@ -27,6 +36,7 @@
               } catch (e) {
                   console.log(e)
               }
+
 
           }
 
