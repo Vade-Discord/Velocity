@@ -4,7 +4,7 @@ import { VoiceChannel } from "eris";
 export default class JoinCommand extends Command {
   constructor(client) {
     super(client, "join", {
-      aliases: [""],
+      aliases: ["joinvc"],
       description: "Have the Bot join your Voice Channel!",
       category: "Music",
     });
