@@ -1,14 +1,24 @@
-import type { Bot } from "../client/Client";
+import type {Bot} from "../client/Client";
 import Command from "./Command";
 
 // Package imports
-import { RichEmbed, Member } from "eris";
+import {RichEmbed} from "eris";
 import axios from "axios";
-import { distance, closest } from "fastest-levenshtein";
-import { Types } from "mongoose";
+import {distance} from "fastest-levenshtein";
+import {Types} from "mongoose";
 
 // File imports
 import guild_schema from "../Schemas/Main Guilds/GuildSchema";
+
+interface SelectionObject {
+  label: string;
+  value: string;
+  description: string;
+  emoji: {
+    name: string;
+    id: string;
+  },
+}
 
 export default class Util {
   resolvePrefix(id: any) {
@@ -27,6 +37,8 @@ export default class Util {
 
   private readonly yes: string[] = ["yes", "si", "yeah", "ok", "sure"];
   private readonly no: string[] = ["no", "nope", "nada"];
+
+
 
   constructor(client: Bot) {
     this.client = client;
@@ -73,18 +85,37 @@ export default class Util {
         }]
   }
 
+  createSelection(id: string, placeholder: string, options: Array<SelectionObject>, minValue: number = 1, maxValue: number = 3) {
+    console.log(options)
+    return [
+  {
+    type: 1,
+    components: [
+      {
+        type: 3,
+        custom_id: id,
+        options,
+        placeholder: placeholder,
+        min_values: minValue,
+        max_values: maxValue
+      }
+    ]
+  }
+];
+
+
+  }
+
 
   getChannel(e, guild) {
     const mentionRegex = /^<#[0-9]+>$/;
     if (mentionRegex.test(e)) {
       const id = e.substring(2, e.length - 1);
-      const channel = guild.channels.get(id);
-      return channel;
+      return guild.channels.get(id);
     }
     if (Number.isInteger(+e)) {
       // ID provided. Validate ID here.
-      const channel = guild.channels.get(e);
-      return channel;
+      return guild.channels.get(e);
     }
     if (isNaN(e)) {
       const channel = guild.channels.filter((c) => distance(e, c.name) < 2.5);
@@ -98,8 +129,8 @@ export default class Util {
     const guildSchema = await guild_schema.findOne({ guildID: guild.id });
     if (!guildSchema) return false;
     if (!guildSchema?.Premium.active) return false;
-    if (guildSchema.Premium.expiresOn > Date.now()) return false;
-    return true;
+    return guildSchema.Premium.expiresOn <= Date.now();
+
   }
 
 
@@ -130,11 +161,12 @@ export default class Util {
   }
 
   generateKey() {
-    var length = 15,
-      charset =
-        "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789@!$£",
-      retVal = "";
-    for (var i = 0, n = charset.length; i < length; ++i) {
+    let length = 15,
+        charset =
+            "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789@!$£",
+        retVal = "";
+    let i = 0, n = charset.length;
+    for (; i < length; ++i) {
       retVal += charset.charAt(Math.floor(Math.random() * n));
     }
     return `Vade_` + retVal;
