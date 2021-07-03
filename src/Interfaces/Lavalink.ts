@@ -33,7 +33,7 @@ export async function Lavalink(client: Bot) {
         autoPlay: true,
         send: (id, payload) => {
             const guild = client.guilds.get(id) as Guild;
-            if(guild) guild.shard.sendWS(payload.op, payload.d);
+            if(guild) guild.shard.ws.send(payload.op, payload.d);
         },
     });
 
