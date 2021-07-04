@@ -34,7 +34,9 @@ export default class PlayCommand extends Command {
     const search = args.join(" ");
     let res;
 
-    if (player.playing && channel.id !== message.guild.me.voice.channel.id)
+    const me = message.guild.members.get(this.client.user.id);
+
+    if (player.playing && channel.id !== me.voiceState.channelID)
       return message.channel.createMessage({ content: `You must be in the same channel as ${this.client.user.mention}`, messageReference: { messageID: message.id }});
 
     if (!args.length)
@@ -129,77 +131,12 @@ export default class PlayCommand extends Command {
         return message.channel.createMessage({ embed: embed });
 
       case "SEARCH_RESULT":
-        const arg = message.content.slice(prefix.length).trim().split(/ +/);
-        const commandName = arg.shift().toLowerCase();
-
         let index = 0;
         let searchEmbed;
 
-        if (commandName === "search") {
-          let max = 10,
-              collected,
-              filter = (m) =>
-                  m.author.id === message.author.id && /^(\d+|end)$/i.test(m.content);
-          if (res.tracks.length < max) max = res.tracks.length;
-
-          const results = res.tracks
-              .slice(0, max)
-              .map(
-                  (track, index) =>
-                      `**\`${++index}.\`**\`| [${this.client.utils.msConversion(
-                          track.duration
-                      )}]\` - [${track.title}](${track.uri})`
-              )
-              .join("\n");
-
-          embed
-              .setAuthor(
-                  "Please choose a number from the list of songs below",
-                  message.author.displayAvatarURL()
-              )
-              .setDescription(results)
-              .setFooter("You have 30 seconds to select, or type end to cancel");
-
-          searchEmbed = await message.channel.createMessage({ embed: embed });
-
-          try {
-            collected = await message.channel.awaitMessages(filter, {
-              max: 1,
-              time: 30 * 1000,
-              errors: ["time"],
-            });
-          } catch (e) {
-            if (!player.queue.current) player.destroy();
-
-            embed
-                .setFooter("")
-                .setDescription("You didn't provide a selection")
-                .setAuthor("");
-            return searchEmbed.edit(embed);
-          }
-
-          const first = collected.first().content;
-          collected.first().delete();
-          if (first.toLowerCase() === "end") {
-            if (!player.queue.current) player.destroy();
-            embed
-                .setFooter("")
-                .setDescription("Cancelled selection")
-                .setAuthor("");
-
-            return searchEmbed.edit(embed);
-          }
-
-          index = Number(first) - 1;
-          if (index < 0 || index > max - 1)
-            return message.channel.createMessage({
-              content: `The number you provided too small or too big (1-${max})`,
-              messageReference: {messageID: message.id}
-            });
-        } else {
           embed.setDescription("Loading track...");
           searchEmbed = await message.channel.createMessage({embed: embed});
-        }
+
 
         const track = res.tracks[index];
         await player.queue.add(track);

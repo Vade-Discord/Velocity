@@ -117,5 +117,6 @@ export async function Lavalink(client: Bot) {
             }
         }
 
-    })
+    });
+
 }

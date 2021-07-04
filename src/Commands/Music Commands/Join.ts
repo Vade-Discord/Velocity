@@ -23,5 +23,6 @@ export default class JoinCommand extends Command {
         messageReference: { messageID: message.id },
       });
     await getChannel.join();
+    return message.channel.createMessage({ content: `Successfully joined your Voice Channel!`, messageReference: { messageID: message.id }});
   }
 }
