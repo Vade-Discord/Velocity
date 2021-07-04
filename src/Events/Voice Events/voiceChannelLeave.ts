@@ -13,8 +13,7 @@
 
               try {
                   if(member.id === this.client.user.id) {
-                      console.log(`Registered the client`)
-                      let player = this.client.manager.players.get(oldChannel.guild.id);
+                      const player = this.client.manager.players.get(oldChannel.guild.id);
                       if(player) {
                           console.log(`Located player`)
                           await player.destroy();

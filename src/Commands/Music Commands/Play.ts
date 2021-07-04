@@ -85,8 +85,8 @@ export default class PlayCommand extends Command {
             );
 
         return message.channel
-            .send(embed)
-            .then((msg) => msg.delete({timeout: 10 * 1000}));
+            .createMessage({ embed: embed })
+            .then((msg) => setTimeout(() => { msg.delete(`Search concluded.`) }, 1000));
 
       case "PLAYLIST_LOADED":
         if (!res.tracks.length)
@@ -126,7 +126,7 @@ export default class PlayCommand extends Command {
             embed.description +
             `\n\nCheck the entire playlist with \`${prefix}queue\` command`;
 
-        return message.channel.send(embed);
+        return message.channel.createMessage({ embed: embed });
 
       case "SEARCH_RESULT":
         const arg = message.content.slice(prefix.length).trim().split(/ +/);
@@ -160,7 +160,7 @@ export default class PlayCommand extends Command {
               .setDescription(results)
               .setFooter("You have 30 seconds to select, or type end to cancel");
 
-          searchEmbed = await message.channel.send(embed);
+          searchEmbed = await message.channel.createMessage({ embed: embed });
 
           try {
             collected = await message.channel.awaitMessages(filter, {

@@ -95,4 +95,27 @@ export async function Lavalink(client: Bot) {
             console.error(error);
         }
     });
+
+    client.manager.on("playerMove", async (player, currentChannel, newChannel) => {
+        if(!newChannel) {
+            player.destroy();
+        } else {
+            if(!player.paused) {
+                player.voiceChannel = newChannel;
+                player.pause(true);
+                let embed = new client.embed()
+                    .setTitle("⏸ The music is now paused")
+                    .setDescription(
+                        `Voice channel changed, use \`${client.config.prefix}resume\` to resume the music`
+                    );
+                const channel = client.getChannel(
+                    player.textChannel
+                )
+                if(channel.type !== 0) return;
+                return channel.createMessage({ embed: embed });
+
+            }
+        }
+
+    })
 }
