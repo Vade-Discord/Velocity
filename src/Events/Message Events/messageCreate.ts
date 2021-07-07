@@ -19,7 +19,7 @@ import { Event } from "../../interfaces/Event";
                     const command = this.client.commands.get(cmd?.toLowerCase()) || this.client.commands.get(this.client.aliases.get(cmd?.toLowerCase()));
                     if(!command) return;
 
-                    const check =  await this.client.utils.runPreconditions(message, command);
+                    const check =  await this.client.utils.runPreconditions(message, command, args);
                     if(check) return;
 
                     try {

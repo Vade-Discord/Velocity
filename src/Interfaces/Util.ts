@@ -256,7 +256,7 @@ export default class Util {
       });
   }
 
-  async runPreconditions(message, command: Command) {
+  async runPreconditions(message, command: Command, args) {
     if (command.devOnly) {
       if (!this.client.owners.includes(message.author.id)) {
         let notOwnerEmbed = new RichEmbed()
@@ -349,5 +349,6 @@ export default class Util {
         }
       }
     }
+
   }
 }

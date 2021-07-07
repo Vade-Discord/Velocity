@@ -12,7 +12,7 @@ interface CommandOptions {
   nsfw?: boolean;
   cooldown?: number;
   vadeOnly?: boolean;
-  args?: boolean;
+  args?: string[];
   premiumOnly?: boolean;
   modCommand?: boolean;
   disabled?: boolean;
@@ -32,7 +32,7 @@ export default class Command {
   public nsfw?: boolean;
   public cooldown?: number;
   public vadeOnly?: boolean;
-  public args?: boolean;
+  public args?: string[];
   public premiumOnly?: boolean;
   public modCommand?: boolean;
   public disabled?: boolean;
@@ -53,11 +53,11 @@ export default class Command {
     this.nsfw = options.nsfw || false;
     this.cooldown = options.cooldown || 1;
     this.vadeOnly = options.vadeOnly || false;
-    this.args = options.args || false;
     this.premiumOnly = options.premiumOnly || false;
     this.modCommand = options.modCommand || false;
     this.disabled = options.disabled || false;
     this.adminCommand = options.adminCommand || false;
+    this.args = options.args || [];
   }
 
   async run(message, args) {

@@ -7,6 +7,8 @@ export default class LogCommand extends Command {
             aliases: ["logs", 'setlog', 'logconfig'],
             description: "Configure the guilds logging channels.",
             category: "Configuration",
+            userPerms: ['manageMessages'],
+            botPerms: ['manageMessages']
         });
     }
     async run(message, args) {
@@ -20,7 +22,7 @@ export default class LogCommand extends Command {
         if(args[0]?.toLowerCase() === 'help') {
             let helpEmbed = new this.client.embed()
                 .setTitle(`${this.client.utils.capitalise(this.name)} Command Assistance`)
-                .setDescription(`You can use the following logging types: \n\n${valid.join("\n")} \n\n Example: \`!${this.name} message ${message.channel.mention}`)
+                .setDescription(`You can use the following logging types: \n\n${valid.join("\n")} \n\n Example: \`!${this.name} message\` ${message.channel.mention}`)
                 .setColor(`#F00000`)
                 .setTimestamp()
                 .setFooter(`Vade Configuation`, this.client.user.avatarURL);
