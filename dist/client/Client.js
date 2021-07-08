@@ -31,12 +31,12 @@ const glob_1 = __importDefault(require("glob"));
 const util_1 = require("util");
 const config_json_1 = __importDefault(require("../config.json"));
 const Util_1 = __importDefault(require("../Interfaces/Util"));
+const MessageEmbed = require("../Classes/Embeds");
+const Constants_1 = __importDefault(require("../Interfaces/Constants"));
 const globPromise = util_1.promisify(glob_1.default);
-pluris_1.default(eris_1.default);
 class Bot extends eris_1.default.Client {
     constructor(options = {}) {
         super(config_json_1.default.token);
-        // public static __instance__?: Bot;
         this.logger = new logger_1.Logger("vade");
         this.commands = new collection_1.default();
         this.token = config_json_1.default.token;
@@ -44,24 +44,25 @@ class Bot extends eris_1.default.Client {
         this.categories = new Set();
         this.events = new collection_1.default();
         this.cooldowns = new collection_1.default();
+        this.autoplay = Array();
         this.owners = ["473858248353513472"];
         this.utils = new Util_1.default(this);
-        // if (Bot.__instance__) throw new Error("Another client was created.");
-        //
-        // Bot.__instance__ = this;
-    }
-    async connect() {
-        await this.start(this.config);
-        return super.connect();
+        this.constants = Constants_1.default;
+        this.embed = MessageEmbed;
+        this.manager = undefined;
+        if (Bot.__instance__)
+            throw new Error("Another client was created.");
+        Bot.__instance__ = this;
     }
     async start(config) {
         this.logger.info("hi");
         this.config = config;
+        await pluris_1.default(eris_1.default);
         await this.connect();
         /* load command files */
         const commandFiles = await globPromise(`${__dirname}/../Commands/**/*{.ts,.js}`);
         commandFiles.map(async (value) => {
-            const file = new ((await Promise.resolve().then(() => __importStar(require(value)))).default)(this);
+            const file = new (await Promise.resolve().then(() => __importStar(require(value)))).default(this);
             this.commands.set(file.name, file);
             this.categories.add(file.category);
             if (file.aliases?.length) {
@@ -70,10 +71,13 @@ class Bot extends eris_1.default.Client {
         });
         const eventFiles = await globPromise(`${__dirname}/../events/**/*{.ts,.js}`);
         eventFiles.map(async (value) => {
-            const file = await Promise.resolve().then(() => __importStar(require(value)));
+            const file = new (await Promise.resolve().then(() => __importStar(require(value)))).default(this);
             this.events.set(file.name, file);
-            this.on(file.name, file.run.bind(null, this));
+            file.emitter[file.type](file.name, (...args) => file.run(...args));
         });
+    }
+    static get instance() {
+        return Bot.__instance__;
     }
 }
 exports.Bot = Bot;

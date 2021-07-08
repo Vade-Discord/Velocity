@@ -10,8 +10,10 @@ class BanCommand extends Command_1.default {
             aliases: ["addban", 'guildban'],
             description: "Ban a member from the server.",
             category: "Moderation",
+            modCommand: true,
             userPerms: ['banMembers'],
-            botPerms: ['banMembers']
+            botPerms: ['banMembers'],
+            guildOnly: true,
         });
     }
     async run(message, args) {
@@ -35,7 +37,8 @@ class BanCommand extends Command_1.default {
                     const member = await message.channel.guild.searchMembers(arg, 1);
                     if (!member.length)
                         return message.channel.createMessage({ content: `Unable to locate the member: "${arg}"`, messageReferenceID: message.id });
-                    message.channel.createMessage({ content: `Somehow found a member: ${member[0].user.username}#${member[0].user.discriminator}`, messageReferenceID: message.id });
+                    member[0].ban(7);
+                    message.channel.createMessage({ content: `Successfully banned: ${member[0].user.username}#${member[0].user.discriminator}`, messageReferenceID: message.id });
                 }
                 else {
                     const member = message.channel.guild.members.get(arg);

@@ -15,15 +15,17 @@ class Command {
         this.nsfw = options.nsfw || false;
         this.cooldown = options.cooldown || 1;
         this.vadeOnly = options.vadeOnly || false;
-        this.args = options.args || false;
         this.premiumOnly = options.premiumOnly || false;
         this.modCommand = options.modCommand || false;
         this.disabled = options.disabled || false;
         this.adminCommand = options.adminCommand || false;
+        this.args = options.args || false;
     }
     async run(message, args) {
         throw new Error(`Command ${this.name} doesn't provide a run method!`);
     }
+    async runInteraction(interaction, args) {
+        throw new Error(`Command ${this.name} doesn't provide a runInteraction method!`);
+    }
 }
 exports.default = Command;
-;

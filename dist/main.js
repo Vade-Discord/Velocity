@@ -7,9 +7,10 @@ const sharder_1 = require("@nedbot/sharder");
 const Client_1 = require("./client/Client");
 const config_json_1 = __importDefault(require("./config.json"));
 const manager = new sharder_1.ClusterManager(config_json_1.default.token, "index.js", {
+    // @ts-ignore
     client: Client_1.Bot,
-    shardCount: "auto",
-    clusterCount: "auto",
+    shardCount: 1,
+    clusterCount: 1,
     guildsPerShard: 1200,
     shardsPerCluster: 10,
     clusterTimeout: 5000,

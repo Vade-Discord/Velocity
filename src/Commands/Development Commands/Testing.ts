@@ -41,7 +41,7 @@ export default class TestingCommand extends Command {
             }
         ];
 
-        let component = this.client.utils.createSelection('testing#selection', 'Choose a selection!', options);
+        let component = this.client.utils.createSelection(`testing#selection#${message.author.id}`, 'Choose a selection!', options);
 
    message.channel.createMessage({
        content: `Testing`,
@@ -50,7 +50,8 @@ export default class TestingCommand extends Command {
 
     }
 
-    async runInteraction(interaction, member) {
+    async runInteraction(interaction, member, id) {
+        if(member.id !== id) return;
         interaction.createMessage({ content: `Yo you selected something.... you get these.... ${interaction.data.values.join(", ")}`});
 
     }

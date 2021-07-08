@@ -15,6 +15,7 @@ import { Interaction } from 'eris';
               const { member } = interaction;
               const split = interaction.data.custom_id;
               const cmd = split.split("#")[0];
+              const id = split.split("#")[2];
               if(cmd === 'paginate') return;
               // @ts-ignore
               switch(interaction.data.component_type) {
@@ -22,13 +23,13 @@ import { Interaction } from 'eris';
                   console.log(`Selection menu`);
                       const command = this.client.commands.get(cmd);
                       if(!command || !command.runInteraction) return;
-                      await command.runInteraction(interaction, member);
+                      await command.runInteraction(interaction, member, id);
                       break;
                   }
                   case 2: {
                       const command = this.client.commands.get(cmd);
                       if(!command || !command.runInteraction) return;
-                      await command.runInteraction(interaction, member);
+                      await command.runInteraction(interaction, member, id);
                       break;
                   }
                   default:

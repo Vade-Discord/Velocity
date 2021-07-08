@@ -7,7 +7,7 @@ const Command_1 = __importDefault(require("../../Interfaces/Command"));
 const eris_1 = require("eris");
 class PingCommand extends Command_1.default {
     constructor(client) {
-        super(client, 'ping', {
+        super(client, "ping", {
             aliases: ["pong"],
             description: "Check the bots ping!",
             category: "Utility",
