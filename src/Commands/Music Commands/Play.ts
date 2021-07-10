@@ -11,7 +11,7 @@ export default class PlayCommand extends Command {
   }
   async run(message, args) {
 
-    try {
+
 
 
       const prefix = this.client.config.prefix;
@@ -118,15 +118,13 @@ export default class PlayCommand extends Command {
 
         case "PLAYLIST_LOADED":
           if (!res.tracks.length)
-            return this.client.utils.sendError(
-                "That playlist doesn't contain any songs!",
-                message.channel
-            );
+          return message.channel.createMessage({content: "That playlist doesn't contain any songs!", messageReference: { messageID: message.id }});
+
           embed.setAuthor(
               `${message.author.username} has ${
                   !player.queue.totalSize ? `started` : `added`
               } a playlist`,
-              message.author.displayAvatarURL()
+              message.author.avatarURL
           );
 
           await player.queue.add(res.tracks);
@@ -136,24 +134,19 @@ export default class PlayCommand extends Command {
               .setTitle(res.playlist.name)
               .setDescription(
                   res.tracks
-                      .slice(0, 10)
+                      .slice(0, 8)
                       .map(
                           (track, index) =>
                               `**\`${++index}.\`**\`| [${this.client.utils.msConversion(
                                   track.duration
                               )}]\` - [${track.title}](${track.uri})`
-                      )
+                      ).join("\n") + `\n\nCheck the entire playlist with \`${prefix}queue\` command`
               )
               .setFooter(
                   `🎵 ${res.tracks.length}  •  🕒 ${this.client.utils.msConversion(
                       res.playlist.duration
                   )}`
               );
-
-          embed.description =
-              embed.description +
-              `\n\nCheck the entire playlist with \`${prefix}queue\` command`;
-
           return message.channel.createMessage({embed: embed});
 
         case "SEARCH_RESULT":
@@ -186,10 +179,6 @@ export default class PlayCommand extends Command {
           return searchEmbed.edit({embed: embed});
 
       }
-
-    } catch (e) {
-      return message.channel.createMessage({ content: `Looks like there was an issue when adding the track to the queue. Please try again later!`, messageReference: { messageID: message.id }})
-    }
 
 
   }

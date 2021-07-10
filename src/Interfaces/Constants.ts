@@ -75,14 +75,24 @@ export default {
         },
         moderation: {
             name: "moderation",
-            id: "858884725484552223",
-            mention: "<:moderation:858884725484552223>"
+            id: "820482408238809099",
+            mention: "<:voice:820482408238809099>"
         },
+      voice: {
+          name: "voice",
+          id: "858884725484552223",
+          mention: "<:moderation:858884725484552223>"
+      },
         boost: {
             name: "boost",
             id: "859808624804233317",
             mention: "<:boost:859808624804233317>",
-        }
+        },
+        channel: {
+            name: "channel",
+            id: "862682453663285301",
+            mention: "<:channel:862682453663285301>"
+        },
     },
   perms: {
     admin: "ADMINISTRATOR",

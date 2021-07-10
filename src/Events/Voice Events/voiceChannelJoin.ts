@@ -1,4 +1,6 @@
 import { Event } from '../../Interfaces/Event';
+import ms from 'ms';
+import vcSchema from '../../Schemas/User Schemas/Voice';
 
 export default class VcJoinEvent extends Event {
             constructor(client) {
@@ -26,6 +28,17 @@ export default class VcJoinEvent extends Event {
 
                     const logChannel = await this.client.utils.loggingChannel(newChannel.guild, 'voice');
                     logChannel ? logChannel.createMessage({ embed: embed }) : null;
+                    let joinTime = Date.now();
+                    const newSchema = new vcSchema({
+                        user: member.id,
+                        Join: {
+                            time: joinTime
+                        }
+                    });
+
+                    await newSchema.save();
+
+
                 } catch (e) {
                     console.log(e)
                 }

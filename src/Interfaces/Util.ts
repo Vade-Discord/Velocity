@@ -86,7 +86,6 @@ export default class Util {
   }
 
   createSelection(id: string, placeholder: string, options: Array<SelectionObject>, minValue: number = 1, maxValue: number = 3) {
-    console.log(options)
     return [
   {
     type: 1,

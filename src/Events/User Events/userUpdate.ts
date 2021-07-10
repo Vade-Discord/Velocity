@@ -32,7 +32,8 @@ import guildSchema from '../../Schemas/Main Guilds/GuildSchema';
                       if (oldUser.username !== user.username) {
                           embed.setTitle(`Username Updated`)
                               .setAuthor(tag, user.avatarURL)
-                          embed.setDescription(`**From:** ${oldUser.username}\n**To:** ${user.username}`)
+                          .setDescription(`**From:** ${oldUser.username}\n**To:** ${user.username}`)
+                          .setTimestamp()
 
                           await channel.createMessage({embed: embed});
                       }
@@ -43,6 +44,7 @@ import guildSchema from '../../Schemas/Main Guilds/GuildSchema';
                               .setAuthor(tag, user.avatarURL)
                           .setDescription(`**From:** #${oldUser.discriminator}\n**To:** #${user.discriminator}`)
                               .setThumbnail(user.avatarURL)
+                              .setTimestamp()
 
                           await channel.createMessage({embed: embed});
                       }
@@ -53,6 +55,7 @@ import guildSchema from '../../Schemas/Main Guilds/GuildSchema';
                               .setAuthor(tag, user.avatarURL)
                               .setDescription(user.mention)
                               .setThumbnail(user.avatarURL)
+                              .setTimestamp()
 
                           await channel.createMessage({embed: embed});
                       }
