@@ -22,6 +22,22 @@
                           await player.destroy();
                       }
                   }
+
+                  const voiceMembers = Array.from(oldChannel.voiceMembers)
+                  let userCount = 0
+
+                  for(const i in voiceMembers) {
+                      if(!voiceMembers[i][1].user.bot) userCount++
+                  }
+
+                  if(userCount === 0) {
+                      const player = this.client.manager.players.get(oldChannel.guild.id)
+                      if(player) {
+                          console.log(`Located player`)
+                          await player.destroy()
+                      }
+                  }
+
                     let timeTracking = false;
                     let time;
                   const locateSchema = await vcSchema.findOne({ user: member.id });
