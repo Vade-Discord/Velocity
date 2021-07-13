@@ -1,10 +1,10 @@
 import Command from "../../Interfaces/Command";
 
-export default class NightcoreCommand extends Command {
+export default class VaporwaveCommand extends Command {
     constructor(client) {
-        super(client, 'nightcore', {
-            aliases: ["nc"],
-            description: "Enable nightcore!",
+        super(client, 'vaporwave', {
+            aliases: ["vw"],
+            description: "Enable vaporwave!",
             category: "Music",
         });
     }
@@ -17,13 +17,13 @@ export default class NightcoreCommand extends Command {
         if(!me.voiceState || !me.voiceState.channelID) return message.channel.createMessage({ content: `I am not connected to a Voice Channnel!`, messageReference: { messageID: message.id }});
         if(!voiceState || voiceState.channelID !== me.voiceState.channelID) return message.channel.createMessage({ content: `You must be in the same Voice Channel as me to use this Command!`, messageReference: { messageID: message.id }});
         if(!player) return message.channel.createMessage({ content: `Nothing seems to be playing.`, messageReference: { messageID: message.id }});
-        player.nightcore ? player.nightcore = false : player.nightcore = true;
+        player.vaporwave ? player.vaporwave = false : player.vaporwave = true;
         let embed = new this.client.embed()
-            .setDescription(`${message.author.mention} 🎵 ${player.nightcore ? `enabled` : `disabled`} nightcore!`)
+            .setDescription(`${message.author.mention} 🎵 ${player.vaporwave ? `enabled` : `disabled`} vaporwave!`)
             .setColor('#ffffff');
         message.channel.createMessage({ embed: embed, messageReference: { messageID: message.id }});
 
 
-     }
-
     }
+
+}
