@@ -536,6 +536,13 @@ erela.js-facebook@^1.0.4:
     axios "^0.21.1"
     cheerio "^1.0.0-rc.6"
 
+erela.js-filters@^1.1.6:
+  version "1.1.6"
+  resolved "https://registry.yarnpkg.com/erela.js-filters/-/erela.js-filters-1.1.6.tgz#13a219d9d0717c3cf56b55a16be5fb1b091168eb"
+  integrity sha512-L9qFRjR8q0bFKcB6xuUxa/G9m1FiterdXT6TmgyDGDRzkud3/8KRMlT3FNYpa3ETwdGUmQ870MhveVhcsVhfiQ==
+  dependencies:
+    erela.js "^2.3.3"
+
 erela.js-spotify@^1.2.0:
   version "1.2.0"
   resolved "https://registry.yarnpkg.com/erela.js-spotify/-/erela.js-spotify-1.2.0.tgz#ebbcbfde1e0eb8593d418ed9c578d758aad04701"

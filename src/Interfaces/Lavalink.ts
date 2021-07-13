@@ -4,6 +4,7 @@ import Spotify from "erela.js-spotify";
 import Deezer from "erela.js-deezer";
 import Facebook from "erela.js-facebook";
 import { Guild } from "eris";
+import Filter from "erela.js-filters"
 
 
 
@@ -29,6 +30,7 @@ export async function Lavalink(client: Bot) {
             }),
             new Deezer({}),
             new Facebook(),
+            new Filter()
         ],
         autoPlay: true,
         send: (id, payload) => {

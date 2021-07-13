@@ -1,5 +1,7 @@
 import Command from "../../Interfaces/Command";
 import guild_schema from "../../Schemas/Main Guilds/GuildSchema";
+import {promisify} from "util";
+const wait = promisify(setTimeout);
 
 export default class LogCommand extends Command {
     constructor(client) {
@@ -99,7 +101,6 @@ export default class LogCommand extends Command {
                 let updated = [];
                 const locateGuild = (await guild_schema.findOne({ guildID: interaction.member.guild.id })) ?? await this.client.utils.createGuildSchema(interaction.member.guild);
                     await updateThing(locateGuild, type, extra);
-
 
                 }
         return interaction.createMessage({ content: `Successfully set the selected types to the specified channel.`, messageReference: { messageID: interaction.message.id }});
