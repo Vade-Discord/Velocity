@@ -33,7 +33,10 @@
                   if(userCount === 0) {
                       if(player) {
                           console.log(`Located player`)
-                          await player.destroy()
+                          await player.destroy();
+                      } else if(oldChannel.voiceMembers.get(this.client.user.id)) {
+                          console.log(`Located player`)
+                          await oldChannel.leave()
                       }
                   }
 
@@ -43,8 +46,6 @@
                   if(locateSchema) {
                     timeTracking = true;
                    const totalTime = Date.now() - parseInt(locateSchema.Join.time);
-                   console.log(locateSchema.Join.time)
-                   console.log(totalTime)
                    time = humanize(totalTime);
                   await locateSchema.delete()
                   }
