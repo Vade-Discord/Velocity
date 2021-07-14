@@ -29,7 +29,7 @@ export class Bot extends Eris.Client {
   public constants: typeof Constants = Constants;
   public embed: typeof MessageEmbed = MessageEmbed;
   public manager = undefined;
-  public constructor(options: Eris.ClientOptions = {}) {
+  public constructor(options: Eris.ClientOptions = {intents: undefined}) {
     super(Config.token, {
       intents: Object.keys(Eris.Constants.Intents)
     });
