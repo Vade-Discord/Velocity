@@ -30,7 +30,9 @@ export class Bot extends Eris.Client {
   public embed: typeof MessageEmbed = MessageEmbed;
   public manager = undefined;
   public constructor(options: Eris.ClientOptions = {}) {
-    super(Config.token);
+    super(Config.token, {
+      intents: Object.keys(Eris.Constants.Intents)
+    });
     if (Bot.__instance__) throw new Error("Another client was created.");
 
     Bot.__instance__ = this;

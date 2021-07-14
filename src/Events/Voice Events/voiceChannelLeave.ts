@@ -13,10 +13,10 @@
           async run(member, oldChannel) {
 
               if(!oldChannel) return;
+              const player = this.client.manager.players.get(oldChannel.guild.id);
 
               try {
                   if(member.id === this.client.user.id) {
-                      const player = this.client.manager.players.get(oldChannel.guild.id);
                       if(player) {
                           console.log(`Located player`)
                           await player.destroy();
@@ -31,7 +31,6 @@
                   }
 
                   if(userCount === 0) {
-                      const player = this.client.manager.players.get(oldChannel.guild.id)
                       if(player) {
                           console.log(`Located player`)
                           await player.destroy()
