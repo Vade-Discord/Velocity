@@ -6,6 +6,7 @@ export default class PopCommand extends Command {
             aliases: ["popfilter", "pfilter"],
             description: "Enable the pop filter!",
             category: "Music",
+            guildOnly: true,
         });
     }
     async run(message, args) {

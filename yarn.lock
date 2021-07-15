@@ -541,7 +541,7 @@ erela.js-facebook@^1.0.4:
     axios "^0.21.1"
     cheerio "^1.0.0-rc.6"
 
-erela.js-filters@^1.1.6:
+erela.js-filters@^1.2.1:
   version "1.2.1"
   resolved "https://registry.yarnpkg.com/erela.js-filters/-/erela.js-filters-1.2.1.tgz#06a7d2ac21bae96e4c0f3121bbb325b625bc023c"
   integrity sha512-jUH69gJe9R2Xcra1d9o8kWNGjSO9Ko5g5uHMzQnL0QlZp9+NQz2LEA4ikCsLnLBCXDpUeugI46+9EvWuSBczOw==

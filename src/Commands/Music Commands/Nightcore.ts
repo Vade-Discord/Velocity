@@ -6,6 +6,7 @@ export default class NightcoreCommand extends Command {
             aliases: ["nc"],
             description: "Enable nightcore!",
             category: "Music",
+            guildOnly: true,
         });
     }
     async run(message, args) {

@@ -6,6 +6,7 @@ export default class KaraokeCommand extends Command {
             aliases: ["kfilter"],
             description: "Add a karaoke effect to the music!",
             category: "Music",
+            guildOnly: true,
         });
     }
     async run(message, args) {

@@ -6,6 +6,7 @@ export default class TrebleCommand extends Command {
             aliases: ["treblefilter", "tfilter"],
             description: "Enable the treble-bass filter!",
             category: "Music",
+            guildOnly: true,
         });
     }
     async run(message, args) {

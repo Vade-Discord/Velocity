@@ -117,9 +117,6 @@ class PaginationEmbed {
   
 
     async initialize() {
-        if (this.pages.length < 2) {
-            return Promise.reject(new Error('A Pagination Embed must contain at least 2 pages!'));
-        }
 
         if (this.page < 1 || this.page > this.pages.length) {
             return Promise.reject(new Error(`Invalid start page! Must be between 1 (first) and ${this.pages.length} (last)`));
