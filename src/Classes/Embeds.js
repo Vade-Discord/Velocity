@@ -274,7 +274,7 @@ class MessageEmbed {
      * @returns {MessageEmbed}
      */
     addFields(...fields) {
-        this.fields.push(...this.constructor.normalizeFields(fields));
+        this.fields.push(...this.constructor.normalizeFields(...fields));
         return this;
     }
 

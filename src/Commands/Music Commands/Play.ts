@@ -1,5 +1,6 @@
 import Command from "../../Interfaces/Command";
 
+
 export default class PlayCommand extends Command {
   constructor(client) {
     super(client, "play", {

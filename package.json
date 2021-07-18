@@ -26,12 +26,13 @@
     "humanize-duration": "^3.27.0",
     "imageapi.js": "^1.7.0",
     "mal-scraper": "^2.11.3",
-    "mongoose": "^5.12.13",
+    "mongoose": "^5.13.2",
     "node-fetch": "^2.6.1",
     "path": "^0.12.7",
     "phin": "^3.6.0",
     "pluris": "^0.3.5",
     "superagent": "^6.1.0",
+    "tech-tip-cyber": "^1.2.3",
     "util": "^0.12.4"
   },
   "scripts": {

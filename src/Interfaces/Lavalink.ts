@@ -4,7 +4,8 @@ import Spotify from "erela.js-spotify";
 import Deezer from "erela.js-deezer";
 import Facebook from "erela.js-facebook";
 import { Guild } from "eris";
-import Filter from "erela.js-filters"
+import Filter from "erela.js-filters";
+import playerSchema from '../Schemas/Backend/Players';
 
 
 
@@ -93,9 +94,24 @@ export async function Lavalink(client: Bot) {
             playingMessage = await client.createMessage(player.textChannel, {embed: np});
             // @ts-ignore
             player.npMessage = playingMessage.id;
+            const checkSchema = await playerSchema.findOne({ guild: player.guild });
+            if(checkSchema) {
+              await checkSchema.delete();
+            }
+        if(player.queue.length) {
+            const newSchema = new playerSchema({
+                guild: player.guild,
+                queue: player.queue.map(t => t.uri),
+                length: player.queue.length,
+                textChannel: player.textChannel,
+            });
+            await newSchema.save();
+        }
         } catch (error) {
             console.error(error);
         }
+
+
     });
 
     client.manager.on("playerMove", async (player, currentChannel, newChannel) => {
