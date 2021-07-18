@@ -97,6 +97,7 @@ export default class LogCommand extends Command {
             const { message, channel } = interaction;
             let newGuild = false;
         await interaction.createMessage({ content: `Successfully set the selected types to the specified channel.`, messageReference: { messageID: interaction.message.id }});
+       await interaction.message.edit({ content: `Done!`, components: []});
             for(const type of types) {
 
                 console.log(type)
