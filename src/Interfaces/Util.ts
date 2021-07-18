@@ -2,7 +2,7 @@ import type {Bot} from "../client/Client";
 import Command from "./Command";
 
 // Package imports
-import {Guild, RichEmbed} from "eris";
+import {Collection, Guild, Member, RichEmbed} from "eris";
 import axios from "axios";
 import { distance } from "fastest-levenshtein";
 import {Types} from "mongoose";
@@ -254,6 +254,33 @@ export default class Util {
       .catch((err) => {
         console.log(err);
       });
+  }
+
+  // @ts-ignore
+  hasHierarchy(guild, member1: Member, member2: Member): boolean {
+
+    if(member1.roles.length && !member2.roles.length) return true;
+    if(member2.roles.length && !member1.roles.length) return false;
+
+    const member1Roles = member1.roles;
+    const member2Roles = member2.roles; // Two arrays of their role IDs.
+    const firstRoles: Array<any> = [];
+    const secondRoles: Array<any> = [];
+    member1Roles.forEach((role) => {
+     let e =  guild.roles.get(role);
+     firstRoles.push(e);
+    });
+
+    member2Roles.forEach((role) => {
+     let r = guild.roles.get(role);
+     secondRoles.push(r);
+
+    });
+
+    const firstMember = firstRoles.sort((r, e) => e.position - r.position);
+    const secondMember = secondRoles.sort((r, e) => e.position - r.position);
+    return firstMember[0].position > secondMember[0].position;
+
   }
 
   async runPreconditions(message, command: Command, args) {

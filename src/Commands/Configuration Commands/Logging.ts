@@ -100,7 +100,6 @@ export default class LogCommand extends Command {
        await interaction.message.edit({ content: `Done!`, components: []});
             for(const type of types) {
 
-                console.log(type)
                 let updated = [];
                 const locateGuild = (await guild_schema.findOne({ guildID: interaction.member.guild.id })) ?? await this.client.utils.createGuildSchema(interaction.member.guild);
                     await updateThing(locateGuild, type, extra);
