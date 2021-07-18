@@ -81,7 +81,7 @@ export default class LogCommand extends Command {
             }
         ];
 
-        let component = this.client.utils.createSelection(`logging#selection#${message.author.id}#${channel.id}`, 'Configure the logging types!', options, 1, 5);
+        let component = this.client.utils.createSelection(`logging#selection#${message.author.id}#${channel.id}`, 'Configure the logging types!', options, 1, 2);
 
 
         message.channel.createMessage({
@@ -96,14 +96,16 @@ export default class LogCommand extends Command {
             const types = interaction.data.values;
             const { message, channel } = interaction;
             let newGuild = false;
+        await interaction.createMessage({ content: `Successfully set the selected types to the specified channel.`, messageReference: { messageID: interaction.message.id }});
             for(const type of types) {
+
                 console.log(type)
                 let updated = [];
                 const locateGuild = (await guild_schema.findOne({ guildID: interaction.member.guild.id })) ?? await this.client.utils.createGuildSchema(interaction.member.guild);
                     await updateThing(locateGuild, type, extra);
-
+                 await wait(1000)
                 }
-        return interaction.createMessage({ content: `Successfully set the selected types to the specified channel.`, messageReference: { messageID: interaction.message.id }});
+
 
         async function updateThing(thingToUpdate, type, channel) {
             switch(type) {

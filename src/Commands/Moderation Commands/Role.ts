@@ -158,7 +158,7 @@ export default class RoleCommand extends Command {
                             } catch(e) {
                                 console.log(e)
                                 return message.channel.createMessage({
-                                    content: `Unable to add the role ${ids[i]}.`,
+                                    content: `Unable to add the role ${ids[e]}.`,
                                     messageReference: {messageID: message.id},
                                     allowedMentions: {everyone: false, role: false, member: false}
                                 });
