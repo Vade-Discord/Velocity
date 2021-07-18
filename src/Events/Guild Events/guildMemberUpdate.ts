@@ -40,7 +40,7 @@
                           .setColor("#F00000")
 
                       logChannel.createMessage({ embed: logEmbed });
-                  } else if(added.length && !removed.length) {
+                  } else if(added?.length && !removed?.length) {
                       let addedRole = guild.roles.get(added[0]);
                       logEmbed
                           .setTitle(`${roleEmoji} Role Added`)

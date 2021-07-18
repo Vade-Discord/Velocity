@@ -1,5 +1,6 @@
 import Command from "../../Interfaces/Command";
 import fetch from 'node-fetch';
+import phin from "phin";
 
 export default class UrlCommand extends Command {
     constructor(client) {
@@ -17,13 +18,14 @@ export default class UrlCommand extends Command {
         }
 
         try {
-            const data = await fetch(
-                `https://is.gd/create.php?format=json&url=${encodeURIComponent(url)}`
-            ).then((res) => res.json());
+            let { body } = await phin<{ shorturl: string }>({
+                url: `https://is.gd/create.php?format=json&url=${encodeURIComponent(url)}`,
+                parse: "json",
+            });
 
-            if(!data.shorturl) return message.channel.createMessage({ content: `An unknown error has occured...`, messageReference: { messageID: message.id }});
+            if(!body.shorturl) return message.channel.createMessage({ content: `An unknown error has occured...`, messageReference: { messageID: message.id }});
 
-            message.channel.createMessage({ content: `Here's your URL: ${data.shorturl}`, messageReference: { messageID: message.id }});
+            message.channel.createMessage({ content: `Here's your URL: ${body.shorturl}`, messageReference: { messageID: message.id }});
         } catch (e) {
             console.log(e)
             return message.channel.createMessage({ content: `An unknown error has occured...`, messageReference: { messageID: message.id }});

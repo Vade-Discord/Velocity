@@ -1,10 +1,9 @@
 import malScraper from "mal-scraper";
 import Command from "../../Interfaces/Command";
-import { RichEmbed } from "eris";
-export default class ServerinfoCommand extends Command {
+export default class AnimeCommand extends Command {
   constructor(client) {
     super(client, "anime", {
-      //   aliases: ["test", "test"],
+        aliases: ["searchanime","animesearch"],
       description: "Search for a specifc anime character!",
       category: "Utility",
       guildOnly: true,
@@ -16,7 +15,7 @@ export default class ServerinfoCommand extends Command {
       return message.channel.createMessage("Please provide a search query!");
 
     malScraper.getInfoFromName(search).then((data) => {
-      const malEmbed = new RichEmbed()
+      const malEmbed = new this.client.embed()
         .setAuthor(`Anime List search result for ${args}`.split(",").join(" "))
         .setThumbnail(data.picture)
         .addField("Premiered", `\`${data.premiered}\``, true)

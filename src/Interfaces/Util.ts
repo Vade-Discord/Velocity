@@ -2,10 +2,11 @@ import type {Bot} from "../client/Client";
 import Command from "./Command";
 
 // Package imports
-import {RichEmbed} from "eris";
+import {Guild, RichEmbed} from "eris";
 import axios from "axios";
-import {distance} from "fastest-levenshtein";
+import { distance } from "fastest-levenshtein";
 import {Types} from "mongoose";
+
 
 // File imports
 import guild_schema from "../Schemas/Main Guilds/GuildSchema";
@@ -349,5 +350,19 @@ export default class Util {
       }
     }
 
+  }
+
+  getRoles(s: string, guild: Guild) {
+    if (/^[0-9]+$/.test(s)) return guild.roles.get(s);
+    else if (/^<@&[0-9]+>$/.test(s)) {
+      const id = s.substring(3, s.length - 1);
+      return guild.roles.get(id);
+    }
+    const role = guild.roles.filter((c) => distance(s, c.name) < 2.5);
+    if(role?.length) {
+      return role[0];
+    } else {
+      return null;
+    }
   }
 }
