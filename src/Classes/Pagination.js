@@ -47,7 +47,7 @@ class PaginationEmbed {
 
         this.invoker._client.on("interactionCreate", async (interaction) => {
             
-                await interaction.acknowledge().then(a => { console.log(a)})
+                await interaction.acknowledge();
          //        if(!interaction) return
                  if(!interaction.data) return;
                  if (interaction.member.id !== this.invoker.author.id) {
