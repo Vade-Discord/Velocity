@@ -190,6 +190,17 @@ export default class Util {
     }
     return `Vade_` + retVal;
   }
+  caseID() {
+    let length = 10,
+        charset =
+            "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789@!$£",
+        retVal = "";
+    let i = 0, n = charset.length;
+    for (; i < length; ++i) {
+      retVal += charset.charAt(Math.floor(Math.random() * n));
+    }
+    return retVal;
+  }
 
   capitalise(string: string) {
     if (string)
@@ -216,7 +227,7 @@ export default class Util {
   }
 
   async getMember(message, args) {
-    if (!args.length) return new TypeError(`No args provided.`);
+    if (!args?.length) return null;
     if (Number(+args)) {
       let id = message.channel.guild.members.get(args);
       if (!id)
@@ -258,6 +269,8 @@ export default class Util {
 
   // @ts-ignore
   hasHierarchy(guild, member1: Member, member2: Member): boolean {
+
+    if(member1.id === guild.ownerID) return true;
 
     if(member1.roles.length && !member2.roles.length) return true;
     if(member2.roles.length && !member1.roles.length) return false;
