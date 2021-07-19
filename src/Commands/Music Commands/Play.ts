@@ -81,6 +81,13 @@ export default class PlayCommand extends Command {
       }
 
       switch (res.loadType) {
+          case "LOAD_FAILED":
+              if (!player.queue.current) player.destroy()
+              return message.channel.createMessage({
+                  content: "There was an error while loading this song",
+                  messageReference: {messageID: message.id}
+              })
+
         case "NO_MATCHES":
           if (!player.queue.current) player.destroy();
           return message.channel.createMessage({

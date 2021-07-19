@@ -31,9 +31,14 @@ export class Bot extends Eris.Client {
   public manager = undefined;
   public constructor(options: Eris.ClientOptions = {intents: undefined}) {
     super(Config.token, {
-      intents: Object.keys(Eris.Constants.Intents),
-      seedVoiceConnections: true,
-      restMode: true,
+      intents: [
+        "guilds",
+        "guildMessages",
+        "guildVoiceStates",
+        "directMessages"
+      ],
+        seedVoiceConnections: true,
+        restMode: true,
     });
     if (Bot.__instance__) throw new Error("Another client was created.");
 

@@ -12,12 +12,12 @@
 
           async run(member, oldChannel) {
 
-              if(!oldChannel) return;
+              if (!oldChannel) return;
               const player = this.client.manager.players.get(oldChannel.guild.id);
 
               try {
-                  if(member.id === this.client.user.id) {
-                      if(player) {
+                  if (member.id === this.client.user.id) {
+                      if (player) {
                           console.log(`Located player`)
                           await player.destroy();
                       }
@@ -26,18 +26,13 @@
                   const voiceMembers = Array.from(oldChannel.voiceMembers)
                   let userCount = 0
 
-                  for(const i in voiceMembers) {
-                      if(!voiceMembers[i][1].user.bot) userCount++
+                  for (const i in voiceMembers) {
+                      if (!voiceMembers[i][1].user.bot) userCount++
                   }
 
-                  if(userCount === 0) {
-                      if(player) {
-                          console.log(`Located player`)
-                          await player.destroy();
-                      } else if(oldChannel.voiceMembers.get(this.client.user.id)) {
-                          console.log(`Located player`)
-                          await oldChannel.leave()
-                      }
+                  if (oldChannel.voiceMembers.get(this.client.user.id) && userCount === 0) {
+                      //console.log("Located player")
+                      await oldChannel.leave()
                   }
 
                     let timeTracking = false;
