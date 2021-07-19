@@ -19,6 +19,7 @@ export class Bot extends Eris.Client {
   public commands: Collection<string, Command> = new Collection();
   public token = Config.token;
   public aliases: Collection<string, string> = new Collection();
+  public Pagination = new Collection();
   public categories: Set<string> = new Set();
   public events: Collection<string, Event> = new Collection();
   public cooldowns: Collection<string, number> = new Collection();
