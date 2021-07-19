@@ -25,7 +25,6 @@ import { Interaction } from 'eris';
               const cmd = split.split("#")[0];
               const id = split.split("#")[2];
               const extra = split.split("#").length >= 3 ? split.split("#")[3] : null;
-              if(cmd === 'paginate') return;
               // @ts-ignore
               switch(interaction.data.component_type) {
                   case 3: {

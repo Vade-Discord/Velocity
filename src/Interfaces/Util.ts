@@ -227,7 +227,13 @@ export default class Util {
   }
 
   async getMember(message, args) {
-    if (!args?.length) return null;
+    if (!args?.length) {
+      message.channel.createMessage({
+        content: `You need to specify a member.`,
+        messageReference: { messageID: message.id },
+      });
+      return null;
+    }
     if (Number(+args)) {
       let id = message.channel.guild.members.get(args);
       if (!id)
