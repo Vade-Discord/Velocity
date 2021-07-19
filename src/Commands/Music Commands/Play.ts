@@ -70,9 +70,6 @@ export default class PlayCommand extends Command {
 
       try {
         res = await player.search(search, message.author);
-        if (res.loadType === "LOAD_FAILED") {
-          if (!player.queue.current) player.destroy();
-        }
       } catch (err) {
         return message.channel.createMessage({
           content: `There was an error while searching:\n\`${err.message}\``,
