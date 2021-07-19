@@ -5,7 +5,7 @@ export interface IWarnings extends mongoose.Document {
     user: string;
     total: number,
     id: string,
-    time: Date,
+    mostRecent: number,
     reasons: string[];
 
 }
@@ -15,7 +15,7 @@ const queueSchema = new mongoose.Schema({
     user: Object,
     total: Number,
     id: String,
-    time: Date,
+    mostRecent: Date,
     reasons: Array()
 });
 
