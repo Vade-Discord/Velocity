@@ -6,7 +6,7 @@ export default class DogCommand extends Command {
     super(client, "dog", {
       description: "Recieve an image of a Dog!",
       category: "Animals",
-      aliases: ['doggo', 'cutedog'],
+      aliases: ['doggo', 'cutedog', 'doggo'],
       guildOnly: true,
     });
   }
@@ -16,8 +16,8 @@ export default class DogCommand extends Command {
       parse: "json",
     });
 
-    let dogEmbed = new this.client.embed().setImage(body.url).setDescription(`[Click To View](${body.url})`);
+    let embed = new this.client.embed().setImage(body.url).setDescription(`[Click To View](${body.url})`);
 
-    message.channel.createMessage({ embed: dogEmbed, messageReference: { messageID: message.id }});
+    message.channel.createMessage({ embed: embed, messageReference: { messageID: message.id }});
   }
 }

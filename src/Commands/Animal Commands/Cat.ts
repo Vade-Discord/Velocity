@@ -1,12 +1,12 @@
 import Command from "../../Interfaces/Command";
-import { RichEmbed } from "eris";
 import phin from "phin";
 
 export default class CatCommand extends Command {
   constructor(client) {
     super(client, "cat", {
-      description: "Recieve an image of a Cat!!",
+      description: "Recieve an image of a Cat!",
       category: "Animals",
+      aliases: ['kitty', 'catto'],
       guildOnly: true,
     });
   }
