@@ -23,7 +23,7 @@ export default class PrefixCommand extends Command {
         if (!args.length)
             return message.channel.createMessage(
                 `The current prefix for this Guild is \`${
-                    (GuildConfig as any)?.prefix || "ts!"
+                    (GuildConfig as any)?.prefix || "!"
                 }\``
             );
 
