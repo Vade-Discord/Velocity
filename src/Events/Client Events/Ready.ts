@@ -3,7 +3,8 @@ import mongo from '../../Interfaces/Database';
 import { Lavalink } from "../../Interfaces/Lavalink";
 import { promisify } from "util";
 import playerSchema from '../../Schemas/Backend/Players';
-import Eris, {VoiceChannel} from "eris";
+import { PrivateChannel } from "eris";
+import redis from '../../Interfaces/Redis';
 const wait = promisify((setTimeout));
 import { TrackUtils } from 'erela.js'
 
@@ -18,6 +19,8 @@ export default class ReadyEvent extends Event {
         async run() {
             await mongo();
             await Lavalink(this.client);
+            this.client.redis = await redis();
+
             console.log(`${this.client.user.username}${this.client.user.discriminator} has successfully logged in!`);
             this.client.editStatus('online', { name: "Vade Rewrite", type: 5, url: "https://vade-bot.com"});
 
@@ -30,7 +33,7 @@ export default class ReadyEvent extends Event {
                     const channel = await this.client.getRESTChannel(one.channelID);
                     // @ts-ignore
                     let guild;
-                    if (!(channel instanceof Eris.PrivateChannel)) {
+                    if (!(channel instanceof PrivateChannel)) {
                         guild = await this.client.getRESTGuild(channel.guild.id);
                     }
                     const checkSchema = await playerSchema.findOne({guild: guild.id});
