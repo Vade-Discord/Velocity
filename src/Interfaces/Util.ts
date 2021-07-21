@@ -126,10 +126,14 @@ export default class Util {
   }
 
 
-  getChannel(e, guild) {
+  getChannel(e, guild, type: number = 1) {
     const mentionRegex = /^<#[0-9]+>$/;
     if (mentionRegex.test(e)) {
       const id = e.substring(2, e.length - 1);
+      if(type !== 1) {
+      let guildChannels = guild.channels.filter((m) => m.type === type);
+      return guildChannels.find((m) => m.id === e);
+      }
       return guild.channels.get(id);
     }
     if (Number.isInteger(+e)) {
@@ -137,6 +141,11 @@ export default class Util {
       return guild.channels.get(e);
     }
     if (isNaN(e)) {
+      if(type !== 1) {
+        let guildChannels = guild.channels.filter((m) => m.type === type);
+        const channel = guildChannels.filter((c) => distance(e, c.name) < 2.5);
+        return channel[0];
+      }
       const channel = guild.channels.filter((c) => distance(e, c.name) < 2.5);
       if (!channel.length) return null;
       return channel[0];
