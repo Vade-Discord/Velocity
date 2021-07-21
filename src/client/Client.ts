@@ -30,6 +30,7 @@ export class Bot extends Eris.Client {
   public constants: typeof Constants = Constants;
   public embed: typeof MessageEmbed = MessageEmbed;
   public manager = undefined;
+  public redis: undefined;
   public constructor(options: Eris.ClientOptions = {intents: undefined}) {
     super(Config.token, {
       intents: [
