@@ -9,8 +9,15 @@ import { Event } from "../../interfaces/Event";
             async run(message) {
                 if(message.author.bot) return;
 
+                let prefix;
+                if(message.channel.guild) {
+                    prefix = await this.client.utils.resolvePrefix(message.channel.guild.id);
+                } else {
+                    prefix = this.client.config.prefix;
+                }
                 const check = await this.client.utils.checkModerator(message);
-                const prefix = this.client.config.prefix;
+
+
                 if(message.content?.toLowerCase().startsWith(prefix)) {
 
                     const args = message.content.slice(prefix.length).trim().split(' ');

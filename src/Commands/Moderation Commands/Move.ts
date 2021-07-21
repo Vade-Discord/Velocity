@@ -66,7 +66,7 @@ export default class MoveCommand extends Command {
 
         }
 
-        const member = await this.client.utils.getMember(message, args[0], 2);
+        const member = await this.client.utils.getMember(message, args[0]);
         if(!member) return;
         if(!member.voiceState.channelID) {
             return message.channel.createMessage({ content: `The member needs to be in a Voice Channel.`, messageReference: { messageID: message.id }});

@@ -2,7 +2,7 @@ import { createClient, RedisClient } from "redis";
 import { redis } from "../config.json";
 
 const redisConnect = async (): Promise<RedisClient> => {
-    return await new Promise((resolve, reject) => {
+    return new Promise((resolve, reject) => {
         const client = createClient({
             url: redis.redisPath,
         });

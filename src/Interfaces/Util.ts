@@ -22,9 +22,6 @@ interface SelectionObject {
 }
 
 export default class Util {
-  resolvePrefix(id: any) {
-    throw new Error("Method not implemented.");
-  }
   succEmbed(arg0: string, channel: any): unknown {
     throw new Error("Method not implemented.");
   }
@@ -51,6 +48,28 @@ export default class Util {
       return memberRole > targetRole;
     } else {
       return true;
+    }
+  }
+
+  async resolvePrefix(id: string) {
+    // @ts-ignore
+    await this.client.redis.get(`prefix.${id}`, (error, result) => {
+      if(result) return result;
+    });
+   let t =  await this.client.redis.keys("*")
+    console.log(t)
+
+    const data = await guild_schema.findOne({ guildID: id });
+    if (data) {
+      if (data.prefix) {
+        // @ts-ignore
+        await this.client.redis.set(`prefix.${id}`, data.prefix);
+        return data.prefix;
+      } else {
+        return "!";
+      }
+    } else {
+      return "!";
     }
   }
 
