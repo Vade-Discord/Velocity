@@ -17,7 +17,12 @@ export default class HelpCommand extends Command {
     const checkOrCross = (bool) =>
       bool ? constants.emojis.check.mention : constants.emojis.x.mention;
 
-    const prefix = "-";
+    let prefix;
+    if(message.channel.guild) {
+      prefix = await this.client.utils.resolvePrefix(message.channel.guild.id);
+    } else {
+      prefix = this.client.config.prefix;
+    }
     const totalCommands = this.client.commands.size;
     const allCategories = [
       ...new Set(this.client.commands.map((cmd) => cmd.category)),

@@ -20,4 +20,24 @@ const redisConnect = async (): Promise<RedisClient> => {
     });
 };
 
+
+export const expiry = (callback) => {
+    const expired = () => {
+        const sub = createClient({
+            url: redis.redisPath,
+        });
+        sub.subscribe('__keyevent@0__:expired', () => {
+            sub.on("message", (channel, message) => {
+                sub(message)
+            });
+        });
+
+        const pub = createClient({
+            url: redis.redisPath,
+        });
+        pub.send_command('config', ['set', 'notify-keyspace-events', 'Ex'], expired());
+
+    }
+}
+
 export default redisConnect;
