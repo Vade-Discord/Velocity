@@ -56,14 +56,11 @@ export default class Util {
     await this.client.redis.get(`prefix.${id}`, (error, result) => {
       if(result) return result;
     });
-   let t =  await this.client.redis.keys("*")
-    console.log(t)
-
     const data = await guild_schema.findOne({ guildID: id });
     if (data) {
       if (data.prefix) {
         // @ts-ignore
-        await this.client.redis.set(`prefix.${id}`, data.prefix);
+        await this.client.redis.set(`prefix.${id}`, data.prefix, 'EX', 1800);
         return data.prefix;
       } else {
         return "!";
@@ -179,7 +176,6 @@ export default class Util {
     return guildSchema.Premium.expiresOn <= Date.now();
 
   }
-
 
   async createGuildSchema(guild) {
     const newSchema = new guild_schema({
