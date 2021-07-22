@@ -49,8 +49,6 @@ export default class RpsCommand extends Command {
 
          const streak = await this.client.redis.get(`rpsstreak.${interaction.member.id}`);
 
-         console.log(streak)
-
         async function handleStreak(client, gameStatus) {
             switch(gameStatus) {
                 case "won": {
