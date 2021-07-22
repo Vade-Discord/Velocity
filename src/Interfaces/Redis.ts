@@ -1,11 +1,9 @@
-import { createClient, RedisClient } from "redis";
+import Redis from "ioredis";
 import { redis } from "../config.json";
 
-const redisConnect = async (): Promise<RedisClient> => {
+const redisConnect = async (): Promise<Redis> => {
     return new Promise((resolve, reject) => {
-        const client = createClient({
-            url: redis.redisPath,
-        });
+        const client = new Redis(redis.port, redis.redisPath);
 
         client.on("error", (err) => {
             console.error(`Redis error: `, err);
