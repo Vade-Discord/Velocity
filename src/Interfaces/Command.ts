@@ -64,7 +64,7 @@ export default class Command {
     throw new Error(`Command ${this.name} doesn't provide a run method!`);
   }
 
-  async runInteraction(interaction, args, id, extra = null) {
+  async runInteraction(interaction, member, id, extra = null) {
     throw new Error(`Command ${this.name} doesn't provide a runInteraction method!`);
   }
 }

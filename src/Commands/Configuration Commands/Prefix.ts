@@ -33,8 +33,7 @@ export default class PrefixCommand extends Command {
         if (args[0].length > 4)
             return message.channel.createMessage(`The max length for Prefixes is 4 characters.`);
 
-        await guild_schema.updateOne({
-            guildID: message.channel.guild.id,
+        await GuildConfig.updateOne({
             prefix: args[0].toLowerCase(),
         });
         // @ts-ignore

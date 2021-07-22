@@ -14,6 +14,7 @@ import { Interaction } from 'eris';
               if(!interaction.data) return;
 
               const com = interaction.data.custom_id.split("#")[0];
+              const args = interaction.data.custom_id.split("#").splice(1);
 
               if(com == 'pagination') {
                   const pages = await this.client.Pagination.get(interaction.message.id)
@@ -31,13 +32,13 @@ import { Interaction } from 'eris';
                       console.log(`Selection menu`);
                       const command = this.client.commands.get(cmd);
                       if(!command || !command.runInteraction) return;
-                      await command.runInteraction(interaction, member, id, extra);
+                      await command.runInteraction(interaction, args, id, extra);
                       break;
                   }
                   case 2: {
                       const command = this.client.commands.get(cmd);
                       if(!command || !command.runInteraction) return;
-                      await command.runInteraction(interaction, member, id, extra);
+                      await command.runInteraction(interaction, args, id, extra);
                       break;
                   }
                   default:
