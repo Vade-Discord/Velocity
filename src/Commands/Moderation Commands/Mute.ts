@@ -1,5 +1,4 @@
 import Command from "../../Interfaces/Command";
-import { expiry } from '../../Interfaces/Redis';
 
 export default class MuteCommand extends Command {
     constructor(client) {

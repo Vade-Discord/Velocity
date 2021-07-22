@@ -51,6 +51,13 @@ export default class Util {
     }
   }
 
+  formatNumber(number: number, minimumFractionDigits = 0) {
+    return Number.parseFloat(number).toLocaleString(undefined, {
+      minimumFractionDigits,
+      maximumFractionDigits: 2,
+    });
+  }
+
   async resolvePrefix(id: string) {
     // @ts-ignore
     await this.client.redis.get(`prefix.${id}`, (error, result) => {

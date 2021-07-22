@@ -10,7 +10,7 @@ import { Interaction } from 'eris';
 
           async run(interaction: Interaction) {
 
-              await interaction.acknowledge();
+             // await interaction.acknowledge();
               if(!interaction.data) return;
 
               const com = interaction.data.custom_id.split("#")[0];

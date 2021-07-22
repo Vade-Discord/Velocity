@@ -9,7 +9,7 @@ import { Event } from "../../interfaces/Event";
             async run(message) {
                 if(message.author.bot) return;
 
-                if(!this.client.getChannel(message.channel.id)) message.channel = await this.client.getRESTChannel(message.channel.id)
+                if(!this.client.getChannel(message.channel.id)) message.channel = await this.client.getRESTChannel(message.channel.id);
 
                 let prefix;
                 if(message.channel.guild) {
@@ -38,6 +38,7 @@ import { Event } from "../../interfaces/Event";
                             .setTitle(`An error has occured!`)
                             .setDescription(`\`${e}\``)
                             .setColor(`#f00000`);
+
                         return message.channel.createMessage({ embed: embed, messageReference: { messageID: message.id }});
                     }
 
