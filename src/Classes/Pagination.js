@@ -133,6 +133,8 @@ class PaginationEmbed {
 
     async run(interaction) {
 
+        if(interaction.user) interaction.member = interaction.user
+
         if (interaction.member.id !== this.invoker.author.id && this.invokerRequired === true) {
             return //interaction.createMessage({content: "You must have run the command in order to use the buttons!", flags: 64});
         }
