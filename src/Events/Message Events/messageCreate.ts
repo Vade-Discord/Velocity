@@ -9,6 +9,8 @@ import { Event } from "../../interfaces/Event";
             async run(message) {
                 if(message.author.bot) return;
 
+                if(!this.client.getChannel(message.channel.id)) message.channel = await this.client.getRESTChannel(message.channel.id)
+
                 let prefix;
                 if(message.channel.guild) {
                     prefix = await this.client.utils.resolvePrefix(message.channel.guild.id);
