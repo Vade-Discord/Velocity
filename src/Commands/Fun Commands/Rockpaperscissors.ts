@@ -56,7 +56,7 @@ export default class RpsCommand extends Command {
          ) {
              embed.setAuthor(`${interaction.member.user.username}, you lost!`, this.client.user.avatarURL)
              embed.setColor('#F00000')
-             let streak = await this.client.utils.handleStreak('rpsstreak', interaction.member.id,'loss');
+             let streak = await this.client.utils.handleStreak('rps', interaction.member.id,'loss');
              embed.setFooter(`Streak status: ${streak}`, this.client.user.avatarURL)
              interaction.message.edit({ content: `Game completed!`, components: []});
             return interaction.createMessage({ embeds: [embed] });
@@ -64,14 +64,14 @@ export default class RpsCommand extends Command {
              embed.setAuthor(`${interaction.member.user.username}, we tied!`, this.client.user.avatarURL)
              embed.setColor('YELLOW')
 
-             let streak = await this.client.utils.handleStreak('rpsstreak', interaction.member.id,'tie');
+             let streak = await this.client.utils.handleStreak('rps', interaction.member.id,'tie');
              embed.setFooter(`Streak status: ${streak}`, this.client.user.avatarURL)
              interaction.message.edit({ content: `Game completed!`, components: []});
              return interaction.createMessage({ embeds: [embed] });
          } else {
              embed.setAuthor(`${interaction.member.user.username}, you won!`, this.client.user.avatarURL)
              embed.setColor(this.client.constants.colours.green)
-             let streak = await this.client.utils.handleStreak('rpsstreak', interaction.member.id, 'won');
+             let streak = await this.client.utils.handleStreak('rps', interaction.member.id, 'won');
              embed.setFooter(`Streak status: ${streak}`, this.client.user.avatarURL)
              interaction.message.edit({ content: `Game completed!`, components: []});
              return interaction.createMessage({ embeds: [embed] });
