@@ -51,21 +51,21 @@ export default class Util {
     }
   }
 
-  async handleStreak(client, type, interaction, gameStatus) {
-    const streak = await this.client.redis.get(`${type}.${interaction.member.id}`);
+  async handleStreak(type, target, gameStatus) {
+    const streak = await this.client.redis.get(`${type}.${target}`);
     switch(gameStatus) {
       case "won": {
         if(streak > 0) {
-          await client.redis.set(`${type}.${interaction.member.id}`, parseInt(streak) + 1, 'EX', 86400);
+          await this.client.redis.set(`${type}.${target}`, parseInt(streak) + 1, 'EX', 86400);
           return parseInt(streak) + 1;
         } else {
-          await client.redis.set(`${type}.${interaction.member.id}`, 1, 'EX', 86400);
+          await this.client.redis.set(`${type}.${target}`, 1, 'EX', 86400);
           return 1;
         }
       }
       case "loss": {
         if(streak > 0) {
-          await client.redis.set(`${type}.${interaction.member.id}`, 0, 'EX', 86400);
+          await this.client.redis.set(`${type}.${target}`, 0, 'EX', 86400);
           return 0;
         } else {
           return 0;
