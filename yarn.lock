@@ -717,7 +717,7 @@ eris@^0.15.0:
 
 "eris@github:Catboi8/eris#components-interactions":
   version "0.15.2-dev"
-  resolved "https://codeload.github.com/Catboi8/eris/tar.gz/cef886abe38fb686859f3da8973113b010bd0bdd"
+  resolved "https://codeload.github.com/Catboi8/eris/tar.gz/835cf6a9a600b2788c7553ed666ca2a8197a696b"
   dependencies:
     ws "^7.4.6"
   optionalDependencies:
