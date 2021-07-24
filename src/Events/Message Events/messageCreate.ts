@@ -11,21 +11,33 @@ import { Event } from "../../interfaces/Event";
 
                 if(!this.client.getChannel(message.channel.id)) message.channel = await this.client.getRESTChannel(message.channel.id);
 
-                let prefix;
+                let mainPrefix;
                 if(message.channel.guild) {
-                    prefix = await this.client.utils.resolvePrefix(message.channel.guild.id);
+                    mainPrefix = await this.client.utils.resolvePrefix(message.channel.guild.id);
                 } else {
-                    prefix = this.client.config.prefix;
+                    mainPrefix = this.client.config.prefix;
                 }
                 const check = await this.client.utils.checkModerator(message);
 
-
+                const mentionRegexPrefix = RegExp(`^<@!?${this.client.user.id}>`);
+                const prefix = message.content.match(mentionRegexPrefix) ? message.content.match(mentionRegexPrefix)[0] : mainPrefix;
                 if(message.content?.toLowerCase().startsWith(prefix)) {
 
-                    const args = message.content.slice(prefix.length).trim().split(' ');
-                    let cmd = args.shift().toLowerCase();
-
+                    const [cmd, ...args] = message.content.slice(prefix.length).trim().split(/ +/g);
                     const command = this.client.commands.get(cmd?.toLowerCase()) || this.client.commands.get(this.client.aliases.get(cmd?.toLowerCase()));
+
+
+                    if(message.content.match(mentionRegexPrefix) && !cmd) {
+                        const prefixEmbed = new this.client.embed()
+                            .setAuthor(`Prefix`, this.client.user.avatarURL)
+                            .setFooter(`Vade`, this.client.user.avatarURL)
+                            .setTimestamp()
+                            .setDescription(`Global Prefix: ${this.client.user.mention}\n\nServer Prefix: ** ${mainPrefix} **`)
+                            .setColor('#F00000')
+
+                        return message.channel.createMessage({ embeds: [prefixEmbed], messageReference: { messageID: message.id }});
+                    }
+
                     if(!command) return;
 
                     const check =  await this.client.utils.runPreconditions(message, command, args);
