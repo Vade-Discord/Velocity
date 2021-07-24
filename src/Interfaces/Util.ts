@@ -51,7 +51,36 @@ export default class Util {
     }
   }
 
-  formatNumber(number: number, minimumFractionDigits = 0) {
+  async handleStreak(client, type, interaction, gameStatus) {
+    const streak = await this.client.redis.get(`${type}.${interaction.member.id}`);
+    switch(gameStatus) {
+      case "won": {
+        if(streak > 0) {
+          await client.redis.set(`${type}.${interaction.member.id}`, parseInt(streak) + 1, 'EX', 86400);
+          return parseInt(streak) + 1;
+        } else {
+          await client.redis.set(`${type}.${interaction.member.id}`, 1, 'EX', 86400);
+          return 1;
+        }
+      }
+      case "loss": {
+        if(streak > 0) {
+          await client.redis.set(`${type}.${interaction.member.id}`, 0, 'EX', 86400);
+          return 0;
+        } else {
+          return 0;
+        }
+      }
+      default:
+        if(streak > 0) {
+          return streak;
+        } else {
+          return 'No streak.'
+        }
+    }
+  }
+
+  formatNumber(number: string, minimumFractionDigits = 0) {
     return Number.parseFloat(number).toLocaleString(undefined, {
       minimumFractionDigits,
       maximumFractionDigits: 2,
