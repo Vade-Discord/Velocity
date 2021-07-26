@@ -715,9 +715,9 @@ eris@^0.15.0:
     opusscript "^0.0.8"
     tweetnacl "^1.0.1"
 
-"eris@github:Catboi8/eris#components-interactions":
+"eris@github:Catboi8/eris#pr-use":
   version "0.15.2-dev"
-  resolved "https://codeload.github.com/Catboi8/eris/tar.gz/835cf6a9a600b2788c7553ed666ca2a8197a696b"
+  resolved "https://codeload.github.com/Catboi8/eris/tar.gz/f8efb91633ee1a8eeace7878ff6610d4198035ab"
   dependencies:
     ws "^7.4.6"
   optionalDependencies:
