@@ -94,23 +94,23 @@ export async function Lavalink(client: Bot) {
             playingMessage = await client.createMessage(player.textChannel, {embed: np});
             // @ts-ignore
             player.npMessage = playingMessage.id;
-            const checkSchema = await playerSchema.findOne({ guild: player.guild });
+            const checkSchema = await client.redis.get(`queue.${player.guild}`);
             if(checkSchema) {
-              await checkSchema.delete();
+              await client.redis.del(`queue.${player.guild}`)
             }
         if(player.queue.length) {
-            const newSchema = new playerSchema({
+            const data = {
                 guild: player.guild,
                 queue: player.queue.map(t => t.uri),
                 length: player.queue.length,
                 textChannel: player.textChannel,
-            });
-            await newSchema.save();
+                voiceChannel: player.voiceChannel
+            }
+            await client.redis.set(`queue.${player.guild}`, JSON.stringify(data));
         }
         } catch (error) {
             console.error(error);
         }
-
 
     });
 
