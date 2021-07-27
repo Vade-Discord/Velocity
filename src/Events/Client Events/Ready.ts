@@ -3,7 +3,7 @@ import mongo from '../../Interfaces/Database';
 import { Lavalink } from "../../Interfaces/Lavalink";
 import { promisify } from "util";
 import playerSchema from '../../Schemas/Backend/Players';
-import { PrivateChannel } from "eris";
+import { VoiceChannel } from "eris";
 import redis from '../../Interfaces/Redis';
 const wait = promisify((setTimeout));
 import { TrackUtils } from 'erela.js'
@@ -31,13 +31,22 @@ export default class ReadyEvent extends Event {
                 // @ts-ignore
                 this.client.voiceConnections.forEach( async (one) => {
                     const channel = await this.client.getRESTChannel(one.channelID);
+                    if (channel instanceof VoiceChannel) {
+                        channel.leave()
+                    }
                     // @ts-ignore
                     let guild;
-                    if (!(channel instanceof PrivateChannel)) {
+                    if ((channel instanceof VoiceChannel)) {
                         guild = await this.client.getRESTGuild(channel.guild.id);
                     }
-                    const checkSchema = await playerSchema.findOne({guild: guild.id});
+                    if(!this.client.redis) {
+                        await wait(1000);
+                    }
+                    const data = await this.client.redis.get(`queue.${guild.id}`);
+                    const checkSchema =JSON.parse(data)
+                    console.log(checkSchema)
                     if (checkSchema) {
+                        console.log(checkSchema.voiceChannel)
                         const queue = checkSchema.queue;
                                 const player = await this.client.manager.create({
                                     guild: guild.id,
@@ -49,19 +58,35 @@ export default class ReadyEvent extends Event {
                         if(!player.playing) {
                             player.connect()
                         }
+                        const textChannel = await this.client.getRESTChannel(checkSchema.textChannel);
+                        let reAddedEmbed = new this.client.embed()
+                            .setAuthor(`Bot Restarted`, this.client.user.avatarURL)
+                            .setDescription(`Looks like the bot restarted during your listening session!\n\nDon't worry, we're adding the songs back!`)
+                            .setThumbnail(this.client.user.avatarURL)
+
+                        textChannel
+                            ?.createMessage({ embeds: [reAddedEmbed]});
                                 checkSchema.queue.forEach(async (song) => {
-                                    const data = await TrackUtils.buildUnresolved(song, this.client.user);
-                                   await player.queue.add(data);
+                                   player.search(song)
+                                    let res;
+                                    try {
+                                        res = await player.search(song, this.client.user);
+                                    } catch (err) {
+                                        return this.client.createMessage(checkSchema.textChannel, `There was an error while searching:\n\`${err.message}\``)
+                                    }
 
+                                    let embed = new this.client.embed();
+                                    switch(res.loadType) {
+                                        case "TRACK_LOADED":
+                                            let enqueueTrack = res.tracks[0];
+                                            if (!enqueueTrack.track) await enqueueTrack.resolve();
+                                            await player.queue.add(enqueueTrack);
+
+                                            if (!player.playing && !player.paused && !player.queue.length)
+                                                player.play();
+                                    }
                                 });
-                        player.queue.current = player.queue.shift()
-                        // if(!player.queue.current) player.queue.shift();
-                        player.play()
-                      //  if (!player.playing && !player.paused && !player.queue.length) player.play();
-                                await checkSchema.delete();
-
-
-
+                                await this.client.redis.del(`queue.${guild.id}`)
 
                     }
                 });
