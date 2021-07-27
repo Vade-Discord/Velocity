@@ -7,8 +7,6 @@ export default class PrefixCommand extends Command {
             description: "Change the bot prefix.",
             category: "Moderation",
             modCommand: true,
-            userPerms: ['banMembers'],
-            //botPerms: ['banMembers'],
             guildOnly: true,
         });
     }
