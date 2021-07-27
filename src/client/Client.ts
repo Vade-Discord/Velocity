@@ -11,6 +11,8 @@ import Util from "../Interfaces/Util";
 import MessageEmbed = require("../Classes/Embeds");
 import Constants from '../Interfaces/Constants';
 
+import { RedisClient } from 'ioredis';
+
 const globPromise = promisify(glob);
 
 export class Bot extends Eris.Client {
@@ -30,7 +32,7 @@ export class Bot extends Eris.Client {
   public constants: typeof Constants = Constants;
   public embed: typeof MessageEmbed = MessageEmbed;
   public manager = undefined;
-  public redis = undefined;
+  public redis: RedisClient = undefined;
   public constructor(options: Eris.ClientOptions = {intents: undefined}) {
     super(Config.token, {
       intents: [
