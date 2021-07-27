@@ -286,12 +286,14 @@ export default class Util {
     return perms[perm] ?? perm;
   }
 
-  async getMember(message, args) {
+  async getMember(message, args, sendMessage = true) {
     if (!args?.length) {
-      message.channel.createMessage({
-        content: `You need to specify a member.`,
-        messageReference: { messageID: message.id },
-      });
+      if(sendMessage) {
+        message.channel.createMessage({
+          content: `You need to specify a member.`,
+          messageReference: { messageID: message.id },
+        });
+      }
       return null;
     }
     if (Number(+args)) {
