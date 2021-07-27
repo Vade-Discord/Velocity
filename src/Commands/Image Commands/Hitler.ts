@@ -1,10 +1,10 @@
 import Command from "../../Interfaces/Command";
-import { Sepia } from 'discord-image-generation';
+import { Hitler } from 'discord-image-generation';
 
-export default class SepiaCommand extends Command {
+export default class HitlerCommand extends Command {
     constructor(client) {
-        super(client, 'sepia', {
-            description: "Apply a sepia effect to a users avatar.",
+        super(client, 'hitler', {
+            description: "Apply a Hitler effect to a users avatar.",
             category: "Images",
         });
     }
@@ -13,8 +13,8 @@ export default class SepiaCommand extends Command {
         const foundmember = await this.client.utils.getMember(message, args[0], false);
         const member = foundmember ? foundmember : message.member;
         const avatar = member?.user.dynamicAvatarURL(`png`, 512);
-        const image = await new Sepia().getImage(avatar);
-        message.reply({}, { file: image, name: `sepia.png`});
+        const image = await new Hitler().getImage(avatar);
+        message.reply({}, { file: image, name: `hitler.png`});
 
     }
 

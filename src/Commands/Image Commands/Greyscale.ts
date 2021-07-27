@@ -15,7 +15,7 @@ export default class GreyscaleCommand extends Command {
         const member = foundmember ? foundmember : message.member;
         const avatar = member?.user.dynamicAvatarURL(`png`, 512);
         const image = await new Greyscale().getImage(avatar);
-        message.channel.createMessage({}, { file: image, name: `greyscale.png`});
+        message.reply({}, { file: image, name: `greyscale.png`});
 
      }
 

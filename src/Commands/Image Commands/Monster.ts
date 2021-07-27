@@ -15,7 +15,7 @@ export default class MonsterCommand extends Command {
         if(!member) return;
 
         const image = await new Bed().getImage(message.author.dynamicAvatarURL('png', 512), member.user.dynamicAvatarURL('png', 512));
-        message.channel.createMessage({}, { file: image, name: `bed.png`});
+        message.reply({}, { file: image, name: `bed.png`});
 
     }
 

@@ -15,7 +15,7 @@ export default class GayCommand extends Command {
         const member = foundmember ? foundmember : message.member;
         const avatar = member?.user.dynamicAvatarURL(`png`, 512);
         const image = await new Gay().getImage(avatar);
-        message.channel.createMessage({}, { file: image, name: `gay.png`});
+        message.reply({}, { file: image, name: `gay.png`});
 
     }
 

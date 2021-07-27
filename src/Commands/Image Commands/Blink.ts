@@ -21,7 +21,7 @@ export default class BlinkCommand extends Command {
 
        const avatar = message.author.dynamicAvatarURL('png', 512);
         const image = await new Blink().getImage(avatar, avatars.join(","));
-        message.channel.createMessage({}, { file: image, name: `blink.gif`});
+        message.reply({}, { file: image, name: `blink.gif`});
 
     }
 

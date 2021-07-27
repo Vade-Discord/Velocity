@@ -14,7 +14,7 @@ export default class InvertCommand extends Command {
         const member = foundmember ? foundmember : message.member;
         const avatar = member?.user.dynamicAvatarURL(`png`, 512);
         const image = await new Invert().getImage(avatar);
-        message.channel.createMessage({}, { file: image, name: `inverted.png`});
+        message.reply({}, { file: image, name: `inverted.png`});
 
     }
 

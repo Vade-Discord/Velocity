@@ -15,7 +15,7 @@ export default class BlurCommand extends Command {
         const member = foundmember ? foundmember : message.member;
         const avatar = member?.user.dynamicAvatarURL(`png`, 512);
         const image = await new Blur().getImage(avatar);
-        message.channel.createMessage({}, { file: image, name: `blur.png`});
+        message.reply({}, { file: image, name: `blur.png`});
 
     }
 
