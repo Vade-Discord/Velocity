@@ -1130,7 +1130,7 @@ eris-reactions@^0.1.2, eris-reactions@^0.1.4:
 
 eris@Catboi8/eris#pr-use:
   version "0.15.2-dev"
-  resolved "https://codeload.github.com/Catboi8/eris/tar.gz/2614a25e0fee0f7545e358d8bdbc8461a190b100"
+  resolved "https://codeload.github.com/Catboi8/eris/tar.gz/a3d9977aa233aa003bb12306b4430af1f19043a0"
   dependencies:
     ws "^7.4.6"
   optionalDependencies:
