@@ -1128,9 +1128,9 @@ eris-reactions@^0.1.2, eris-reactions@^0.1.4:
   resolved "https://registry.yarnpkg.com/eris-reactions/-/eris-reactions-0.1.4.tgz#4b642f7411144f164b6097138c262eac6b03def1"
   integrity sha512-U2rMtfywnhh4TmqFcF7uo/ciyQN8vb9ptwSJMQs/uaY1a401f+t3sei1R3IR2gYqaFejJzgjTmzBMT6jIBPYYQ==
 
-"eris@github:Catboi8/eris#pr-use":
+eris@Catboi8/eris#pr-use:
   version "0.15.2-dev"
-  resolved "https://codeload.github.com/Catboi8/eris/tar.gz/f8efb91633ee1a8eeace7878ff6610d4198035ab"
+  resolved "https://codeload.github.com/Catboi8/eris/tar.gz/2614a25e0fee0f7545e358d8bdbc8461a190b100"
   dependencies:
     ws "^7.4.6"
   optionalDependencies:

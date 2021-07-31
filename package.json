@@ -18,7 +18,7 @@
     "erela.js-facebook": "^1.0.4",
     "erela.js-filters": "^1.2.1",
     "erela.js-spotify": "^1.2.0",
-    "eris": "github:Catboi8/eris#pr-use",
+    "eris": "Catboi8/eris#pr-use",
     "eris-pagination": "^0.5.2",
     "fastest-levenshtein": "^1.0.12",
     "fuse.js": "^6.4.6",
