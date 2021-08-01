@@ -12,6 +12,7 @@
     "@types/node": "^16.4.7",
     "eris": "github:Catboi8/eris#pr-use",
     "glob": "^7.1.7",
+    "phin": "^3.6.0",
     "pluris": "github:Catboi8/pluris#master",
     "ts-node": "^10.1.0",
     "ts-node-dev": "^1.1.8",

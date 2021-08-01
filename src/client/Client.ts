@@ -61,9 +61,6 @@ export class Bot extends Eris.Client {
       const file: Command = new (await import(value)).default(this);
       this.commands.set(file.name, file);
       this.categories.add(file.category);
-      if (file.aliases?.length) {
-        file.aliases.map((value: string) => this.aliases.set(value, file.name));
-      }
     });
 
     const eventFiles: string[] = await globPromise(
