@@ -8,7 +8,6 @@ export default class BannerCommand extends Command {
             aliases: [""],
             description: "Check out a users banner!",
             category: "Main",
-            devOnly: true,
             options: [
                 {
                     type: 6,
