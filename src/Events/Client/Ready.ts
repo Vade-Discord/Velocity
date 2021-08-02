@@ -12,6 +12,8 @@
 
           const guild = this.client.guilds.get("857895083839324190");
 
+              this.client.editStatus('online', { name: "Vade Rewrite", type: 5, url: "https://vade-bot.com"});
+
            this.client.commands.forEach( (command) => {
                guild.createCommand({
                    options: command.options,

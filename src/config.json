@@ -1,3 +1,11 @@
 {
-  "token": "ODUwNzIzOTk2NTEzMDc1MjAw.YLt4dg.bYEOH0pSm-dUMKPW7K2apH_588s"
+  "token": "ODUwNzIzOTk2NTEzMDc1MjAw.YLt4dg.bYEOH0pSm-dUMKPW7K2apH_588s",
+  "lavalink": {
+    "host": "149.56.228.166",
+    "port": 2333,
+    "password": "bIg@BOI-VaDE*MUSIC.",
+    "SPOTIFY_CLIENT_ID": "9c5ad393a00c4c6ca43be66953932612",
+    "SPOTIFY_SECRET_ID": "768736177d1a4f97bbd7de8f6d07e256",
+    "DEFAULT_VOLUME": 100
+  }
 }

@@ -13,8 +13,13 @@
             if(!interaction.data) return;
             const cmd = interaction.data?.name;
             const { member } = interaction;
+
             if(cmd) {
-                await this.client.commands.get(cmd).run(interaction, member)
+                const command = await this.client.commands.get(cmd);
+                if(!command) return;
+               const check = await this.client.utils.runPreconditions(interaction, command);
+               if(check) return;
+                command.run(interaction, member);
             }
           }
 
