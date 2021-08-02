@@ -7,5 +7,6 @@
     "SPOTIFY_CLIENT_ID": "9c5ad393a00c4c6ca43be66953932612",
     "SPOTIFY_SECRET_ID": "768736177d1a4f97bbd7de8f6d07e256",
     "DEFAULT_VOLUME": 100
-  }
+  },
+  "mongoURI": "mongodb+srv://VadeBot:VadeDevelopment16@cluster0.ipnav.mongodb.net/myFirstDatabase?retryWrites=true&w=majority"
 }

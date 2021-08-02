@@ -1,4 +1,5 @@
   import { Event } from '../../Interfaces/Event';
+  import mongo from '../../Interfaces/Database';
 
       export default class ReadyEvent extends Event {
           constructor(client) {
@@ -8,7 +9,8 @@
           }
 
           async run() {
-          console.log(`${this.client.user.username}#${this.client.user.discriminator} has successfully logged in!`);
+              await mongo();
+              console.log(`${this.client.user.username}#${this.client.user.discriminator} has successfully logged in!`);
 
           const guild = this.client.guilds.get("857895083839324190");
 
