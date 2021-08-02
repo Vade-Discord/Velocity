@@ -135,6 +135,8 @@ export default class PingCommand extends Command {
                         }]
                     }]
                 });
+            } else if(embeds.length >= 2) {
+                return await createPaginationEmbed(interaction, embeds, {});
             }
 
             const command = this.client.commands.get(cmd);

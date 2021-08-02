@@ -212,7 +212,8 @@ class PaginationEmbed {
  * @param {EmbedBase[]} pages An array containing all embed objects
  * @param {PaginationOptions} [options] An optional options object for overwriting defaults
  */
-export const createPaginationEmbed = async (message, pages, options) => {
+export const createPaginationEmbed = async (interaction, pages, options) => {
+    const message = await interaction.getOriginalMessage()
     const paginationEmbed = new PaginationEmbed(message, pages, options);
     const mes = await paginationEmbed.initialize();
     message.client.Pagination.set(mes.id, paginationEmbed)
