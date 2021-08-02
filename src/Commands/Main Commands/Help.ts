@@ -8,11 +8,11 @@ export default class PingCommand extends Command {
             category: "Main",
             options: [
                 {
-                type: 3,
-                name: 'command',
-                description: `Name of the command that you would like help with.`,
-                required: false,
-            },
+                    type: 3,
+                    name: 'command',
+                    description: `Name of the command that you would like help with.`,
+                    required: false,
+                },
                 {
                     type: 3,
                     name: 'category',
@@ -27,13 +27,49 @@ export default class PingCommand extends Command {
            interaction.data.options.filter(m => m.name === "command")[0].value :
            interaction.data.options?.filter(m => m.name === "category")[0].value;
        if(!cmd) {
-           return interaction.createFollowup(`You need to provide either a command or category.`);
+           //const websiteButton = this.client.utils.createButton(interaction, 'Website', 5, 'https://vade-bot.com', 'help#websiteurl');
+           let prefix = "/"
+           const totalCommands = this.client.commands.size;
+
+           const allCategories = [
+               ...new Set(this.client.commands.map((cmd) => cmd.category)),
+           ];
+
+           const categories = allCategories.filter((_, idx) => allCategories[idx]);
+
+               const mainEmbed = new this.client.embed().setDescription(
+                   //`Prefix: ** ${prefix} **\n
+                    `Total Commands: **${totalCommands}**\n
+                    [Support Server](https://discord.gg/FwBUBzBkYt)  **|** [Website](https://vade-bot.com) **|**  [Dashboard](https://vade-bot.com/dashboard)`
+               );
+               for (const category of categories) {
+                   mainEmbed.addField(
+                       `**${this.client.utils.capitalise(category)} [${this.client.commands.filter((cmd) => cmd.category === category).size
+                       }]**`,
+                       `${prefix}help ${this.client.utils.capitalise(category)}`,
+                       true
+                   );
+               }
+           return interaction.createFollowup({
+                   embeds: [mainEmbed],
+                   components: [{
+                       type: 1,
+                       components: [{
+                           type: 2,
+                           style: 5,
+                           label: "Website",
+                           url: `https://vade-bot.com`,
+                       }]
+                   }]
+               });
+           
        }
        const command = this.client.commands.get(cmd);
 
         if(!command) {
             const cat = this.client.commands.filter(m => m.category.toLowerCase() === cmd.toLowerCase());
-            if(!cat) {
+            console.log(cat)
+            if(!cat[0]) {
                 return interaction.createFollowup(`That isn't a valid command or category.`);
             } else {
                 return interaction.createFollowup(`Loctaed category: ${cmd}`);
@@ -42,7 +78,6 @@ export default class PingCommand extends Command {
         } else {
             return interaction.createFollowup(`Located cmd: ${command.name}`);
         }
-
 
     }
 
