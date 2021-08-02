@@ -20,7 +20,6 @@ export class Bot extends Eris.Client {
   public logger: Logger = new Logger("vade");
   public commands: Collection<string, Command> = new Collection();
   public token = Config.token;
-  public aliases: Collection<string, string> = new Collection();
   public Pagination = new Collection();
   public categories: Set<string> = new Set();
   public events: Collection<string, Event> = new Collection();
@@ -32,8 +31,8 @@ export class Bot extends Eris.Client {
   public constants: typeof Constants = Constants;
   public embed: typeof MessageEmbed = MessageEmbed;
   public manager = undefined;
-  public redis: RedisClient = undefined;
-  public constructor(options: Eris.ClientOptions = {intents: undefined}) {
+ // public redis: RedisClient = undefined;
+  public constructor(options: Eris.ClientOptions = {}) {
     super(Config.token, {
       intents: [
         "guilds",
@@ -64,7 +63,7 @@ export class Bot extends Eris.Client {
     });
 
     const eventFiles: string[] = await globPromise(
-      `${__dirname}/../events/**/*{.ts,.js}`
+      `${__dirname}/../Events/**/*{.ts,.js}`
     );
     eventFiles.map(async (value: string) => {
       const file: Event = new (await import(value)).default(this);
