@@ -24,7 +24,6 @@ export default class BannerCommand extends Command {
         if(user) {
             const url = `https://discord.com/api/v8/users/${user}`;
             const { body } = await phin({url: url, parse: "json", headers: { Authorization: `Bot ${this.client.config.token}` }});
-            console.log(body);
             // @ts-ignore
             const banners = {
                 gif: `https://cdn.discordapp.com/banners/${user}/${body?.banner}.gif?size=1024`,
@@ -32,10 +31,14 @@ export default class BannerCommand extends Command {
                 none: null
             }
 
+            const embed = new this.client.embed()
+                .setAuthor(`${body.username}'s Banner`)
+                .setTimestamp()
+
             if (body?.banner?.startsWith("a_")) {
-                return interaction.createFollowup({ embeds: [ new this.client.embed().setImage(banners.gif)]});
+                return interaction.createFollowup({ embeds: [ embed.setImage(banners.gif)]});
             } else if(body?.banner) {
-                return interaction.createFollowup({ embeds: [ new this.client.embed().setImage(banners.png)]});
+                return interaction.createFollowup({ embeds: [ embed.setImage(banners.png)]});
             } else {
                 return interaction.createFollowup(`Could not locate a banner for that user.`);
             }
