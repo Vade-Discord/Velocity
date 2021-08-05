@@ -5,7 +5,7 @@ export default class AvatarCommand extends Command {
         super(client, 'avatar', {
             aliases: [""],
             description: "Check out a users avatar!",
-            category: "Main",
+            category: "Core",
             options: [
                 {
                     type: 6,

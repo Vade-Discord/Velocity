@@ -6,7 +6,7 @@ export default class BannerCommand extends Command {
         super(client, 'banner', {
             aliases: [""],
             description: "Check out a users banner!",
-            category: "Main",
+            category: "Core",
             options: [
                 {
                     type: 6,

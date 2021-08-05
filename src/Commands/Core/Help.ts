@@ -8,7 +8,7 @@ export default class PingCommand extends Command {
         super(client, 'help', {
             aliases: [""],
             description: "Get help with the bot!",
-            category: "Main",
+            category: "Core",
             options: [
                 {
                     type: 3,
