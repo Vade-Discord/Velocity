@@ -1,5 +1,4 @@
 import Command from "../../Interfaces/Command";
-import Eris from "eris";
 import phin from 'phin';
 
 export default class BannerCommand extends Command {
@@ -12,7 +11,7 @@ export default class BannerCommand extends Command {
                 {
                     type: 6,
                     name: 'user',
-                    description: `The person who's avatar you would like to see.`,
+                    description: `The person who's banner you would like to see.`,
                     required: true,
                 }
             ],
