@@ -62,9 +62,9 @@
     "@types/node" "*"
 
 "@types/node@*", "@types/node@^16.4.7":
-  version "16.4.10"
-  resolved "https://registry.yarnpkg.com/@types/node/-/node-16.4.10.tgz#e57e2a54fc6da58da94b3571b1cb456d39f88597"
-  integrity sha512-TmVHsm43br64js9BqHWqiDZA+xMtbUpI1MBIA0EyiBmoV9pcEYFOSdj5fr6enZNfh4fChh+AGOLIzGwJnkshyQ==
+  version "16.4.12"
+  resolved "https://registry.yarnpkg.com/@types/node/-/node-16.4.12.tgz#961e3091f263e6345d2d84afab4e047a60b4b11b"
+  integrity sha512-zxrTNFl9Z8boMJXs6ieqZP0wAhvkdzmHSxTlJabM16cf5G9xBc1uPRH5Bbv2omEDDiM8MzTfqTJXBf0Ba4xFWA==
 
 "@types/strip-bom@^3.0.0":
   version "3.0.0"
@@ -368,7 +368,7 @@ eris-reactions@^0.1.2:
 
 eris@Catboi8/eris#pr-use:
   version "0.15.2-dev"
-  resolved "https://codeload.github.com/Catboi8/eris/tar.gz/dbd0b67874c28cf2841ac681ecf11ad5d266cb2c"
+  resolved "https://codeload.github.com/Catboi8/eris/tar.gz/539db5bf00e05f95f0b8f2234e17bafd5d2180eb"
   dependencies:
     ws "^7.4.6"
   optionalDependencies:
@@ -659,9 +659,9 @@ optional-require@1.0.x:
   integrity sha512-RV2Zp2MY2aeYK5G+B/Sps8lW5NHAzE5QClbFP15j+PWmP+T9PxlJXBOOLoSAdgwFvS4t0aMR4vpedMkbHfh0nA==
 
 optional-require@^1.0.3:
-  version "1.1.1"
-  resolved "https://registry.yarnpkg.com/optional-require/-/optional-require-1.1.1.tgz#214314d1f9fbdd6f9e28fb12c9a3b4422ef93fdc"
-  integrity sha512-EnUe33GTAltyZlIsQ2l93KzBC9zi8BsxLvKP3wxALOsz/YIakVojyuZsv5PFFk8y8e6r+SbaPIsNmyPoSK0OHw==
+  version "1.1.4"
+  resolved "https://registry.yarnpkg.com/optional-require/-/optional-require-1.1.4.tgz#8af7da26b17da76abbf8a1c46e2e148a63813c0e"
+  integrity sha512-YIabCRxu1Qqlxowh5MBaT8vrvC5fa5QehT4iJw8OthkTC1ZXe7aMxtZHtwnNwJRfFgiqPof2RZeguXo4weS9mA==
   dependencies:
     require-at "^1.0.6"
 

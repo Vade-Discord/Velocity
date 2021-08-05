@@ -19,13 +19,13 @@ export default class ReadyEvent extends Event {
         const commands = []
 
         await this.client.commands.forEach((command) => {
-            commands.push({
-                options: command.options,
-                name: command.name,
-                description: command.description,
-                defaultPermission: command.devOnly,
-            });
-        })
+           commands.push({
+               options: command.options,
+               name: command.name,
+               description: command.description,
+               defaultPermission: command.devOnly,
+           });
+        });
         guild.bulkEditCommands(commands)
     }
 
