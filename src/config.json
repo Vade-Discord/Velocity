@@ -1,5 +1,9 @@
 {
   "token": "ODUwNzIzOTk2NTEzMDc1MjAw.YLt4dg.bYEOH0pSm-dUMKPW7K2apH_588s",
+  "CLIENTS": {
+    "beta": "850723996513075200",
+    "main": "782309258620305438"
+  },
   "lavalink": {
     "host": "149.56.228.166",
     "port": 2333,

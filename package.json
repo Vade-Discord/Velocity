@@ -22,6 +22,7 @@
     "glob": "^7.1.7",
     "humanize-duration": "^3.27.0",
     "ioredis": "^4.27.7",
+    "moment": "^2.29.1",
     "mongoose": "^5.13.5",
     "phin": "^3.6.0",
     "pluris": "github:Catboi8/pluris#master",
