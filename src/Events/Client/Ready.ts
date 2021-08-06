@@ -26,7 +26,11 @@ export default class ReadyEvent extends Event {
                defaultPermission: command.devOnly,
            });
         });
-        guild.bulkEditCommands(commands)
+        if(this.client.user.id === this.client.config.CLIENTS.beta) {
+            guild.bulkEditCommands(commands)
+        } else if(this.client.user.id === this.client.config.CLIENTS.main){
+            this.client.bulkEditCommands(commands)
+        }
     }
 
 }
