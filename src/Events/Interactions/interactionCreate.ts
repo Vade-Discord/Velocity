@@ -1,5 +1,4 @@
     import { Event } from '../../Interfaces/Event';
-    import { PingInteraction, CommandInteraction, ComponentInteraction, UnknownInteraction } from 'eris';
 
       export default class InteractionCreateEvent extends Event {
           constructor(client) {

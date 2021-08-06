@@ -3,7 +3,7 @@ import Command from "./Command";
 
 // Package imports
 
-import { Collection, Guild, PingInteraction, CommandInteraction, ComponentInteraction, UnknownInteraction, Interaction, Member, RichEmbed} from "eris";
+import { Collection, Guild, Interaction, Member, RichEmbed} from "eris";
 import { distance } from "fastest-levenshtein";
 import {Types} from "mongoose";
 
