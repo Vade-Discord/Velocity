@@ -56,6 +56,7 @@
                             return console.log(`Unknown interaction type.`);
                     }
                 }
+                break;
                 default: {
                     return;
                 }
