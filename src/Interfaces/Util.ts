@@ -115,7 +115,7 @@ export default class Util {
       }
     }
     if (command.guildOnly) {
-      if (!interaction.guildId) {
+      if (!interaction.guildID) {
         let noGuild = new RichEmbed()
             .setTitle(`Guild Only!`)
             .setDescription(`This Command can only be ran in a Guild!`)
