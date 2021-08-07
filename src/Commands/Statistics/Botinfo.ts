@@ -31,7 +31,6 @@ export default class BotinfoCommand extends Command {
             .setColor(
                this.client.constants.colours.turquoise
             )
-            // @ts-ignore
             .addField("__General__",
                 `**❯** Bot: **${this.client.user.username}#${this.client.user.discriminator} (${this.client.user.id})**
                 **❯** Commands: **${this.client.commands.size}**
@@ -46,12 +45,10 @@ export default class BotinfoCommand extends Command {
                 **❯** Node.js: **${process.version}**
                 **❯** Eris: **${VERSION}**`
             )
-            // @ts-ignore
             .addField("__System__",
                 `**❯** Platform: **${process.platform}**
                  **❯** Uptime: **${ms(os.uptime() * 1000, { long: true })}**`,
             )
-            // @ts-ignore
             .addField("__CPU__",
                 `**❯** Cores: **${os.cpus().length}**
                 **❯** Model: **${core.model}**
