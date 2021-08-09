@@ -12,5 +12,10 @@
     "SPOTIFY_SECRET_ID": "768736177d1a4f97bbd7de8f6d07e256",
     "DEFAULT_VOLUME": 100
   },
+  "redis":  {
+    "redisPath": "//redis-11976.c266.us-east-1-3.ec2.cloud.redislabs.com:11976?password=1nHU5kXpW70ari6yV5oo3x5wB8ptO4dN",
+    "redisPassword": "bIg@BOI-VaDE*REDIS.",
+    "port": 11976
+  },
   "mongoURI": "mongodb+srv://VadeBot:VadeDevelopment16@cluster0.ipnav.mongodb.net/myFirstDatabase?retryWrites=true&w=majority"
 }

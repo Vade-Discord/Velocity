@@ -55,7 +55,6 @@ export default class UserinfoCommand extends Command {
         }
         try {
 
-
             const embed = new this.client.embed()
                 .setThumbnail(user.avatarURL)
                 .setColor("BLUE")

@@ -13,7 +13,7 @@
           async run(member, oldChannel) {
 
               if (!oldChannel) return;
-              const player = this.client.manager.players.get(oldChannel.guild.id);
+              const player = this.client.manager?.players.get(oldChannel.guild.id);
 
               try {
                   if (member.id === this.client.user.id) {

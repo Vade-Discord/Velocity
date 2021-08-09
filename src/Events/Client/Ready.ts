@@ -1,5 +1,6 @@
 import { Event } from '../../Interfaces/Event';
 import mongo from '../../Interfaces/Database';
+import redisConnect from "../../Interfaces/Redis";
 
 export default class ReadyEvent extends Event {
     constructor(client) {
@@ -10,6 +11,7 @@ export default class ReadyEvent extends Event {
 
     async run() {
         await mongo();
+        this.client.redis = await redisConnect();
         console.log(`${this.client.user.username}#${this.client.user.discriminator} has successfully logged in!`);
 
         const guild = this.client.guilds.get("857895083839324190");
