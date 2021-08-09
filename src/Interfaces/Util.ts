@@ -99,7 +99,7 @@ export default class Util {
     return locatedType ? guild.channels.get(locatedType) : null;
   }
 
-  async runPreconditions(interaction, member, command: Command) {
+  async runPreconditions(interaction, member, guild, command: Command) {
     if (command.devOnly) {
       if (!this.client.owners.includes(interaction.user ? interaction.user.id : interaction.member.id)) {
         let notOwnerEmbed = new RichEmbed()
@@ -128,7 +128,7 @@ export default class Util {
       }
     }
 
-    if (!interaction.guildId) return;
+    if (!guild) return;
 
     if (command.modCommand) {
       if (!(await this.checkModerator(interaction))) {
@@ -145,50 +145,44 @@ export default class Util {
       }
     }
 
-    if (command.botPerms) {
-      for (const perm of command.botPerms) {
+    if (command.botPerms.length) {
+      const getMember = guild.members.get(
+          this.client.user.id
+      );
+
+      const checkBotPerms = command.botPerms.some((perm) => !getMember.permissions.has(perm));
+      if(checkBotPerms) {
         let noPermEmbed = new RichEmbed()
             .setTitle(`Missing Permissions!`)
             .setDescription(
-                `I am missing the ${this.cleanPerms(
-                    perm
-                )} Permission! I need it for you to run this Command!`
+                `I am missing one of the required permissions for this Command. Required Permissions: ${command.botPerms.map((m) => this.cleanPerms(m)).join(", ")}`
             )
             .setColor(`#F00000`)
             .setTimestamp()
             .setFooter(`Vade`, this.client.user.avatarURL);
 
-        const getMember = interaction.guild.members.get(
-            this.client.user.id
-        );
-        if (!getMember?.permissions.has(perm)) {
-          return  interaction.createFollowup({
-            embeds: [noPermEmbed]
-          });
-        }
+        return  interaction.createFollowup({
+          embeds: [noPermEmbed]
+        });
       }
     }
-    if (command.userPerms) {
-      for (const perm of command.userPerms) {
+    if (command.userPerms.length) {
+     const userPermCheck =  command.userPerms.some((perm) => !member.permissions.has(perm));
+      if(userPermCheck) {
         let noPermEmbed = new RichEmbed()
             .setTitle(`Missing Permissions!`)
             .setDescription(
-                `You are missing the ${this.cleanPerms(
-                    perm
-                )} Permission! You need it to run this Command!`
+                `You are missing one of the required permissions for this Command. Required Permissions: ${command.userPerms.map((m) => this.cleanPerms(m)).join(", ")}`
             )
             .setColor(`#F00000`)
             .setTimestamp()
             .setFooter(`Vade`, this.client.user.avatarURL);
-        if (!member.permissions.has(perm)) {
-          return  interaction.createFollowup({
-            embeds: [noPermEmbed]
-          });
-        }
+
+        return  interaction.createFollowup({
+          embeds: [noPermEmbed]
+        });
       }
     }
-
-
   }
 
   trimArray(arr: Array<string>, maxLen = 10) {
