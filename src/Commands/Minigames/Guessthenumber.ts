@@ -42,7 +42,7 @@ export default class GuessthenumberCommand extends Command {
            if(channel instanceof TextChannel) {
                const embed = new this.client.embed()
                    .setAuthor(`🔢 Guess The Number!`, this.client.user.avatarURL)
-                   .setDescription(`${member.mention} has started a guess the number event!\nYou have 5 minutes to guess it!`)
+                   .setDescription(`${member.mention} has started a guess the number event!\nYou have **10 minutes** to guess it!`)
                    .setThumbnail(this.client.user.avatarURL)
                    .setFooter(`Vade Minigames`, this.client.user.avatarURL)
                    .setColor(this.client.constants.colours.turquoise)
