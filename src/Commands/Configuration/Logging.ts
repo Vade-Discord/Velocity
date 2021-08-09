@@ -7,6 +7,7 @@ export default class LoggingCommand extends Command {
             aliases: [""],
             description: "Set a logging channel for the specified type.",
             category: "Configuration",
+            userPerms: ['manageGuild'],
             options: [
                 {
                     type: 7,
