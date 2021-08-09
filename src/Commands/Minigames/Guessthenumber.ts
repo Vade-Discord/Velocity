@@ -27,6 +27,11 @@ export default class GuessthenumberCommand extends Command {
     }
     async run(interaction, member) {
 
+        const d = await this.client.redis.get(`minigames.${interaction.guildID}.gtn`);
+        if(d) {
+            return interaction.createFollowup(`You already have a game of guess the number ongoing in: <#${d}>.`);
+        }
+
         const channelID = interaction.data.options?.filter(m => m.name === "channel")[0]?.value;
         const channel = await this.client.getRESTChannel(channelID);
 
@@ -48,6 +53,7 @@ export default class GuessthenumberCommand extends Command {
               await channel.createMessage({ embed: embed})
                channel.awaitMessages({ timeout: 600000, count: 1, filter: (msg => msg.content == number.toString())}).then((c) => {
 
+                // So someone got the number here...
 
                })
 
