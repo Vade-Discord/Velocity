@@ -7,7 +7,6 @@ export default class GuessthenumberCommand extends Command {
             aliases: [""],
             description: "Start a guess the number that lasts 10 minutes!",
             category: "Minigames",
-            devOnly: true,
             userPerms: ['manageMessages'],
             options: [
                 {
@@ -36,7 +35,6 @@ export default class GuessthenumberCommand extends Command {
         const channel = await this.client.getRESTChannel(channelID);
 
         const number: number = interaction.data.options?.filter(m => m.name === "number")[0]?.value;
-        console.log(number)
        try {
 
            if(channel instanceof TextChannel) {
@@ -49,13 +47,27 @@ export default class GuessthenumberCommand extends Command {
 
                await this.client.redis.set(`minigames.${interaction.guildID}.gtn`, channel.id, 'EX', 600);
 
-
-              await channel.createMessage({ embed: embed})
+                const e = await this.client.getRESTUser(interaction.member.id);
+              await channel.createMessage({ embed: embed});
+              e.getDMChannel().then((c) => {
+                  c.createMessage({ content: `The number you chose is: **${number}**`})
+              })
                channel.awaitMessages({ timeout: 600000, count: 1, filter: (msg => msg.content == number.toString())}).then((c) => {
 
-                // So someone got the number here...
+                  const e =  c.collected.find(m => m.content == number.toString())
+                    this.client.redis.del(`minigames.${interaction.guildID}.gtn`);
+                  const gotEmbed = new this.client.embed()
+                      .setAuthor(`🔢 Game Over!`, this.client.user.avatarURL)
+                      .setDescription(`${e.author.mention} has got the number!`)
+                      .setThumbnail(this.client.user.avatarURL)
+                      .setFooter(`Vade Minigames`, this.client.user.avatarURL)
+                      .setColor(this.client.constants.colours.green)
 
-               })
+                   channel.createMessage({ embed: gotEmbed, messageReference: { messageID: e.id}})
+               });
+
+
+
 
            } else {
                return interaction.createFollowup(`Guess the number can only be hosted within a text channel.`);

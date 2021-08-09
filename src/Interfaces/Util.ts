@@ -99,7 +99,7 @@ export default class Util {
     return locatedType ? guild.channels.get(locatedType) : null;
   }
 
-  async runPreconditions(interaction, command: Command) {
+  async runPreconditions(interaction, member, command: Command) {
     if (command.devOnly) {
       if (!this.client.owners.includes(interaction.user ? interaction.user.id : interaction.member.id)) {
         let notOwnerEmbed = new RichEmbed()
@@ -180,7 +180,7 @@ export default class Util {
             .setColor(`#F00000`)
             .setTimestamp()
             .setFooter(`Vade`, this.client.user.avatarURL);
-        if (!interaction.member.permissions.has(perm)) {
+        if (!member.permissions.has(perm)) {
           return  interaction.createFollowup({
             embeds: [noPermEmbed]
           });
