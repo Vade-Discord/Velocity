@@ -9,6 +9,8 @@
 
           async run(interaction) {
 
+              console.log(interaction.type)
+
               const guild = interaction.guildID ? await this.client.getRESTGuild(interaction.guildID) : null;
 
               const member = guild ? await guild.getRESTMember(interaction.member.id) : interaction.member;
@@ -25,7 +27,7 @@
                         const command = await this.client.commands.get(cmd);
 
                         if (!command) return;
-                        const check = await this.client.utils.runPreconditions(interaction, member, command);
+                        const check = await this.client.utils.runPreconditions(interaction, member, guild, command);
                         if (check) return;
                         command.run(interaction, member);
                     }
