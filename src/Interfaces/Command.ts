@@ -53,7 +53,7 @@ export default class Command {
         this.category = options.category || "Miscellaneous";
         this.usage = options.usage || "No usage provided.";
         this.userPerms = options.userPerms || ["sendMessages"];
-        this.botPerms = options.botPerms || ["sendMessages"];
+        this.botPerms = options.botPerms || [];
         this.guildOnly = options.guildOnly || false;
         this.devOnly = options.devOnly || false;
         this.nsfw = options.nsfw || false;
