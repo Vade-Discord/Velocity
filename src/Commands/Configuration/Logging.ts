@@ -25,7 +25,7 @@ export default class LoggingCommand extends Command {
         });
     }
     async run(interaction, member) {
-        const guildData = await guildSchema.findOne({ guildID: interaction.guildId });
+        const guildData = await guildSchema.findOne({ guildID: interaction.guildID });
         const c = interaction.data.options?.filter(m => m.name === "channel")[0]?.value;
         const channel = await this.client.getRESTChannel(c);
 
