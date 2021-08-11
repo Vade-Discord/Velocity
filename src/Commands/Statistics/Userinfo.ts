@@ -17,14 +17,15 @@ export default class UserinfoCommand extends Command {
                     required: true,
                 },
             ],
+            contextUserMenu: true,
         });
     }
     async run(interaction, member) {
-
+        console.log(interaction)
         const guild = this.client.guilds.get(interaction.guildID);
 
         if(!interaction.data.resolved.users) await interaction.data.users.resolve();
-        const u = interaction.data.options?.filter(m => m.name === "user")[0].value;
+        const u = interaction.data.options?.filter(m => m.name === "user")[0].value ?? interaction.data?.target_id;
 
         if(!u) {
             return interaction.createFollowup(`You need to provide a user.`);
