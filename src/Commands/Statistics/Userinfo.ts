@@ -79,6 +79,7 @@ export default class UserinfoCommand extends Command {
                     `
                     **❯** Server Join Date:** ${moment(m.joinedAt).format("LL LTS")}**
                 **❯** Member Roles: **[${memberRoles?.length}]:**  ${
+                    !memberRoles.length ? '**No roles**' :
                         memberRoles?.length < 10
                             ? memberRoles.map((m => m.mention))?.join(", ")
                             : memberRoles.length > 10
