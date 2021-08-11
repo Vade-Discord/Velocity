@@ -18,9 +18,8 @@ export default class ReadyEvent extends Event {
 
         this.client.editStatus('online', { name: "Vade Rewrite", type: 5, url: "https://vade-bot.com" });
 
-        const commands = []
-        const userContextCommands = [];
-
+        const commands = [];
+        const contextCommands = [];
         await this.client.commands.forEach((command) => {
            commands.push({
                options: command.options,
@@ -37,6 +36,7 @@ export default class ReadyEvent extends Event {
                 name: command.name,
                 description: command.description,
                 defaultPermission: command.devOnly,
+                type: 2,
             });
         });
         if(this.client.user.id === this.client.config.CLIENTS.beta) {
