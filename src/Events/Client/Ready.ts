@@ -19,6 +19,7 @@ export default class ReadyEvent extends Event {
         this.client.editStatus('online', { name: "Vade Rewrite", type: 5, url: "https://vade-bot.com" });
 
         const commands = []
+        const userContextCommands = [];
 
         await this.client.commands.forEach((command) => {
            commands.push({
@@ -28,10 +29,20 @@ export default class ReadyEvent extends Event {
                defaultPermission: command.devOnly,
            });
         });
+
+        const contextFiltered = this.client.commands.filter(m => m.contextUserMenu);
+        await contextFiltered.forEach((command) => {
+            commands.push({
+                options: command.options,
+                name: command.name,
+                description: command.description,
+                defaultPermission: command.devOnly,
+            });
+        });
         if(this.client.user.id === this.client.config.CLIENTS.beta) {
-            guild.bulkEditCommands(commands)
+            guild.bulkEditCommands(commands);
         } else if(this.client.user.id === this.client.config.CLIENTS.main){
-            this.client.bulkEditCommands(commands)
+            this.client.bulkEditCommands(commands);
         }
     }
 
