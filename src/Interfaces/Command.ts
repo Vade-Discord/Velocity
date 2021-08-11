@@ -19,6 +19,7 @@ interface CommandOptions {
     modCommand?: boolean;
     disabled?: boolean;
     adminCommand?: boolean;
+    contextUserMenu?: boolean;
 }
 
 
@@ -41,6 +42,7 @@ export default class Command {
     public modCommand?: boolean;
     public disabled?: boolean;
     public adminCommand?: boolean;
+    public contextUserMenu?: boolean;
     public options?: SlashCommandOptions[];
     public client: Bot;
 
@@ -64,6 +66,7 @@ export default class Command {
         this.disabled = options.disabled || false;
         this.adminCommand = options.adminCommand || false;
         this.args = options.args || false;
+        this.contextUserMenu = options.contextUserMenu || false;
     }
 
     async run(interaction, member) {
