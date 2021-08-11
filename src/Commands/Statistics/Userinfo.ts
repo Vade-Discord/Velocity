@@ -21,9 +21,8 @@ export default class UserinfoCommand extends Command {
         });
     }
     async run(interaction, member) {
-        console.log(interaction)
-        const guild = this.client.guilds.get(interaction.guildID);
 
+        const guild = this.client.guilds.get(interaction.guildID);
         if(!interaction.data.resolved.users) await interaction.data.users.resolve();
         const u = interaction.data.options?.filter(m => m.name === "user")[0].value ?? interaction.data?.target_id;
 
@@ -34,7 +33,6 @@ export default class UserinfoCommand extends Command {
         const user = await this.client.getRESTUser(u);
 
        const e =  Object.keys(Constants.UserFlags).filter((v) => user.publicFlags & Constants.UserFlags[v])
-        console.log(e)
 
     const m = await guild.getRESTMember(user.id);
     const memberRoles: Array<any> = m?.roles.length ? m.roles.map((m) => guild.roles.get(m)) : [];
