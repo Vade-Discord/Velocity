@@ -14,11 +14,12 @@ export default class AvatarCommand extends Command {
                     required: true,
                 }
             ],
+            contextUserMenu: true,
         });
     }
     async run(interaction, member) {
         if(!interaction.data.resolved.users) await interaction.data.users.resolve();
-        const u = interaction.data.options?.filter(m => m.name === "user")[0].value;
+        const u = interaction.data.options?.filter(m => m.name === "user")[0].value ?? interaction.data?.target_id;
         const user = await this.client.getRESTUser(u);
         if(user) {
             const avatar = user.dynamicAvatarURL(null, 512);
