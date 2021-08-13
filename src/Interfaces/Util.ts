@@ -82,6 +82,19 @@ export default class Util {
     return filteredRoles.sort((a, b) => b.position - a.position)[0];
   }
 
+  async createGuildSchema(guild) {
+    const newSchema = new guild_schema({
+      _id: Types.ObjectId(),
+      guildID: guild.id,
+      guildName: guild.name,
+      prefix: "!",
+    });
+
+    await newSchema.save();
+
+    return newSchema;
+  }
+
   cleanPerms(perm) {
     const perms: Object = {
       banMembers: "Ban Members",

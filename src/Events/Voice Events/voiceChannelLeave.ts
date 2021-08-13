@@ -37,12 +37,13 @@
 
                     let timeTracking = false;
                     let time;
-                  const locateSchema = await vcSchema.findOne({ user: member.id });
+                  const locateSchema = await this.client.redis.get(`vcTrack.${oldChannel.guild.id}.${member.id}`);
+                  console.log(locateSchema)
                   if(locateSchema) {
                     timeTracking = true;
-                   const totalTime = Date.now() - parseInt(locateSchema.Join.time);
+                   const totalTime = Date.now() - parseInt(locateSchema);
                    time = humanize(totalTime);
-                  await locateSchema.delete()
+                   await this.client.redis.del(`vcTracking.${oldChannel.guild.id}.${member.id}`);
                   }
 
 

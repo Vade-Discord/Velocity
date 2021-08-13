@@ -25,7 +25,8 @@ export default class LoggingCommand extends Command {
         });
     }
     async run(interaction, member) {
-        const guildData = await guildSchema.findOne({ guildID: interaction.guildID });
+        const guild = await this.client.getRESTGuild(interaction.guildID);
+        const guildData = await guildSchema.findOne({ guildID: interaction.guildID }) ?? (await this.client.utils.createGuildSchema(guild))!;
         const c = interaction.data.options?.filter(m => m.name === "channel")[0]?.value;
         const channel = await this.client.getRESTChannel(c);
 
@@ -51,27 +52,57 @@ export default class LoggingCommand extends Command {
         switch(type?.toLowerCase()) {
             case "message": {
                 console.log(`Message option selected`)
+                await guildData.updateOne({
+                    Logging: {
+                        message: channel.id,
+                    }
+                });
+                interaction.createFollowup(`Successfully updated the **${type?.toLowerCase()}** logging channel.`);
                 break;
             }
 
             case "voice": {
                 console.log(`Voice option selected`)
+                await guildData.updateOne({
+                    Logging: {
+                        voice: channel.id,
+                    }
+                });
+                interaction.createFollowup(`Successfully updated the **${type?.toLowerCase()}** logging channel.`);
                 break;
             }
 
             case "moderation": {
                 console.log(`Moderation option selected`)
+                await guildData.updateOne({
+                    Logging: {
+                        moderation: channel.id,
+                    }
+                });
+                interaction.createFollowup(`Successfully updated the **${type?.toLowerCase()}** logging channel.`);
                 break;
             }
 
 
             case "user": {
+                await guildData.updateOne({
+                    Logging: {
+                        user: channel.id,
+                    }
+                });
                 console.log(`User option selected`)
+                interaction.createFollowup(`Successfully updated the **${type?.toLowerCase()}** logging channel.`);
                 break;
             }
 
             case "channel": {
+                await guildData.updateOne({
+                    Logging: {
+                        channel: channel.id,
+                    }
+                });
                 console.log(`Channel option selected`)
+                interaction.createFollowup(`Successfully updated the **${type?.toLowerCase()}** logging channel.`);
                 break;
             }
 
