@@ -40,12 +40,24 @@
                   const locateSchema = await this.client.redis.get(`vcTrack.${oldChannel.guild.id}.${member.id}`);
                   console.log(locateSchema)
                   if(locateSchema) {
-                    timeTracking = true;
-                   const totalTime = Date.now() - parseInt(locateSchema);
-                   time = humanize(totalTime);
-                   await this.client.redis.del(`vcTracking.${oldChannel.guild.id}.${member.id}`);
-                  }
+                      timeTracking = true;
+                      const totalTime = Date.now() - parseInt(locateSchema);
+                      time = humanize(totalTime);
+                      await this.client.redis.del(`vcTracking.${oldChannel.guild.id}.${member.id}`);
+                      const totalSchema = await vcSchema.findOne({user: member.id});
+                      if (totalSchema) {
+                        await totalSchema.updateOne({
+                            $inc: {total: ms(totalTime) }
+                        });
+                      } else {
+                          const newSchema = new vcSchema({
+                              user: member.id,
+                              total: ms(totalTime)
+                          });
+                          await newSchema.save();
+                      }
 
+                  }
 
                   let tag = `${member.user.username}#${member.user.discriminator}`
                   let embed = new this.client.embed()
