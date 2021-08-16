@@ -36,7 +36,7 @@ export default class LoggingCommand extends Command {
 
         const type = interaction.data.options?.filter(m => m.name === "type")[0]?.value;
         if(type) {
-            const validTypes: string[] = ['message', 'voice', 'role', 'moderation', 'channel', 'user'];
+            const validTypes: string[] = ['message', 'voice', 'role', 'moderation', 'channel', 'user', 'welcome', 'invites'];
             if(!validTypes.includes(type?.toLowerCase())) {
                 const invalidEmbed = new this.client.embed()
                     .setAuthor(`Invalid Option!`, this.client.user.avatarURL)
@@ -55,6 +55,26 @@ export default class LoggingCommand extends Command {
                 await guildData.updateOne({
                     Logging: {
                         message: channel.id,
+                    }
+                });
+                interaction.createFollowup(`Successfully updated the **${type?.toLowerCase()}** logging channel.`);
+                break;
+            }
+
+            case "welcome": {
+                await guildData.updateOne({
+                    Logging: {
+                        welcome: channel.id,
+                    }
+                });
+                interaction.createFollowup(`Successfully updated the **${type?.toLowerCase()}** logging channel.`);
+                break;
+            }
+
+            case "invites": {
+                await guildData.updateOne({
+                    Logging: {
+                        invites: channel.id,
                     }
                 });
                 interaction.createFollowup(`Successfully updated the **${type?.toLowerCase()}** logging channel.`);

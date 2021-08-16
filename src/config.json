@@ -13,9 +13,9 @@
     "DEFAULT_VOLUME": 100
   },
   "redis":  {
-    "redisPath": "//redis-11976.c266.us-east-1-3.ec2.cloud.redislabs.com:11976?password=1nHU5kXpW70ari6yV5oo3x5wB8ptO4dN",
-    "redisPassword": "bIg@BOI-VaDE*REDIS.",
-    "port": 11976
+    "redisPath": "host-panel.vade-bot.com?password=V@deRe-dis",
+    "redisPassword": "V@deRe-dis",
+    "port": 2006
   },
   "API": {
     "TOPGG_AUTH": "VadeVotingPassEthan2004"
