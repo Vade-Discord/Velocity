@@ -38,7 +38,6 @@
                     let timeTracking = false;
                     let time;
                   const locateSchema = await this.client.redis.get(`vcTrack.${oldChannel.guild.id}.${member.id}`);
-                  console.log(locateSchema)
                   if(locateSchema) {
                       timeTracking = true;
                       const totalTime = Date.now() - parseInt(locateSchema);
@@ -47,12 +46,12 @@
                       const totalSchema = await vcSchema.findOne({user: member.id});
                       if (totalSchema) {
                         await totalSchema.updateOne({
-                            $inc: {total: ms(totalTime) }
+                            $inc: {total: totalTime}
                         });
                       } else {
                           const newSchema = new vcSchema({
                               user: member.id,
-                              total: ms(totalTime)
+                              total: totalTime
                           });
                           await newSchema.save();
                       }
