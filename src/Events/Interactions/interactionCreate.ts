@@ -10,7 +10,7 @@ export default class InteractionCreateEvent extends Event {
 
     async run(interaction) {
 
-        const guild = interaction.guildID ? await this.client.getRESTGuild(interaction.guildID) : null;
+        const guild = interaction.guildID ? (await this.client.getRESTGuild(interaction.guildID)) : null;
 
         const member = guild ? await guild.getRESTMember(interaction.member.id) : interaction.member;
         if (interaction instanceof PingInteraction) {
