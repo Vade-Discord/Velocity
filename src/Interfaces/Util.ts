@@ -112,7 +112,8 @@ export default class Util {
     return locatedType ? guild.channels.get(locatedType) : null;
   }
 
-  async runPreconditions(interaction, member, guild, command: Command) {
+  async runPreconditions(interaction, member, g, command: Command) {
+    const guild = await this.client.guilds.get(g.id);
     if (command.devOnly) {
       if (!this.client.owners.includes(interaction.user ? interaction.user.id : interaction.member.id)) {
         let notOwnerEmbed = new RichEmbed()
@@ -159,7 +160,7 @@ export default class Util {
     }
 
     if (command.botPerms.length) {
-      const getMember = guild.members.get(
+      const getMember = await guild.members.get(
           this.client.user.id
       );
 
