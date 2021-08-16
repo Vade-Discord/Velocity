@@ -139,26 +139,14 @@ export default class PingCommand extends Command {
                 return await createPaginationEmbed(interaction, embeds, {});
             }
 
-            const command = this.client.commands.get(cmd);
-
-            if (!command) {
-                const cat = categories.find(m => m === cmd.toLowerCase());
-                console.log(`cat: ` + cat)
-
-                if (!cat) {
-                    return interaction.createFollowup(`That isn't a valid command or category.`);
-                } else {
-                    const catCommands = this.client.commands.filter(m => m.category.toLowerCase() === cat);
-                    const commandsMapped = catCommands.map(c => c.name)
-                    // Found a category
-                    return interaction.createFollowup(`Located category: ${cmd}`);
-                }
+        } else {
+            // It isn't a category
+            if(allCommands.includes(item)) {
+                const c = allCommands.find(i => i === item);
 
             } else {
-                // Found a command
-                return interaction.createFollowup(`Located cmd: ${command.name}`);
+                return interaction.createFollowup(`Unable to locate that command/category.`);
             }
-
         }
 
     }
