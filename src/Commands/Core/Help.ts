@@ -41,7 +41,7 @@ export default class PingCommand extends Command {
             );
             for (const category of categories) {
                 mainEmbed.addField(
-                    `**${this.client.utils.capitalise(category)} [${this.client.commands.filter((cmd) => cmd.category === category).size
+                    `**${this.client.utils.capitalise(category)} [${this.client.commands.filter((cmd) => cmd.category?.toLowerCase() === category).size
                     }]**`,
                     `${prefix}help ${this.client.utils.capitalise(category)}`,
                     true
