@@ -63,7 +63,7 @@
                   let embed = new this.client.embed()
                       .setAuthor(tag, member.user.avatarURL)
                       .setTitle(`📤 Left Voice Channel`)
-                      .setDescription(`**Channel:** ${oldChannel.mention}\n\n${timeTracking ? `Time Spent: ${time}` : null}`)
+                      .setDescription(`**Channel:** ${oldChannel.mention}\n\n${timeTracking ? `Time Spent: ${time ?? 'Unable to track.'}` : null}`)
                       .setThumbnail(member.user.avatarURL)
                       .setFooter(`Vade Logging System`)
                       .setColor(`#F00000`)
