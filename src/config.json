@@ -17,5 +17,8 @@
     "redisPassword": "bIg@BOI-VaDE*REDIS.",
     "port": 11976
   },
+  "API": {
+    "TOPGG_AUTH": "VadeVotingPassEthan2004"
+  },
   "mongoURI": "mongodb+srv://VadeBot:VadeDevelopment16@cluster0.ipnav.mongodb.net/myFirstDatabase?retryWrites=true&w=majority"
 }

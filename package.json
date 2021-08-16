@@ -9,6 +9,7 @@
   "dependencies": {
     "@dimensional-fun/logger": "^1.0.1",
     "@discordjs/collection": "^0.2.0",
+    "@koa/router": "^10.1.0",
     "@the-nerd-cave/paginate": "^1.1.1",
     "@types/node": "^16.4.7",
     "erela.js": "^2.3.3",
@@ -22,6 +23,9 @@
     "glob": "^7.1.7",
     "humanize-duration": "^3.27.0",
     "ioredis": "^4.27.7",
+    "joi": "^17.4.2",
+    "koa": "^2.13.1",
+    "koa-body": "^4.2.0",
     "moment": "^2.29.1",
     "mongoose": "^5.13.5",
     "phin": "^3.6.0",
