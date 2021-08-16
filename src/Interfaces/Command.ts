@@ -1,5 +1,5 @@
 import { Bot } from "../client/Client";
-import { SlashCommandOptions } from 'eris';
+import { Constants, SlashCommandOptions } from 'eris';
 
 interface CommandOptions {
     aliases?: string[];

@@ -38,7 +38,8 @@ export class Bot extends Eris.Client {
         "guilds",
         "guildMessages",
         "guildVoiceStates",
-        "directMessages"
+        "directMessages",
+        "guildMembers"
       ],
         seedVoiceConnections: true,
         restMode: true,
