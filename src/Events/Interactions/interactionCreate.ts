@@ -21,7 +21,7 @@ export default class InteractionCreateEvent extends Event {
             const cmd = interaction.data?.name?.toLowerCase();
 
             if (cmd) {
-                const command = await this.client.commands.get(cmd);
+                const command = await this.client.utils.getCommand(cmd);
 
                 if (!command) return;
                 const check = await this.client.utils.runPreconditions(interaction, member, guild, command);
@@ -46,7 +46,7 @@ export default class InteractionCreateEvent extends Event {
                     break;
                 }
                 case 2: {
-                    const command = this.client.commands.get(cmd);
+                    const command = this.client.utils.getCommand(cmd);
                     if (!command || !command.run) return;
                     await command.run(interaction, member);
                     break;
