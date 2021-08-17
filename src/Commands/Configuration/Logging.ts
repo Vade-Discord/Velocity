@@ -10,31 +10,68 @@ export default class LoggingCommand extends Command {
             userPerms: ['manageGuild'],
             options: [
                 {
-                    type: 7,
-                    name: 'channel',
-                    description: `The channel to recieve the logging option selected.`,
-                    required: true,
+                    type: 1,
+                    name: 'add',
+                    description: `Set a logging channel for the specified type.`,
+                    options: [
+                        {
+                            type: 7,
+                            name: 'channel',
+                            description: `The channel to recieve the logging option selected.`,
+                            required: true,
+                        },
+                        {
+                            type: 3,
+                            name: 'type',
+                            description: `The logging option that you would like to set.`,
+                            required: true,
+                            choices: [
+                                {
+                                    name: 'message changes',
+                                    value: 'message',
+                                },
+                                {
+                                    name: 'voice activity',
+                                    value: 'voice',
+                                },
+                                {
+                                    name: 'moderation actions',
+                                    value: 'moderation',
+                                },
+                                {
+                                    name: 'welcome channel',
+                                    value: 'welcome',
+                                },
+                                {
+                                    name: 'invite channel',
+                                    value: 'invites',
+                                },
+                                {
+                                    name: 'user changes',
+                                    value: 'user',
+                                },
+                                {
+                                    name: 'channel updates',
+                                    value: 'channel',
+                                },
+                            ]
+                        },
+                    ]
                 },
-                {
-                    type: 3,
-                    name: 'type',
-                    description: `The logging option that you would like to set.`,
-                    required: true,
-                }
             ],
         });
     }
     async run(interaction, member) {
         const guild = await this.client.getRESTGuild(interaction.guildID);
         const guildData = await guildSchema.findOne({ guildID: interaction.guildID }) ?? (await this.client.utils.createGuildSchema(guild))!;
-        const c = interaction.data.options?.filter(m => m.name === "channel")[0]?.value;
+        const c = interaction.data.options?.filter(m => m.name === "add")[0]?.options.filter((m) => m.name === 'channel')[0].value;
         const channel = await this.client.getRESTChannel(c);
 
       if(!channel) {
         return interaction.createFollowup(`Oops! Looks like you didn't provide a channel!`);
         }
 
-        const type = interaction.data.options?.filter(m => m.name === "type")[0]?.value;
+        const type = interaction.data.options?.filter(m => m.name === "add")[0]?.options?.filter((m) => m.name === 'type')[0].value;
         if(type) {
             const validTypes: string[] = ['message', 'voice', 'role', 'moderation', 'channel', 'user', 'welcome', 'invites'];
             if(!validTypes.includes(type?.toLowerCase())) {
@@ -51,7 +88,6 @@ export default class LoggingCommand extends Command {
 
         switch(type?.toLowerCase()) {
             case "message": {
-                console.log(`Message option selected`)
                 await guildData.updateOne({
                     Logging: {
                         message: channel.id,
@@ -82,7 +118,6 @@ export default class LoggingCommand extends Command {
             }
 
             case "voice": {
-                console.log(`Voice option selected`)
                 await guildData.updateOne({
                     Logging: {
                         voice: channel.id,
@@ -93,7 +128,6 @@ export default class LoggingCommand extends Command {
             }
 
             case "moderation": {
-                console.log(`Moderation option selected`)
                 await guildData.updateOne({
                     Logging: {
                         moderation: channel.id,
@@ -110,7 +144,6 @@ export default class LoggingCommand extends Command {
                         user: channel.id,
                     }
                 });
-                console.log(`User option selected`)
                 interaction.createFollowup(`Successfully updated the **${type?.toLowerCase()}** logging channel.`);
                 break;
             }
@@ -121,7 +154,6 @@ export default class LoggingCommand extends Command {
                         channel: channel.id,
                     }
                 });
-                console.log(`Channel option selected`)
                 interaction.createFollowup(`Successfully updated the **${type?.toLowerCase()}** logging channel.`);
                 break;
             }
