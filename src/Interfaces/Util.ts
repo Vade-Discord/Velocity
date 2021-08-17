@@ -207,4 +207,15 @@ export default class Util {
     }
     return arr;
   }
+
+  getCommand(c: string): Command {
+    const cmd = c?.toLowerCase()
+     if(this.client.commands.has(cmd)) {
+       return this.client.commands.get(cmd);
+     } else if(this.client.subCommands.has(cmd)) {
+       return this.client.subCommands.get(cmd);
+     } else {
+       return null;
+     }
+  }
 }
