@@ -46,7 +46,14 @@ export default class InteractionCreateEvent extends Event {
                     break;
                 }
                 case 2: {
-                    const command = this.client.utils.getCommand(cmd);
+                    const data = interaction.data.custom_id;
+                    const cmd = data.split("#")[0];
+                    if (cmd == 'pagination') {
+                        const pages = await this.client.Pagination.get(interaction.message.id)
+                        //@ts-ignore
+                        pages.run(interaction)
+                    }
+                    const command = this.client.commands.get(cmd);
                     if (!command || !command.run) return;
                     await command.run(interaction, member);
                     break;

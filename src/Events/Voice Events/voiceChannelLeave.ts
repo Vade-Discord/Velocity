@@ -43,7 +43,7 @@
                       const totalTime = Date.now() - parseInt(locateSchema);
                       time = humanize(totalTime);
                       await this.client.redis.del(`vcTracking.${oldChannel.guild.id}.${member.id}`);
-                      const totalSchema = await vcSchema.findOne({user: member.id});
+                      const totalSchema = await vcSchema.findOne({user: member.id, guild: oldChannel.guild.id});
                       if (totalSchema) {
                         await totalSchema.updateOne({
                             $inc: {total: totalTime}
@@ -51,6 +51,8 @@
                       } else {
                           const newSchema = new vcSchema({
                               user: member.id,
+                              guild: oldChannel.guild.id,
+                              username: `${member.username}#${member.discriminator}`,
                               total: totalTime
                           });
                           await newSchema.save();

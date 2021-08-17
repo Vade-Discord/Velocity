@@ -1,5 +1,6 @@
 'use strict';
 import constants from '../Interfaces/Constants';
+import config from 'src/config.json';
 
 /**
  * @typedef {import('eris').EmbedBase} EmbedBase
@@ -120,10 +121,11 @@ class PaginationEmbed {
             components: this.components
         }
 
-        if (this.invoker.author.id === this.invoker.client.user.id) {
+        const CLIENTS = ['850723996513075200', '782309258620305438'];
+        if (CLIENTS.includes(this.invoker.member.id)) {
             this.message = await this.invoker.edit(messageContent);
         } else {
-            this.message = await this.invoker.channel.createMessage(messageContent)
+            this.message = await this.invoker.createFollowup(messageContent)
         }
 
         return this.message
@@ -208,15 +210,16 @@ class PaginationEmbed {
 /**
  * Create an Embed Paginator
  *
- * @param {Message} message A message object emitted from a messageCreate event coming from Eris, used as an invoker. If sent by the client, the message will be edited.
+ * @param client
+ * @param interaction
  * @param {EmbedBase[]} pages An array containing all embed objects
  * @param {PaginationOptions} [options] An optional options object for overwriting defaults
  */
-export const createPaginationEmbed = async (interaction, pages, options) => {
+export const createPaginationEmbed = async (client, interaction, pages, options) => {
     const message = await interaction.getOriginalMessage()
     const paginationEmbed = new PaginationEmbed(message, pages, options);
     const mes = await paginationEmbed.initialize();
-    message.client.Pagination.set(mes.id, paginationEmbed)
+    client.Pagination.set(mes.id, paginationEmbed)
 
     return Promise.resolve(paginationEmbed.message);
 }
