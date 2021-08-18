@@ -21,7 +21,7 @@ export default class InteractionCreateEvent extends Event {
             const cmd = interaction.data?.name?.toLowerCase();
 
             if (cmd) {
-                const command = await this.client.utils.getCommand(cmd);
+                const command = await this.client.commands.get(cmd);
 
                 if (!command) return;
                 const check = await this.client.utils.runPreconditions(interaction, member, guild, command);

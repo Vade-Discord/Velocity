@@ -9,6 +9,7 @@
   "dependencies": {
     "@dimensional-fun/logger": "^1.0.1",
     "@discordjs/collection": "^0.2.0",
+    "@extreme_hero/deeptype": "^1.0.1",
     "@koa/router": "^10.1.0",
     "@the-nerd-cave/paginate": "^1.1.1",
     "@types/node": "^16.4.7",

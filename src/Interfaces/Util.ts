@@ -2,9 +2,7 @@ import type {Bot} from "../client/Client";
 import Command from "./Command";
 
 // Package imports
-
-import { Collection, Guild, Interaction, Member, RichEmbed} from "eris";
-import { distance } from "fastest-levenshtein";
+import {RichEmbed} from "eris";
 import {Types} from "mongoose";
 
 
@@ -208,14 +206,9 @@ export default class Util {
     return arr;
   }
 
-  getCommand(c: string): Command {
-    const cmd = c?.toLowerCase()
-     if(this.client.commands.has(cmd)) {
-       return this.client.commands.get(cmd);
-     } else if(this.client.subCommands.has(cmd)) {
-       return this.client.subCommands.get(cmd);
-     } else {
-       return null;
-     }
+  async hasVoted(user: string) {
+   await this.client.redis.get(`votes.top.gg.${user}`, function (err, result) {
+      return !!result;
+    })
   }
 }
