@@ -39,7 +39,7 @@ export default class InteractionCreateEvent extends Event {
             const {member} = interaction;
             switch (interaction.data.component_type) {
                 case 3: {
-                    console.log(`Selection menu`);
+                    //console.log(`Selection menu`);
                     const command = this.client.commands.get(cmd);
                     if (!command || !command.run) return;
                     await command.run(interaction, member);

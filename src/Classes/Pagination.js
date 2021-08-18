@@ -31,9 +31,9 @@ class PaginationEmbed {
      * @param {EmbedBase[]} pages An array containing all embed objects
      * @param {PaginationOptions} [options] An optional options object for overwriting defaults
      */
-    constructor(message, pages = [], options = {}) {
+    constructor(interaction, pages = [], options = {}) {
         this.pages       = pages;
-        this.invoker     = message;
+        this.invoker     = interaction;
         this.invokerRequired = options.invokerRequired || true;
         this.options     = options;
         this.cmdname     = options.commandName;
@@ -117,7 +117,7 @@ class PaginationEmbed {
 
         const messageContent = {
             content: (this.showPages) ? `Page **${this.page}** of **${this.pages.length}**` : undefined,
-            embed: this.pages[this.page - 1],
+            embeds: [this.pages[this.page - 1]],
             components: this.components
         }
 
@@ -137,7 +137,7 @@ class PaginationEmbed {
 
         if(interaction.user) interaction.member = interaction.user
 
-        if (interaction.member.id !== this.invoker.author.id && this.invokerRequired === true) {
+        if (interaction.member.id !== this.invoker.member.id && this.invokerRequired === true) {
             return //interaction.createMessage({content: "You must have run the command in order to use the buttons!", flags: 64});
         }
 
@@ -201,7 +201,7 @@ class PaginationEmbed {
         if(!interaction.data) return;
         return interaction.message.edit({
             content: (this.showPages) ? `Page **${this.page}** of **${this.pages.length}**` : undefined,
-            embed: this.pages[this.page - 1],
+            embeds: [this.pages[this.page - 1]],
             components: this.components
         });
     }
@@ -216,8 +216,7 @@ class PaginationEmbed {
  * @param {PaginationOptions} [options] An optional options object for overwriting defaults
  */
 export const createPaginationEmbed = async (client, interaction, pages, options) => {
-    const message = await interaction.getOriginalMessage()
-    const paginationEmbed = new PaginationEmbed(message, pages, options);
+    const paginationEmbed = new PaginationEmbed(interaction, pages, options);
     const mes = await paginationEmbed.initialize();
     client.Pagination.set(mes.id, paginationEmbed)
 
