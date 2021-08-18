@@ -8,9 +8,7 @@
           }
 
           async run(error) {
-
-
-              this.client.logger.info(`Websocket resumed connection.`);
+            this.client.logger.error(error);
           }
 
       }
