@@ -32,9 +32,7 @@ export default class ReadyEvent extends Event {
         const contextFiltered = this.client.commands.filter(m => m.contextUserMenu);
         await contextFiltered.forEach((command) => {
             commands.push({
-                options: command.options,
-                name: command.name,
-                description: command.description,
+                name: this.client.utils.capitalise(command.name),
                 defaultPermission: command.devOnly,
                 type: 2,
             });
