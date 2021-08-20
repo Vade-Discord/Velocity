@@ -124,7 +124,7 @@ export async function Lavalink(client: Bot) {
                 let embed = new client.embed()
                     .setTitle("⏸ The music is now paused")
                     .setDescription(
-                        `Voice channel changed, use \`${client.config.prefix}resume\` to resume the music`
+                        `Voice channel changed, use \`/resume\` to resume the music`
                     );
                 const channel = client.getChannel(
                     player.textChannel

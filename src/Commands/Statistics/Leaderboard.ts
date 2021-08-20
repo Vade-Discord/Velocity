@@ -35,7 +35,6 @@ export default class LeaderboardCommand extends Command {
         });
     }
     async run(interaction, member) {
-        console.dir(interaction.data)
         const guild = await this.client.getRESTGuild(interaction.guildID);
 
         const data = interaction.data.options[0].value;
@@ -54,11 +53,11 @@ export default class LeaderboardCommand extends Command {
             }
 
             case "voice": {
-                const allVoice = await voiceSchema.find({});
+                const allVoice = await voiceSchema.find({ guild: interaction.guildID});
                 if(!allVoice.length) {
                     return interaction.createFollowup(`There doesn't seem to be an existing leaderboard for that..`);
                 }
-                const mapped = allVoice.map((m, i) => `**${i + 1}**. ${m.username} - ${humanise(m.total)}`)
+                const mapped = allVoice.sort((x, y) => y.total - x.total).map((m, i) => `**${i + 1}**. ${m.username} - ${humanise(m.total, { long: false})}`)
                 const pages = new Paginate(mapped, 8).getPaginatedArray();
                 const embeds = pages.map((page, index) => {
                     return new this.client.embed()
