@@ -22,7 +22,7 @@ export default class PingCommand extends Command {
     async run(interaction, member) {
         console.dir(interaction.data.options)
         const cmd = interaction.data.options?.filter(m => m.name === "query")[0]?.value;
-        console.log(cmd)
+        //console.log(cmd)
         const allCategories = [
             ...new Set(this.client.commands.map((cmd) => cmd.category.toLowerCase())),
         ];
@@ -97,7 +97,7 @@ export default class PingCommand extends Command {
 
         const {item} = match;
 
-        console.log(`Item: ` + item)
+        //console.log(`Item: ` + item)
 
         if (allCategories.includes(item)) {
 
@@ -120,7 +120,7 @@ export default class PingCommand extends Command {
                     .setTimestamp();
             });
 
-            console.log(embeds);
+            //console.log(embeds);
 
             if (embeds.length == 1) {
                 return interaction.createFollowup({
