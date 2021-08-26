@@ -61,17 +61,17 @@ export default class LoggingCommand extends Command {
             ],
         });
     }
-    async run(interaction, member) {
+    async run(interaction, member, options, subOptions) {
         const guild = await this.client.getRESTGuild(interaction.guildID);
         const guildData = await guildSchema.findOne({ guildID: interaction.guildID }) ?? (await this.client.utils.createGuildSchema(guild))!;
-        const c = interaction.data.options?.filter(m => m.name === "add")[0]?.options.filter((m) => m.name === 'channel')[0].value;
+        const c = subOptions.get(`channel`);
         const channel = await this.client.getRESTChannel(c);
 
       if(!channel) {
         return interaction.createFollowup(`Oops! Looks like you didn't provide a channel!`);
         }
 
-        const type = interaction.data.options?.filter(m => m.name === "add")[0]?.options?.filter((m) => m.name === 'type')[0].value;
+        const type = subOptions.get(`type`);
         if(type) {
             const validTypes: string[] = ['message', 'voice', 'role', 'moderation', 'channel', 'user', 'welcome', 'invites'];
             if(!validTypes.includes(type?.toLowerCase())) {
