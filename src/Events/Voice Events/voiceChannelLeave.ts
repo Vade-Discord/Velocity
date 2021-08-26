@@ -16,13 +16,6 @@
               const player = this.client.manager?.players.get(oldChannel.guild.id);
 
               try {
-                  if (member.id === this.client.user.id) {
-                      if (player) {
-                          console.log(`Located player`)
-                          await player.destroy();
-                      }
-                  }
-
                   const voiceMembers = Array.from(oldChannel.voiceMembers)
                   let userCount = 0
 
@@ -71,7 +64,7 @@
                       .setTimestamp();
 
                   const logChannel = await this.client.utils.loggingChannel(oldChannel.guild, 'voice');
-                  logChannel ? logChannel.createMessage({ embed: embed }) : null;
+                  logChannel ? logChannel.createMessage({ embeds: [embed] }) : null;
 
 
               } catch (e) {

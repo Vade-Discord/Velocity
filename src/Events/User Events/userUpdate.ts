@@ -35,7 +35,7 @@ import guildSchema from '../../Schemas/Main Guilds/GuildSchema';
                           .setDescription(`**From:** ${oldUser.username}\n**To:** ${user.username}`)
                           .setTimestamp()
 
-                          await channel.createMessage({embed: embed});
+                          await channel.createMessage({embeds: [embed]});
                       }
 
                       if (oldUser.discriminator !== user.discriminator) {
@@ -46,7 +46,7 @@ import guildSchema from '../../Schemas/Main Guilds/GuildSchema';
                               .setThumbnail(user.avatarURL)
                               .setTimestamp()
 
-                          await channel.createMessage({embed: embed});
+                          await channel.createMessage({embeds: [embed]});
                       }
 
                       if (oldUser.avatar !== user.avatar) {

@@ -23,7 +23,7 @@
                       .setTitle(`Nickname Updated`)
                       .setDescription(`**From:** ${oldMember.nick ?? 'No Nickname.'}\n**To:** ${member.nick ?? 'No Nickname.'}`)
 
-                  logChannel.createMessage({ embed: logEmbed });
+                  logChannel.createMessage({ embeds: [logEmbed] });
 
               }
 
@@ -39,7 +39,7 @@
                           .setDescription(`**Role Removed:** ${removedRole.mention}`)
                           .setColor("#F00000")
 
-                      logChannel.createMessage({ embed: logEmbed });
+                      logChannel.createMessage({ embeds: [logEmbed] });
                   } else if(added?.length && !removed?.length) {
                       let addedRole = guild.roles.get(added[0]);
                       logEmbed
@@ -47,7 +47,7 @@
                           .setDescription(`**Role Added:** ${addedRole.mention}`)
                           .setColor("#00C09A")
 
-                      logChannel.createMessage({ embed: logEmbed });
+                      logChannel.createMessage({ embeds: [logEmbed] });
                   } else {
                      return;
                   }
@@ -60,7 +60,7 @@
                       .setDescription(`**Boosted the Server!**`)
                       .setColor(`#f47fff`)
 
-                  logChannel.createMessage({ embed: logEmbed });
+                  logChannel.createMessage({ embeds: [logEmbed] });
               } else if(oldMember.premiumSince && !member.premiumSince) {
                   let boostEmoji = this.client.constants.emojis.boost.mention;
                   logEmbed
@@ -68,7 +68,7 @@
                       .setDescription(`**Stopped Boosting :(**`)
                       .setColor(`#f47fff`)
 
-                  logChannel.createMessage({ embed: logEmbed });
+                  logChannel.createMessage({ embeds: [logEmbed] });
               }
 
               if(oldMember.pending && !member.pending) {
@@ -76,6 +76,8 @@
                       .setTitle(`Passed Membership Screening `)
                       .setDescription(`**They passed the membership screening!**`)
                       .setColor(`#00C09A`)
+
+                  logChannel.createMessage({ embeds: [logEmbed] });
               }
 
           }

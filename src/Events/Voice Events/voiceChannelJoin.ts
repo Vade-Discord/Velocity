@@ -27,7 +27,7 @@ export default class VcJoinEvent extends Event {
                         .setTimestamp();
 
                     const logChannel = await this.client.utils.loggingChannel(newChannel.guild, 'voice');
-                    logChannel ? logChannel.createMessage({ embed: embed }) : null;
+                    logChannel ? logChannel.createMessage({ embeds: [embed] }) : null;
                     let joinTime = Date.now();
                     await this.client.redis.set(`vcTrack.${newChannel.guild.id}.${member.id}`, joinTime, 'EX', 86400);
 
