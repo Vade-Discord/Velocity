@@ -4,3 +4,4 @@
 .gitignore
 /src/config.json
 .yarnrc
+config.json

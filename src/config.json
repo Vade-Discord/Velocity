@@ -1,5 +1,5 @@
 {
-  "token": "ODUwNzIzOTk2NTEzMDc1MjAw.YLt4dg.bYEOH0pSm-dUMKPW7K2apH_588s",
+  "token": "ODUwNzIzOTk2NTEzMDc1MjAw.YLt4dg.91gqGyedd9QHGber-u-AWk-A_A4",
   "CLIENTS": {
     "beta": "850723996513075200",
     "main": "782309258620305438"
@@ -13,14 +13,14 @@
     "DEFAULT_VOLUME": 100
   },
   "redis":  {
-    "redisPath": "host-panel.vade-bot.com?password=V@deRe-dis",
-    "redisPassword": "V@deRe-dis",
-    "port": 2006
+    "redisPath": "host-panel.vade-bot.com?password=P@55w0rd",
+    "redisPassword": "P@55w0rd",
+    "port": 2016
   },
   "API": {
     "TOPGG_AUTH": "VadeVotingPassEthan2004"
   },
-  "mongoURI": "mongodb+srv://VadeBot:VadeDevelopment16@cluster0.ipnav.mongodb.net/myFirstDatabase?retryWrites=true&w=majority",
+  "mongoURI": "mongodb+srv://VadeBot:9D6O3pvaRNpBG9GF@cluster0.ipnav.mongodb.net/myFirstDatabase?retryWrites=true&w=majority",
   "GUILDS": {
     "main": "794770969079185420",
     "testing": "857895083839324190"

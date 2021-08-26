@@ -103,6 +103,12 @@ export default class GiveawayCommand extends Command {
     }
     async run(interaction, member, options, subOptions) {
 
+        this.client.redis.expire((message) => {
+            if(message.startsWith("giveaways")) {
+                console.log(message)
+            }
+        })
+
         if(interaction.data.custom_id) {
 
             const giveawayData = await giveawaySchema.findOne({ guild: interaction.guildID, messageID: interaction.message.id });
@@ -201,6 +207,7 @@ export default class GiveawayCommand extends Command {
                             roleRequired: role,
                         });
                         await newSchema.save()
+                        await this.client.redis.set(`giveaways.${interaction.guildID}.${m.id}`, m.id, 'EX', actualTime * 1000)
                     });
                     //
                 } else {

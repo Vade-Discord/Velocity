@@ -15,6 +15,21 @@ const redisConnect = async (): Promise<Redis> => {
             resolve(client);
             console.log(`Redis has connected`);
         });
+
+       client.expire = (callback) => {
+            const expired = () => {
+                const sub = new Redis(redis.port, redis.redisPath);
+                sub.subscribe('__keyevent@0__:expired', () => {
+                    sub.on('message', (channel, message) => {
+                        callback(message);
+                    })
+                })
+            }
+            const pub = new Redis(redis.port, redis.redisPath);
+            // @ts-ignore
+           pub.send_command('config', ['set', 'notify-keyspace-events', 'Ex'], expired())
+        }
+
     });
 };
 
