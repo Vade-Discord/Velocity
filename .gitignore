@@ -3,3 +3,4 @@
 /dist/
 .gitignore
 /src/config.json
+.yarnrc
