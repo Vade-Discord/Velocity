@@ -24,12 +24,12 @@ export default class VoicekickCommand extends Command {
             userPerms: ['voiceMoveMembers']
         });
     }
-    async run(interaction, member) {
+    async run(interaction, member, options, subOptions) {
 
         switch(interaction.data.options[0].name) {
 
             case "disconnect": {
-                const ID = interaction.data.options[0].options[0].value;
+                const ID = subOptions.get(`member`);
                 const member1 = (await member.guild.getRESTMember(ID));
                 if(!member1) {
                     return interaction.createFollowup(`Something seems to have gone wrong.. please try again.`);
@@ -46,8 +46,6 @@ export default class VoicekickCommand extends Command {
                 } catch (e) {
                     return interaction.createFollowup(`Something seems to have gone wrong.. please try again.`);
                 }
-
-                break;
             }
         }
 
