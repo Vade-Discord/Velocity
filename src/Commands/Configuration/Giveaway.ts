@@ -1,5 +1,7 @@
 import Command from "../../Interfaces/Command";
 import guildSchema from "../../Schemas/Main Guilds/GuildSchema";
+import ms from 'ms';
+import {NewsChannel, TextChannel} from "eris";
 
 export default class GiveawayCommand extends Command {
     constructor(client) {
@@ -89,10 +91,77 @@ export default class GiveawayCommand extends Command {
     }
     async run(interaction, member, options, subOptions) {
 
+        if(interaction.data.custom_id) {
+
+            // Button pressed
+
+                member.user.getDMChannel().then((c) => {
+                    c.createMessage(`You have successfully entered the giveaway!`).catch((e) => {
+                        interaction.createFollowup({ content: `You have successfully entered the giveaway!`, flags: 64 });
+
+                    });
+                });
+
+
+
+
+
+
+
+
+
+            return;
+        }
+
         switch (interaction.data.options[0].name) {
 
             case "start": {
-                console.log(`Giveaway beginning?`);
+
+                const channelID = subOptions.get('channel');
+                const channel = (await this.client.getRESTChannel(channelID));
+                if(!channel) {
+                    return interaction.createFollowup(`Something seems to have gone wrong... please try again.`);
+                }
+
+                const prize = subOptions.get('prize');
+                const time = subOptions.get('time');
+                console.log(time)
+                const actualTime = ms(time);
+                console.log(new Date().getTime() + actualTime)
+                if(!actualTime) {
+                    return interaction.createFollowup(`You seem to have provided an invalid length of time.`);
+                }
+
+                const giveawayEmbed = new this.client.embed()
+                    .setTitle('🎉 Giveaway! 🎉')
+                    .setDescription(`Click the button to enter!\nEnds: <t:${Date.now() + actualTime}:R>\nGiveaway Host: ${member.mention}`)
+                    .addField(`Prize`, `${prize}`)
+                    .setTimestamp()
+                    .setFooter(`Vade Giveaways @ https://vade-bot.com`)
+                    .setThumbnail(this.client.user.avatarURL)
+
+                if(channel instanceof TextChannel || channel instanceof NewsChannel) {
+
+                    // @ts-ignore
+                    channel.createMessage({ embeds: [giveawayEmbed], components: [{
+                        type: 1,
+                            components: [
+                                {
+                                    type: 2,
+                                    style: 3,
+                                    label: `Enter!`,
+                                    custom_id: `giveaway#enter`,
+                                    emoji: { id: this.client.constants.emojis.giveaway.id, name: this.client.constants.emojis.giveaway.name, animated: false },
+                                }
+                            ]
+
+
+                    }]
+                    });
+                    //
+                } else {
+                    return interaction.createFollowup(`The channel you provided needs to be either a text channel or a news channel.`);
+                }
 
 
                 break;

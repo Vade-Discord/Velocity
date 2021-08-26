@@ -14,10 +14,10 @@ export default class InteractionCreateEvent extends Event {
         const guild = interaction.guildID ? (await this.client.getRESTGuild(interaction.guildID)) : null;
         const mainOptions = new Map();
         const subOptions = new Map();
-        interaction.data?.options.forEach((option) => {
+       interaction.data.options?.length > 1 ?  interaction.data?.options.forEach((option) => {
             mainOptions.set(option.name, option.value);
-        });
-     if(interaction.data.options[0]?.options.length) {
+        }) : null;
+     if(interaction.data?.options?.length && interaction.data?.options[0]?.options.length) {
          interaction.data.options[0].options.forEach((option) => {
              subOptions.set(option.name, option.value);
          })
@@ -61,6 +61,7 @@ export default class InteractionCreateEvent extends Event {
                     break;
                 }
                 case 2: {
+
                     const data = interaction.data.custom_id;
                     const cmd = data.split("#")[0];
                     if (cmd == 'pagination') {
@@ -68,6 +69,7 @@ export default class InteractionCreateEvent extends Event {
                         //@ts-ignore
                         pages.run(interaction)
                     }
+                    await interaction.acknowledge();
                     const command = this.client.commands.get(cmd);
                     if (!command || !command.run) return;
                     await command.run(interaction, member, mainOptions, subOptions);

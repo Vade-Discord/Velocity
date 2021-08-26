@@ -93,6 +93,11 @@ export default {
             id: "862682453663285301",
             mention: "<:channel:862682453663285301>"
         },
+      giveaway: {
+            name: "party",
+            id: "858884726226944031",
+            mention: "<:party:858884726226944031>"
+      }
     },
   perms: {
     admin: "ADMINISTRATOR",
