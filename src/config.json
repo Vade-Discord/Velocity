@@ -20,5 +20,12 @@
   "API": {
     "TOPGG_AUTH": "VadeVotingPassEthan2004"
   },
-  "mongoURI": "mongodb+srv://VadeBot:VadeDevelopment16@cluster0.ipnav.mongodb.net/myFirstDatabase?retryWrites=true&w=majority"
+  "mongoURI": "mongodb+srv://VadeBot:VadeDevelopment16@cluster0.ipnav.mongodb.net/myFirstDatabase?retryWrites=true&w=majority",
+  "GUILDS": {
+    "main": "794770969079185420",
+    "testing": "857895083839324190"
+  },
+  "PRIVATE": {
+    "guild_logs": "796828146954534973"
+  }
 }
