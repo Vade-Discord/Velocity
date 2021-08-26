@@ -1,5 +1,6 @@
 import { Event } from '../../Interfaces/Event';
 import {CommandInteraction, ComponentInteraction, PingInteraction} from "eris";
+import {main} from "../../api/routers/main";
 
 export default class InteractionCreateEvent extends Event {
     constructor(client) {
@@ -11,6 +12,16 @@ export default class InteractionCreateEvent extends Event {
     async run(interaction) {
 
         const guild = interaction.guildID ? (await this.client.getRESTGuild(interaction.guildID)) : null;
+        const mainOptions = new Map();
+        const subOptions = new Map();
+        interaction.data?.options.forEach((option) => {
+            mainOptions.set(option.name, option.value);
+        });
+     if(interaction.data.options[0]?.options.length) {
+         interaction.data.options[0].options.forEach((option) => {
+             subOptions.set(option.name, option.value);
+         })
+     }
 
         const member = guild ? await guild.getRESTMember(interaction.member.id) : interaction.member;
         if (interaction instanceof PingInteraction) {
@@ -26,7 +37,9 @@ export default class InteractionCreateEvent extends Event {
                 if (!command) return;
                 const check = await this.client.utils.runPreconditions(interaction, member, guild, command);
                 if (check) return;
-                command.run(interaction, member);
+                await command.run(interaction, member, mainOptions, subOptions);
+                mainOptions.clear();
+                subOptions.clear();
             }
         } else if (interaction instanceof ComponentInteraction) {
             const data = interaction.data.custom_id;
@@ -42,7 +55,9 @@ export default class InteractionCreateEvent extends Event {
                     //console.log(`Selection menu`);
                     const command = this.client.commands.get(cmd);
                     if (!command || !command.run) return;
-                    await command.run(interaction, member);
+                    await command.run(interaction, member, mainOptions, subOptions);
+                    mainOptions.clear();
+                    subOptions.clear();
                     break;
                 }
                 case 2: {
@@ -55,7 +70,9 @@ export default class InteractionCreateEvent extends Event {
                     }
                     const command = this.client.commands.get(cmd);
                     if (!command || !command.run) return;
-                    await command.run(interaction, member);
+                    await command.run(interaction, member, mainOptions, subOptions);
+                    mainOptions.clear();
+                    subOptions.clear();
                     break;
                 }
                 default:
