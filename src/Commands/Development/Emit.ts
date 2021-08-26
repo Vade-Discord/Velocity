@@ -29,8 +29,20 @@ export default class EmitCommand extends Command {
         switch(event?.toLowerCase()) {
             case "guildmemberadd": {
                 this.client.emit('guildMemberAdd', member.guild, member);
+                break;
+            }
+
+            case "guildcreate": {
+                this.client.emit('guildCreate', member.guild);
+                break;
+            }
+            case "guilddelete": {
+                this.client.emit('guildDelete', member.guild);
+                break;
             }
         }
+
+        interaction.createFollowup(`Successfully emit *${event}*.`);
 
     }
 
