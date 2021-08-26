@@ -38,8 +38,10 @@ export default class InteractionCreateEvent extends Event {
                 const check = await this.client.utils.runPreconditions(interaction, member, guild, command);
                 if (check) return;
                 await command.run(interaction, member, mainOptions, subOptions);
-                mainOptions.clear();
-                subOptions.clear();
+                setTimeout((e) => {
+                    mainOptions.clear();
+                    subOptions.clear();
+                }, 10000)
             }
         } else if (interaction instanceof ComponentInteraction) {
             const data = interaction.data.custom_id;
@@ -56,8 +58,10 @@ export default class InteractionCreateEvent extends Event {
                     const command = this.client.commands.get(cmd);
                     if (!command || !command.run) return;
                     await command.run(interaction, member, mainOptions, subOptions);
-                    mainOptions.clear();
-                    subOptions.clear();
+                    setTimeout((e) => {
+                        mainOptions.clear();
+                        subOptions.clear();
+                    }, 10000)
                     break;
                 }
                 case 2: {
@@ -73,8 +77,10 @@ export default class InteractionCreateEvent extends Event {
                     const command = this.client.commands.get(cmd);
                     if (!command || !command.run) return;
                     await command.run(interaction, member, mainOptions, subOptions);
-                    mainOptions.clear();
-                    subOptions.clear();
+                    setTimeout((e) => {
+                        mainOptions.clear();
+                        subOptions.clear();
+                    }, 10000)
                     break;
                 }
                 default:

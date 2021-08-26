@@ -230,4 +230,11 @@ export default class Util {
       return !!result;
     })
   }
+
+  async checkPremium(guildID): Promise<Boolean> {
+    const guildSchema = await guild_schema.findOne({ guildID });
+    if(!guildSchema) return false;
+    return !!guildSchema?.Premium?.active;
+
+  }
 }
