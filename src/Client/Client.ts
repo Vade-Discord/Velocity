@@ -10,6 +10,7 @@ import type { Event } from "../interfaces/Event";
 import Util from "../Interfaces/Util";
 import MessageEmbed = require("../Classes/Embeds");
 import Constants from '../Interfaces/Constants';
+import { API } from '../api/API';
 
 import { RedisClient } from 'ioredis';
 
@@ -38,7 +39,8 @@ export class Bot extends Eris.Client {
         "guilds",
         "guildMessages",
         "guildVoiceStates",
-        "directMessages"
+        "directMessages",
+        "guildMembers"
       ],
         seedVoiceConnections: true,
         restMode: true,
@@ -52,6 +54,8 @@ export class Bot extends Eris.Client {
     this.config = config;
     await pluris(Eris);
     await this.connect();
+    const api = new API(this);
+    api.start(); // Start the API.
     /* load command files */
     const commandFiles: string[] = await globPromise(
       `${__dirname}/../Commands/**/*{.ts,.js}`

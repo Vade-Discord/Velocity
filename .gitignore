@@ -3,4 +3,5 @@
 /dist/
 .gitignore
 /src/config.json
+/.vscode/
 .yarnrc
