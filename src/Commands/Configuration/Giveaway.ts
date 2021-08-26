@@ -99,7 +99,7 @@ export default class GiveawayCommand extends Command {
             }
 
             case "edit": {
-                console.log(subOptions.get(`message-id`))
+                const messageID = subOptions.get('message-id');
                 break;
             }
         }
