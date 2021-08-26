@@ -69,7 +69,7 @@ export default class Command {
         this.contextUserMenu = options.contextUserMenu || false;
     }
 
-    async run(interaction, member) {
+    async run(interaction, member, options: Map<string, string>, subOptions: Map<string, string>) {
         throw new Error(`Command ${this.name} doesn't provide a run method!`);
     }
 }
