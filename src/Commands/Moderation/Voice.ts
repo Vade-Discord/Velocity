@@ -20,6 +20,7 @@ export default class VoicekickCommand extends Command {
                     ]
                 }
             ],
+            modCommand: true,
             botPerms: ['voiceMoveMembers'],
             userPerms: ['voiceMoveMembers']
         });
