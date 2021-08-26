@@ -87,14 +87,20 @@ export default class GiveawayCommand extends Command {
             ],
         });
     }
-    async run(interaction, member) {
+    async run(interaction, member, options, subOptions) {
 
-     console.log(interaction.data)
-
-        switch (interaction.data.options[0].value) {
+        switch (interaction.data.options[0].name) {
 
             case "start": {
-                console.log(`Giveaway beginning?`)
+                console.log(`Giveaway beginning?`);
+
+
+                break;
+            }
+
+            case "edit": {
+                console.log(subOptions.get(`message-id`))
+                break;
             }
         }
 
