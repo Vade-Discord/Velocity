@@ -5,4 +5,4 @@
 /src/config.json
 /.vscode/
 .yarnrc
-config.json
+/.yarn/
