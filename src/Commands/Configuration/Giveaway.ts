@@ -156,9 +156,7 @@ export default class GiveawayCommand extends Command {
 
                 const prize = subOptions.get('prize');
                 const time = subOptions.get('time');
-                console.log(time)
                 const actualTime = ms(time);
-                console.log(new Date().getTime() + actualTime)
                 if(!actualTime) {
                     return interaction.createFollowup(`You seem to have provided an invalid length of time.`);
                 }
@@ -180,7 +178,7 @@ export default class GiveawayCommand extends Command {
                 }
                 const giveawayEmbed = new this.client.embed()
                     .setTitle('🎉 Giveaway! 🎉')
-                    .setDescription(`Click the button to enter!\nEnds: <t:${actualTime + Date.now()}:R>\nGiveaway Host: ${member.mention}`)
+                    .setDescription(`Click the button to enter!\nEnds: <t:${Math.floor((actualTime + Date.now()) / 1000)}:R>\nGiveaway Host: ${member.mention}`)
                     .addField(`Prize`, `${prize}`)
                     .addField(`Requirements`, `Role Requirement: ${roleRequirement} \n\n`)
                     .setTimestamp()

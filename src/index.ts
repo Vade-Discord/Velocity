@@ -5,4 +5,4 @@ process.on("unhandledRejection", (err) => {
     console.log(err)
 })
 
-new Bot({}).start(Config);
+new Bot({intents: []}).start(Config);
