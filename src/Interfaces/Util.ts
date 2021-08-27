@@ -164,6 +164,7 @@ export default class Util {
           this.client.user.id
       );
 
+
       const checkBotPerms = command.botPerms.some((perm) => !getMember.permissions.has(perm));
       if (checkBotPerms) {
         let noPermEmbed = new RichEmbed()
@@ -276,7 +277,7 @@ export default class Util {
                 ]
               }
               ]
-            });
+            }).catch(() => null);
             await giveaway.delete();
             return;
           }
