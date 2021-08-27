@@ -112,7 +112,12 @@ export default class GiveawayCommand extends Command {
         if(interaction.data.custom_id) {
 
             const giveawayData = await giveawaySchema.findOne({ guildID: interaction.guildID, messageID: interaction.message.id });
-            if(giveawayData) {
+            if(!giveawayData) {
+                return interaction.createFollowup({ content: `There seems to be an issue with this giveaway's data. Please notify the giveaway host.`, flags: 64 });
+            }
+            if(giveawayData?.entrants?.length && giveawayData.entrants.includes(member.id)) {
+                return interaction.createFollowup({ content: `You have already entered this giveaway!`, flags: 64 });
+            }
                 if(giveawayData?.roleRequired) {
                     if(!member.roles.includes(giveawayData?.roleRequired)) {
                         member.user.getDMChannel().then((c) => {
@@ -123,8 +128,6 @@ export default class GiveawayCommand extends Command {
                         return;
                     }
                 }
-            }
-
             // Button pressed
                 member.user.getDMChannel().then((c) => {
                     c.createMessage(`You have successfully entered the giveaway!`).catch((e) => {
