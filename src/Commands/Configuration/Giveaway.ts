@@ -25,7 +25,7 @@ export default class GiveawayCommand extends Command {
                         {
                             type: 3,
                             name: 'time',
-                            description: `The length of time for the giveaway.`,
+                            description: `The length of time for the giveaway. (Example: 1d)`,
                             required: true,
                         },
                         {
@@ -103,15 +103,15 @@ export default class GiveawayCommand extends Command {
     }
     async run(interaction, member, options, subOptions) {
 
-        this.client.redis.expire((message) => {
-            if(message.startsWith("giveaways")) {
-                console.log(message)
-            }
-        })
+        // this.client.redis.expire((message) => {
+        //     if(message.startsWith("giveaways")) {
+        //         console.log(message)
+        //     }
+        // })
 
         if(interaction.data.custom_id) {
 
-            const giveawayData = await giveawaySchema.findOne({ guild: interaction.guildID, messageID: interaction.message.id });
+            const giveawayData = await giveawaySchema.findOne({ guildID: interaction.guildID, messageID: interaction.message.id });
             if(giveawayData) {
                 if(giveawayData?.roleRequired) {
                     if(!member.roles.includes(giveawayData?.roleRequired)) {
@@ -131,6 +131,10 @@ export default class GiveawayCommand extends Command {
                         interaction.createFollowup({ content: `You have successfully entered the giveaway!`, flags: 64 });
                     });
                 });
+
+           await giveawayData.updateOne({
+               $push: { entrants: member.id }
+           });
 
             return;
         }
@@ -163,7 +167,7 @@ export default class GiveawayCommand extends Command {
 
                 let count = [];
                 if(subOptions.has("role-required")) {
-                    count.push("1");
+                    count.push(1);
                 }
                 if(subOptions.has("invites")) {
                     count.push(2);
@@ -199,15 +203,18 @@ export default class GiveawayCommand extends Command {
                             ]
                     }]
                     }).then(async (m) => {
-                        console.log(subOptions.get("role-required"))
                         const role = subOptions.get("role-required") ? subOptions.get("role-required") : null;
                         const newSchema = new giveawaySchema({
-                            guild: interaction.guildID,
+                            guildID: interaction.guildID,
+                            endTime: Date.now() + actualTime,
+                            prize: prize,
+                            winners: winners,
                             messageID: m.id,
+                            channelID: interaction.channel.id,
                             roleRequired: role,
+                            giveawayHost: member.mention,
                         });
                         await newSchema.save()
-                        await this.client.redis.set(`giveaways.${interaction.guildID}.${m.id}`, m.id, 'EX', actualTime * 1000)
                     });
                     //
                 } else {

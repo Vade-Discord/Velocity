@@ -12,7 +12,7 @@ export default class ReadyEvent extends Event {
 
     async run() {
         await mongo();
-        this.client.redis = await redisConnect();
+        this.client.redis = await redisConnect(this.client);
         console.log(`${this.client.user.username}#${this.client.user.discriminator} has successfully logged in!`);
         const guild = this.client.guilds.get("857895083839324190");
 
@@ -42,6 +42,10 @@ export default class ReadyEvent extends Event {
         } else if(this.client.user.id === this.client.config.CLIENTS.main){
             this.client.bulkEditCommands(commands);
         }
+
+        setInterval(async () => {
+            await this.client.utils.checkGiveaways();
+            }, 15000)
     }
 
 }

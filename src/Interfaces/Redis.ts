@@ -1,7 +1,7 @@
 import Redis from "ioredis";
 import { redis } from "../config.json";
 
-const redisConnect = async (): Promise<Redis> => {
+const redisConnect = async (c): Promise<Redis> => {
     return new Promise((resolve, reject) => {
         const client = new Redis(redis.port, redis.redisPath);
 
@@ -15,20 +15,6 @@ const redisConnect = async (): Promise<Redis> => {
             resolve(client);
             console.log(`Redis has connected`);
         });
-
-       client.expire = (callback) => {
-            const expired = () => {
-                const sub = new Redis(redis.port, redis.redisPath);
-                sub.subscribe('__keyevent@0__:expired', () => {
-                    sub.on('message', (channel, message) => {
-                        callback(message);
-                    })
-                })
-            }
-            const pub = new Redis(redis.port, redis.redisPath);
-            // @ts-ignore
-           pub.send_command('config', ['set', 'notify-keyspace-events', 'Ex'], expired())
-        }
 
     });
 };

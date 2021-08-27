@@ -355,7 +355,7 @@ class MessageEmbed {
 
     /**
      * Sets the timestamp of this embed.
-     * @param {Date|number} [timestamp=Date.now()] The timestamp or date
+     * @param {Date|number|string} [timestamp=Date.now()] The timestamp or date
      * @returns {MessageEmbed}
      */
     setTimestamp(timestamp = Date.now()) {

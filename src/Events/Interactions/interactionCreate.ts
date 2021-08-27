@@ -17,7 +17,7 @@ export default class InteractionCreateEvent extends Event {
        interaction.data.options?.length > 1 ?  interaction.data?.options.forEach((option) => {
             mainOptions.set(option.name, option.value);
         }) : null;
-     if(interaction.data?.options?.length && interaction.data?.options[0]?.options.length) {
+     if(interaction.data?.options?.length && interaction.data?.options[0]?.options?.length) {
          interaction.data.options[0].options.forEach((option) => {
              subOptions.set(option.name, option.value);
          })

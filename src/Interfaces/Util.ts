@@ -8,6 +8,7 @@ import {Types} from "mongoose";
 
 // File imports
 import guild_schema from "../Schemas/Main Guilds/GuildSchema";
+import giveawaysSchema from "../Schemas/Backend/Giveaways";
 
 interface SelectionObject {
   label: string;
@@ -52,6 +53,7 @@ export default class Util {
     }
     return `Vade_` + retVal;
   }
+
   caseID() {
     let length = 10,
         charset =
@@ -102,11 +104,11 @@ export default class Util {
   }
 
   async loggingChannel(guild, type: string) {
-    if(!type) throw new TypeError(`No type provided.`);
-    const locatedGuild = await guild_schema.findOne({ guildID: guild.id });
+    if (!type) throw new TypeError(`No type provided.`);
+    const locatedGuild = await guild_schema.findOne({guildID: guild.id});
     if (!locatedGuild) return null;
     let locatedType = locatedGuild.Logging[type];
-    if(!locatedType) return null;
+    if (!locatedType) return null;
     return locatedType ? guild.channels.get(locatedType) : null;
   }
 
@@ -151,7 +153,7 @@ export default class Util {
             .setTimestamp()
             .setFooter(`Vade`, this.client.user.avatarURL);
 
-        return  interaction.createFollowup({
+        return interaction.createFollowup({
           embeds: [noMod]
         });
       }
@@ -163,7 +165,7 @@ export default class Util {
       );
 
       const checkBotPerms = command.botPerms.some((perm) => !getMember.permissions.has(perm));
-      if(checkBotPerms) {
+      if (checkBotPerms) {
         let noPermEmbed = new RichEmbed()
             .setTitle(`Missing Permissions!`)
             .setDescription(
@@ -173,14 +175,14 @@ export default class Util {
             .setTimestamp()
             .setFooter(`Vade`, this.client.user.avatarURL);
 
-        return  interaction.createFollowup({
+        return interaction.createFollowup({
           embeds: [noPermEmbed]
         });
       }
     }
     if (command.userPerms.length) {
-     const userPermCheck =  command.userPerms.some((perm) => !member.permissions.has(perm));
-      if(userPermCheck) {
+      const userPermCheck = command.userPerms.some((perm) => !member.permissions.has(perm));
+      if (userPermCheck) {
         let noPermEmbed = new RichEmbed()
             .setTitle(`Missing Permissions!`)
             .setDescription(
@@ -190,7 +192,7 @@ export default class Util {
             .setTimestamp()
             .setFooter(`Vade`, this.client.user.avatarURL);
 
-        return  interaction.createFollowup({
+        return interaction.createFollowup({
           embeds: [noPermEmbed]
         });
       }
@@ -226,15 +228,69 @@ export default class Util {
   }
 
   async hasVoted(user: string) {
-   await this.client.redis.get(`votes.top.gg.${user}`, function (err, result) {
+    await this.client.redis.get(`votes.top.gg.${user}`, function (err, result) {
       return !!result;
     })
   }
 
   async checkPremium(guildID): Promise<Boolean> {
-    const guildSchema = await guild_schema.findOne({ guildID });
-    if(!guildSchema) return false;
+    const guildSchema = await guild_schema.findOne({guildID});
+    if (!guildSchema) return false;
     return !!guildSchema?.Premium?.active;
 
   }
+
+  async checkGiveaways() {
+
+    const allGiveaways = await giveawaysSchema.find({});
+    let winner = [];
+    if (allGiveaways?.length) {
+      allGiveaways.forEach(async (giveaway) => {
+
+        if (giveaway.endTime < Date.now()) {
+
+          if (!giveaway?.entrants?.length) {
+
+          }
+          while (!winner?.length || winner.length !== giveaway.winners) {
+            const rand = Math.floor(Math.random() * (giveaway.entrants?.length - 0))
+            const winnerID = giveaway.entrants[rand];
+            let e = (await this.client.getRESTGuildMember(giveaway.guildID, winnerID));
+            giveaway.entrants.splice(rand, 1);
+            winner.push(e)
+          }
+
+
+          const endEmbed = new this.client.embed()
+              .setTitle(`🎉 Giveaway Ended! 🎉`)
+              .setColor('#F00000')
+              .setTimestamp()
+              .setDescription(`Ended: <t:${Math.floor(Date.now() / 1000)}:f>\nHosted By: ${giveaway.giveawayHost}`)
+              .addField(`Prize`, `${giveaway.prize}`)
+              .addField(`Winner`, `${winner.map((u) => u.mention).join(",\n")}`)
+              .setThumbnail(this.client.user.avatarURL)
+
+          // @ts-ignore
+          await this.client.editMessage(giveaway.channelID, giveaway.messageID, {embeds: [endEmbed], components: [{
+              type: 1,
+              components: [
+                {
+                  type: 2,
+                  style: 3,
+                  label: `Enter!`,
+                  custom_id: `giveaway#enter`,
+                  disabled: true,
+                  emoji: { id: this.client.constants.emojis.giveaway.id, name: this.client.constants.emojis.giveaway.name, animated: false },
+                }
+              ]
+            }
+            ]})
+
+        }
+      })
+
+    }
+
+  }
+
 }
