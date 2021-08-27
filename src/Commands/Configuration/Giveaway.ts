@@ -1,6 +1,8 @@
 import Command from "../../Interfaces/Command";
 import giveawaySchema from "../../Schemas/Backend/Giveaways";
+import voiceSchema from "../../Schemas/User Schemas/Voice";
 import ms from 'ms';
+import humanize from 'humanize-duration';
 import {NewsChannel, TextChannel} from "eris";
 
 export default class GiveawayCommand extends Command {
@@ -44,6 +46,12 @@ export default class GiveawayCommand extends Command {
                             type: 8,
                             name: 'role-required',
                             description: `The role required to enter (If any).`,
+                            required: false,
+                        },
+                        {
+                            type: 3,
+                            name: 'voice-time',
+                            description: `The amount of time they should have spent in VC.`,
                             required: false,
                         },
                     ]
@@ -128,6 +136,17 @@ export default class GiveawayCommand extends Command {
                         return;
                     }
                 }
+                if(giveawayData?.voiceRequired) {
+                    const userTime = await voiceSchema.findOne({ guild: interaction.guildID, user: member.id });
+                    if(!userTime || userTime.total < giveawayData.voiceRequired) {
+                        member.user.getDMChannel().then((c) => {
+                            c.createMessage(`You are unable to enter this giveaway due to you not spending enough time in their Voice Channels.`).catch((e) => {
+                                interaction.createFollowup({ content: `You are unable to enter this giveaway due to you not spending enough time in their Voice Channels.`, flags: 64 });
+                            });
+                        });
+                        return;
+                    }
+                }
             // Button pressed
                 member.user.getDMChannel().then((c) => {
                     c.createMessage(`You have successfully entered the giveaway!`).catch((e) => {
@@ -164,7 +183,9 @@ export default class GiveawayCommand extends Command {
                     return interaction.createFollowup(`You seem to have provided an invalid length of time.`);
                 }
 
+
                 const roleRequirement = subOptions.has("role-required") ? member.guild.roles.get(subOptions.get("role-required")).mention : 'No Role Required.';
+                const voiceRequirement = subOptions.has("voice-time") ? humanize(ms(subOptions.get("voice-time"))) : 'No VC time required.';
 
                 let count = [];
                 if(subOptions.has("role-required")) {
@@ -183,7 +204,7 @@ export default class GiveawayCommand extends Command {
                     .setTitle('🎉 Giveaway! 🎉')
                     .setDescription(`Click the button to enter!\nEnds: <t:${Math.floor((actualTime + Date.now()) / 1000)}:R>\nGiveaway Host: ${member.mention}`)
                     .addField(`Prize`, `${prize}`)
-                    .addField(`Requirements`, `Role Requirement: ${roleRequirement} \n\n`)
+                    .addField(`Requirements`, `Role Requirement: ${roleRequirement} \nVoice Requirement: ${voiceRequirement} \n\n`)
                     .setTimestamp()
                     .setFooter(`Vade Giveaways @ https://vade-bot.com`)
                     .setThumbnail(this.client.user.avatarURL)
@@ -204,7 +225,8 @@ export default class GiveawayCommand extends Command {
                             ]
                     }]
                     }).then(async (m) => {
-                        const role = subOptions.get("role-required") ? subOptions.get("role-required") : null;
+                        const role = subOptions.has("role-required") ? subOptions.get("role-required") : null;
+                        const vc = subOptions.has("voice-time") ? ms(subOptions.get("voice-time")) : null;
                         const newSchema = new giveawaySchema({
                             guildID: interaction.guildID,
                             endTime: Date.now() + actualTime,
@@ -213,6 +235,7 @@ export default class GiveawayCommand extends Command {
                             messageID: m.id,
                             channelID: interaction.channel.id,
                             roleRequired: role,
+                            voiceRequired: vc,
                             giveawayHost: member.mention,
                         });
                         await newSchema.save()
