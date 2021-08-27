@@ -9,7 +9,7 @@ export interface IGiveaways extends mongoose.Document {
     endTime: number;
     roleRequired?: string;
     timeSpent?: string;
-    voiceRequired?: string;
+    voiceRequired?: number;
     invitesRequired?: string;
     entrants: string[];
     giveawayHost: string;
@@ -25,7 +25,7 @@ const giveawaySchema = new mongoose.Schema({
     endTime: Number,
     roleRequired: String,
     timeSpent: String,
-    voiceRequired: String,
+    voiceRequired: Number,
     invitesRequired: String,
     entrants: Array,
     giveawayHost: String,
