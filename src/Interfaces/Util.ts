@@ -250,14 +250,42 @@ export default class Util {
         if (giveaway.endTime < Date.now()) {
 
           if (!giveaway?.entrants?.length) {
-
+            const endEmbed = new this.client.embed()
+              .setTitle(`🎉 Giveaway Ended! 🎉`)
+              .setColor('#F00000')
+              .setTimestamp()
+              .setDescription(`Ended: <t:${Math.floor(Date.now() / 1000)}:f>\nHosted By: ${giveaway.giveawayHost}`)
+              .addField(`Prize`, `${giveaway.prize}`)
+              .addField(`Winner`, `Nobody Entered the giveaway :(`)
+              .setThumbnail(this.client.user.avatarURL)
+            
+            await this.client.editMessage(giveaway.channelID, giveaway.messageID, {
+              // @ts-ignore
+              embeds: [endEmbed], components: [{
+                type: 1,
+                components: [
+                  {
+                    type: 2,
+                    style: 3,
+                    label: `Enter!`,
+                    custom_id: `giveaway#enter`,
+                    disabled: true,
+                    emoji: { id: this.client.constants.emojis.giveaway.id, name: this.client.constants.emojis.giveaway.name, animated: false },
+                  }
+                ]
+              }
+              ]
+            })
           }
           while (!winner?.length || winner.length !== giveaway.winners) {
+            if (!giveaway?.entrants?.length) {
+              return winner.push("Nobody")
+            }
             const rand = Math.floor(Math.random() * (giveaway.entrants?.length - 0))
             const winnerID = giveaway.entrants[rand];
             let e = (await this.client.getRESTGuildMember(giveaway.guildID, winnerID));
             giveaway.entrants.splice(rand, 1);
-            winner.push(e)
+            return winner.push(e)
           }
 
 

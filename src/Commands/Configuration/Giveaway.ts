@@ -206,7 +206,7 @@ export default class GiveawayCommand extends Command {
                             guildID: interaction.guildID,
                             endTime: Date.now() + actualTime,
                             prize: prize,
-                            winners: winners,
+                            winners: null,
                             messageID: m.id,
                             channelID: interaction.channel.id,
                             roleRequired: role,
