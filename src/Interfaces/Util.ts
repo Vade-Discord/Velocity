@@ -249,17 +249,18 @@ export default class Util {
 
         if (giveaway.endTime < Date.now()) {
 
-          if (!giveaway?.entrants?.length) {
+          if (!giveaway.entrants?.length) {
+            console.log(`No entrants`);
             const endEmbed = new this.client.embed()
-              .setTitle(`🎉 Giveaway Ended! 🎉`)
-              .setColor('#F00000')
-              .setTimestamp()
-              .setDescription(`Ended: <t:${Math.floor(Date.now() / 1000)}:f>\nHosted By: ${giveaway.giveawayHost}`)
-              .addField(`Prize`, `${giveaway.prize}`)
-              .addField(`Winner`, `Nobody Entered the giveaway :(`)
-              .setThumbnail(this.client.user.avatarURL)
-            
-            await this.client.editMessage(giveaway.channelID, giveaway.messageID, {
+                .setTitle(`🎉 Giveaway Ended! 🎉`)
+                .setColor('#F00000')
+                .setTimestamp()
+                .setDescription(`Ended: <t:${Math.floor(Date.now() / 1000)}:f>\nHosted By: ${giveaway.giveawayHost}`)
+                .addField(`Prize`, `${giveaway.prize}`)
+                .addField(`Winner`, `Nobody Entered the giveaway :(`)
+                .setThumbnail(this.client.user.avatarURL)
+
+            this.client.editMessage(giveaway.channelID, giveaway.messageID, {
               // @ts-ignore
               embeds: [endEmbed], components: [{
                 type: 1,
@@ -275,17 +276,17 @@ export default class Util {
                 ]
               }
               ]
-            })
+            });
+            await giveaway.delete();
+            return;
           }
-          while (!winner?.length || winner.length !== giveaway.winners) {
-            if (!giveaway?.entrants?.length) {
-              return winner.push("Nobody")
-            }
+          while (!winner.length || winner?.length < giveaway.winners) {
             const rand = Math.floor(Math.random() * (giveaway.entrants?.length - 0))
             const winnerID = giveaway.entrants[rand];
+            console.log(winnerID)
             let e = (await this.client.getRESTGuildMember(giveaway.guildID, winnerID));
             giveaway.entrants.splice(rand, 1);
-            return winner.push(e)
+           if(e) winner.push(e)
           }
 
 
@@ -295,7 +296,7 @@ export default class Util {
               .setTimestamp()
               .setDescription(`Ended: <t:${Math.floor(Date.now() / 1000)}:f>\nHosted By: ${giveaway.giveawayHost}`)
               .addField(`Prize`, `${giveaway.prize}`)
-              .addField(`Winner`, `${winner.map((u) => u.mention).join(",\n")}`)
+              .addField(`Winner(s)`, `${winner.map((u) => u.mention)?.join(", ")}`)
               .setThumbnail(this.client.user.avatarURL)
 
           // @ts-ignore
@@ -313,6 +314,7 @@ export default class Util {
               ]
             }
             ]})
+          await giveaway.delete();
 
         }
       })
