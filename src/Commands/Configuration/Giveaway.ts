@@ -200,6 +200,10 @@ export default class GiveawayCommand extends Command {
                 if(count.length > 1 && !(await this.client.utils.checkPremium(interaction.guildID))) {
                     return interaction.createFollowup(`Only vade premium members can have multiple requirements set.`);
                 }
+
+                if(subOptions.has("voice-time") && ms(subOptions.get("voice-time")) > ms("1d") && !(await this.client.utils.checkPremium(interaction.guildID))) {
+                    return interaction.createFollowup(`The Voice Requirement can only be over 24 hours if the guild owner has vade premium.`);
+                }
                 const giveawayEmbed = new this.client.embed()
                     .setTitle('🎉 Giveaway! 🎉')
                     .setDescription(`Click the button to enter!\nEnds: <t:${Math.floor((actualTime + Date.now()) / 1000)}:R>\nGiveaway Host: ${member.mention}`)
