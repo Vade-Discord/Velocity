@@ -257,7 +257,7 @@ export default class Util {
                 .setTimestamp()
                 .setDescription(`Ended: <t:${Math.floor(Date.now() / 1000)}:f>\nHosted By: ${giveaway.giveawayHost}`)
                 .addField(`Prize`, `${giveaway.prize}`)
-                .addField(`Winner`, `Nobody Entered the giveaway :(`)
+                .addField(`Winner`, `No valid participants.`)
                 .setThumbnail(this.client.user.avatarURL)
 
             this.client.editMessage(giveaway.channelID, giveaway.messageID, {
@@ -283,7 +283,6 @@ export default class Util {
           while (!winner.length || winner?.length < giveaway.winners) {
             const rand = Math.floor(Math.random() * (giveaway.entrants?.length - 0))
             const winnerID = giveaway.entrants[rand];
-            console.log(winnerID)
             let e = (await this.client.getRESTGuildMember(giveaway.guildID, winnerID));
             giveaway.entrants.splice(rand, 1);
            if(e) winner.push(e)
