@@ -54,13 +54,25 @@ export default class GiveawayCommand extends Command {
                             description: `The amount of time they should have spent in VC.`,
                             required: false,
                         },
+                        {
+                            type: 3,
+                            name: 'guild-time',
+                            description: `The amount of time they should have been in the guild for.`,
+                            required: false,
+                        },
                     ]
                 },
                 {
                     type: 1,
-                    name: 'end',
-                    description: `End a giveaway.`,
+                    name: 'delete',
+                    description: `Delete a giveaway.`,
                     options: [
+                        {
+                            type: 7,
+                            name: 'channel',
+                            description: `The channel that the giveaway is hosted in.`,
+                            required: true,
+                        },
                         {
                             type: 3,
                             name: 'message-id',
@@ -147,6 +159,19 @@ export default class GiveawayCommand extends Command {
                         return;
                     }
                 }
+                if(giveawayData?.guildTime) {
+                    const memberJoinDate = interaction.member.joinedAt;
+                    console.log(memberJoinDate / 1000)
+                    console.log(giveawayData?.guildTime)
+                    if(memberJoinDate > Date.now() - giveawayData?.guildTime) {
+                        member.user.getDMChannel().then((c) => {
+                            c.createMessage(`You are unable to enter this giveaway due to you not spending enough time in the server.`).catch((e) => {
+                                interaction.createFollowup({ content: `You are unable to enter this giveaway due to you not spending enough time in the server.`, flags: 64 });
+                            });
+                        });
+                        return;
+                    }
+                }
             // Button pressed
                 member.user.getDMChannel().then((c) => {
                     c.createMessage(`You have successfully entered the giveaway!`).catch((e) => {
@@ -186,7 +211,7 @@ export default class GiveawayCommand extends Command {
 
                 const roleRequirement = subOptions.has("role-required") ? member.guild.roles.get(subOptions.get("role-required")).mention : 'No Role Required.';
                 const voiceRequirement = subOptions.has("voice-time") ? humanize(ms(subOptions.get("voice-time"))) : 'No VC time required.';
-
+                const guildRequirement = subOptions.has("guild-time") ? humanize(ms(subOptions.get("guild-time"))) : 'No server time required.';
                 let count = [];
                 if(subOptions.has("role-required")) {
                     count.push(1);
@@ -197,6 +222,9 @@ export default class GiveawayCommand extends Command {
                 if(subOptions.has("voice-time")) {
                     count.push(3);
                 }
+                if(subOptions.has("guild-time")) {
+                    count.push(4);
+                }
                 if(count.length > 1 && !(await this.client.utils.checkPremium(interaction.guildID))) {
                     return interaction.createFollowup(`Only vade premium members can have multiple requirements set.`);
                 }
@@ -204,11 +232,17 @@ export default class GiveawayCommand extends Command {
                 if(subOptions.has("voice-time") && ms(subOptions.get("voice-time")) > ms("1d") && !(await this.client.utils.checkPremium(interaction.guildID))) {
                     return interaction.createFollowup(`The Voice Requirement can only be over 24 hours if the guild owner has vade premium.`);
                 }
+                if(subOptions.has("voice-time") && ms(subOptions.get("voice-time")) > ms("30d")) {
+                    return interaction.createFollowup(`Sorry, a giveaway can only last a maximum of 30 days.`);
+                }
+
+
+
                 const giveawayEmbed = new this.client.embed()
                     .setTitle('🎉 Giveaway! 🎉')
                     .setDescription(`Click the button to enter!\nEnds: <t:${Math.floor((actualTime + Date.now()) / 1000)}:R>\nGiveaway Host: ${member.mention}`)
                     .addField(`Prize`, `${prize}`)
-                    .addField(`Requirements`, `Role Requirement: ${roleRequirement} \nVoice Requirement: ${voiceRequirement} \n\n`)
+                    .addField(`Requirements`, `Role Requirement: ${roleRequirement} \nVoice Requirement: ${voiceRequirement} \nServer Time: ${guildRequirement} \n\n`)
                     .setTimestamp()
                     .setFooter(`Vade Giveaways @ https://vade-bot.com`)
                     .setThumbnail(this.client.user.avatarURL)
@@ -231,6 +265,7 @@ export default class GiveawayCommand extends Command {
                     }).then(async (m) => {
                         const role = subOptions.has("role-required") ? subOptions.get("role-required") : null;
                         const vc = subOptions.has("voice-time") ? ms(subOptions.get("voice-time")) : null;
+                        const joinTime = subOptions.has("guild-time") ? ms(subOptions.get("guild-time")) : null;
                         const newSchema = new giveawaySchema({
                             guildID: interaction.guildID,
                             endTime: Date.now() + actualTime,
@@ -240,9 +275,11 @@ export default class GiveawayCommand extends Command {
                             channelID: interaction.channel.id,
                             roleRequired: role,
                             voiceRequired: vc,
+                            guildTime: joinTime,
                             giveawayHost: member.mention,
                         });
-                        await newSchema.save()
+                        await newSchema.save();
+                        interaction.createFollowup(`Successfully started the giveaway.`);
                     });
                     //
                 } else {
@@ -258,6 +295,25 @@ export default class GiveawayCommand extends Command {
 
             case "edit": {
                 const messageID = subOptions.get('message-id');
+                break;
+            }
+
+            case "delete": {
+                const channelID = subOptions.get("channel");
+                const messageID = subOptions.get("message-id");
+
+                const data = (await giveawaySchema.findOne({ guildID: interaction.guildID, messageID: messageID }));
+                if(!data) {
+                    return interaction.createFollowup(`There doesn't seem to be a giveaway with that message ID.`);
+                }
+                await this.client.editMessage(channelID, messageID, { content: `*Giveaway deleted.*`, embeds: [], components: []}).catch((e) => {
+                    return interaction.createFollowup(`Something seems to have gone wrong.. please ensure all information provided was correct.`);
+                });
+
+                interaction.createFollowup(`Successfully deleted that giveaway.`)
+
+                await data.delete();
+
                 break;
             }
         }
