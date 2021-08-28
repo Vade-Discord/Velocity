@@ -161,8 +161,6 @@ export default class GiveawayCommand extends Command {
                 }
                 if(giveawayData?.guildTime) {
                     const memberJoinDate = interaction.member.joinedAt;
-                    console.log(memberJoinDate / 1000)
-                    console.log(giveawayData?.guildTime)
                     if(memberJoinDate > Date.now() - giveawayData?.guildTime) {
                         member.user.getDMChannel().then((c) => {
                             c.createMessage(`You are unable to enter this giveaway due to you not spending enough time in the server.`).catch((e) => {
