@@ -20,7 +20,7 @@ export default class DehoistCommand extends Command {
             limit: 1000
         }));
 
-        const characters = ['!', '@', '#', '~', '?', ';', '£', '$', '%', '^', '&', '*'];
+        const characters = ['!', '@', '#', '~', '?', ';', '£', '$', '%', '^', '&', '*', '=', ';', ':', '>', '<'];
         const filter = guildMembers.filter(u => u.nick && characters.some((char) => u.nick?.trim().startsWith(char)) || u.username && u.nick !== "No Hoisting" && characters.some((char) => u.username?.trim().startsWith(char)));
         try {
             if(filter.length) {
