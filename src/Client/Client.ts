@@ -18,7 +18,7 @@ const globPromise = promisify(glob);
 
 export class Bot extends Eris.Client {
   public static __instance__?: Bot;
-  public logger: Logger = new Logger("vade");
+  public logger: Logger = new Logger("client");
   public commands: Collection<string, Command> = new Collection();
   public token = Config.token;
   public Pagination = new Collection();
