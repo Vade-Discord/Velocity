@@ -73,7 +73,7 @@ export default class LoggingCommand extends Command {
 
         const type = subOptions.get(`type`);
         if(type) {
-            const validTypes: string[] = ['message', 'voice', 'role', 'moderation', 'channel', 'user', 'welcome', 'invites'];
+            const validTypes: string[] = ['message', 'voice', 'role', 'moderation', 'channel', 'user', 'welcome', 'invites', 'suggestion'];
             if(!validTypes.includes(type?.toLowerCase())) {
                 const invalidEmbed = new this.client.embed()
                     .setAuthor(`Invalid Option!`, this.client.user.avatarURL)
@@ -143,6 +143,14 @@ export default class LoggingCommand extends Command {
                     Logging: {
                         user: channel.id,
                     }
+                });
+                interaction.createFollowup(`Successfully updated the **${type?.toLowerCase()}** logging channel.`);
+                break;
+            }
+
+            case "suggestion": {
+                await guildData.updateOne({
+                   Suggestion: channel.id
                 });
                 interaction.createFollowup(`Successfully updated the **${type?.toLowerCase()}** logging channel.`);
                 break;

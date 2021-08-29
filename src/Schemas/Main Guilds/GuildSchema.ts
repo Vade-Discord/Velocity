@@ -40,6 +40,7 @@ export interface IGuild extends mongoose.Document {
     }
     Logging?: {
         message?: string;
+        suggestion?: string;
         welcome?: string;
         invites?: string;
         leave?: string;
@@ -93,6 +94,7 @@ const guildSchema = new mongoose.Schema({
     Logging: {
         message: String,
         welcome: String,
+        suggestion: String,
         invites: String,
         voice: String,
         role: String,

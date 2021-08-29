@@ -14,7 +14,7 @@ export default class InteractionCreateEvent extends Event {
         const guild = interaction.guildID ? (await this.client.getRESTGuild(interaction.guildID)) : null;
         const mainOptions = new Map();
         const subOptions = new Map();
-       interaction.data.options?.length > 1 ?  interaction.data?.options.forEach((option) => {
+       interaction.data.options?.length >= 1 ?  interaction.data?.options.forEach((option) => {
             mainOptions.set(option.name, option.value);
         }) : null;
      if(interaction.data?.options?.length && interaction.data?.options[0]?.options?.length) {

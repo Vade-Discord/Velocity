@@ -1,5 +1,5 @@
 import Command from "../../Interfaces/Command";
-import phin from 'phin';
+import phin, {IJSONResponse} from 'phin';
 
 export default class BannerCommand extends Command {
     constructor(client) {
@@ -22,7 +22,7 @@ export default class BannerCommand extends Command {
         const user = interaction.data.options?.filter(m => m.name === "user")[0].value;
         if(user) {
             const url = `https://discord.com/api/v8/users/${user}`;
-            const { body } = await phin({url: url, parse: "json", headers: { Authorization: `Bot ${this.client.config.token}` }});
+            const { body }: IJSONResponse<any> = await phin({url: url, parse: "json", headers: { Authorization: `Bot ${this.client.config.token}` }});
             // @ts-ignore
             const banners = {
                 gif: `https://cdn.discordapp.com/banners/${user}/${body?.banner}.gif?size=1024`,

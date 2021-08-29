@@ -82,7 +82,9 @@ export default class Util {
     return filteredRoles.sort((a, b) => b.position - a.position)[0];
   }
 
-  async createGuildSchema(guild) {
+  async getGuildSchema(guild) {
+    const check = await guild_schema.findOne({ guildID: guild.id });
+    if(check) return check;
     const newSchema = new guild_schema({
       _id: Types.ObjectId(),
       guildID: guild.id,
