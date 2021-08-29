@@ -119,7 +119,9 @@ export default class RoleCommand extends Command {
                 break;
             }
                 case "humans": {
-                    const guildMembers = (await member.guild.fetchMembers());
+                    const guildMembers = (await member.guild.getRESTMembers({
+                        limit: 1000
+                    }));
 
 
                     const humans = guildMembers.filter(m => !m.bot);
@@ -148,7 +150,9 @@ export default class RoleCommand extends Command {
                 }
 
             case "bots": {
-                const guildMembers = (await member.guild.fetchMembers());
+                const guildMembers = (await member.guild.getRESTMembers({
+                    limit: 1000
+                }));
 
 
                 const bots = guildMembers.filter(m => m.bot);
@@ -171,6 +175,8 @@ export default class RoleCommand extends Command {
                 } else {
                     return interaction.createFollowup(`Unable to locate any bots.`);
                 }
+
+                break;
             }
 
 
