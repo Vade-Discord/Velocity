@@ -243,7 +243,7 @@ export default class Util {
 
   async checkGiveaways() {
 
-    const allGiveaways = await giveawaysSchema.find({});
+    const allGiveaways = await giveawaysSchema.find({}).catch(() => null);
     let winner = [];
     if (allGiveaways?.length) {
       allGiveaways.forEach(async (giveaway) => {
