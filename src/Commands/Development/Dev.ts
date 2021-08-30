@@ -1,8 +1,11 @@
 import Command from "../../Interfaces/Command";
-import guildSchema from "../../Schemas/Main Guilds/GuildSchema";
+import keyStorage from "../../Schemas/Premium Schemas/keyStorage";
 import Eris from "eris";
 import { Type } from "@extreme_hero/deeptype";
 import { inspect } from "util";
+import { Types } from 'mongoose';
+import ms from 'ms';
+import humanize from 'humanize-duration';
 
 export default class EvaluateCommand extends Command {
     constructor(client) {
@@ -40,8 +43,16 @@ export default class EvaluateCommand extends Command {
                 },
                 {
                     type: 1,
-                    name: 'premium',
-                    description: `Add premium to a server.`,
+                    name: 'generate-key',
+                    description: `Generate a premium key.`,
+                    options: [
+                        {
+                            type: 3,
+                            name: 'duration',
+                            description: 'The duration of the premium that the key will grant.',
+                            required: true,
+                        }
+                    ]
                 },
                 {
                     type: 1,
@@ -160,18 +171,27 @@ export default class EvaluateCommand extends Command {
                 return interaction.createFollowup(`Successfully emit *${event}*.`);
             }
 
-            case "premium": {
-                const schema = await guildSchema.findOne({ guildID: interaction.guildID });
-                if (schema) {
-                    await schema.updateOne({
-                        Premium: {
-                            active: true,
-                        },
-                    });
-                    return interaction.createFollowup(`Successfully added the premium!`);
-                } else {
-                    return interaction.createFollowup(`This guild doesn't have any data.`);
+            case "generate-key": {
+               const length = subOptions.get("duration");
+                if(ms(length) > ms('360d')) {
+                    return interaction.createFollowup({ content: `The key shouldn't last longer than one year.` });
+
                 }
+
+                const key = this.client.utils.generateKey();
+                const newSchema = new keyStorage({
+                    _id: Types.ObjectId(),
+                    key,
+                    expirationTime: Date.now() + ms(length),
+                    length: ms(length),
+                    createdBy: member.id,
+                    createdOn: Date.now(),
+                });
+
+                await newSchema.save();
+
+                interaction.createFollowup(`Here is the generated key with an expiration time of \`${humanize(ms(length))}\`\n\n\`${key}\``);
+                break;
             }
 
             case "say": {
