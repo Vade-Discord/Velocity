@@ -20,11 +20,10 @@ export default class UserinfoCommand extends Command {
             contextUserMenu: true,
         });
     }
-    async run(interaction, member) {
+    async run(interaction, member, options) {
 
         const guild = this.client.guilds.get(interaction.guildID);
-        if(!interaction.data.resolved.users) await interaction.data.users.resolve();
-        const u = interaction.data.options?.filter(m => m.name === "user")[0].value ?? interaction.data?.target_id;
+        const u = options.get("user") ?? interaction.data?.target_id;
 
         if(!u) {
             return interaction.createFollowup(`You need to provide a user.`);
