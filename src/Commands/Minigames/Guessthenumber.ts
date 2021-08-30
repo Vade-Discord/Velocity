@@ -48,7 +48,8 @@ export default class GuessthenumberCommand extends Command {
                await this.client.redis.set(`minigames.${interaction.guildID}.gtn`, channel.id, 'EX', 600);
 
                 const e = await this.client.getRESTUser(interaction.member.id);
-              await channel.createMessage({ embed: embed});
+              // @ts-ignore
+               await channel.createMessage({ embeds: [embed]});
               e.getDMChannel().then((c) => {
                   c.createMessage({ content: `The number you chose is: **${number}**`})
               })
@@ -63,7 +64,8 @@ export default class GuessthenumberCommand extends Command {
                       .setFooter(`Vade Minigames`, this.client.user.avatarURL)
                       .setColor(this.client.constants.colours.green)
 
-                   channel.createMessage({ embed: gotEmbed, messageReference: { messageID: e.id}})
+                   // @ts-ignore
+                   channel.createMessage({ embeds: [gotEmbed], messageReference: { messageID: e.id}})
                });
 
 
