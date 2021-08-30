@@ -58,7 +58,7 @@ export default class BankCommand extends Command {
                 let user = member;
                 const nf = Intl.NumberFormat();
                 const ID = subOptions.get("user");
-                if (ID) user = { user: await this.client.getRESTUser(ID) };
+                if (ID) user = (await member.guild.getRESTMember(ID));
                 const Profile = (await this.client.utils.getProfileSchema(user.id))!!;
 
                 const balanceEmbed = new this.client.embed()
