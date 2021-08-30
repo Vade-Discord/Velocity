@@ -1,22 +1,44 @@
 import Redis from "ioredis";
 import { redis } from "../config.json";
 import { Logger } from "@dimensional-fun/logger";
+import { Bot } from "../Client/Client";
 
 const logger: Logger = new Logger("cache");
 const redisConnect = async (c): Promise<Redis> => {
     return new Promise((resolve, reject) => {
-        const client = new Redis(redis.port, redis.redisPath);
+        const publisher = new Redis(redis.port, redis.redisPath);
+        const subscriber = new Redis(redis.port, redis.redisPath);
 
-        client.on("error", (err) => {
-            logger.error(`Redis encountered an error: `, err);
-            client.quit();
+        subscriber.subscribe('__keyevent@0__:expired')
+
+        publisher.on("error", (err) => {
+            logger.error(`(Publisher) Redis encountered an error: `, err);
+            publisher.quit();
             reject(err);
         });
 
-        client.on("ready", () => {
-            resolve(client);
-            logger.info(`Redis has successfully connected.`);
+        publisher.on("ready", () => {
+            resolve(publisher);
+            logger.info(`(Publisher) Redis has successfully connected.`);
         });
+        
+        subscriber.on("error", (err) => {
+            logger.error("(Subscriber) Redis encountered an error:", err)
+            subscriber.quit()
+            reject(err)
+        })
+        
+        subscriber.on("ready", () => {
+            logger.info("(Subscriber) Redis has successfully connected.")
+        })
+
+        subscriber.on('message', (channel, key) => {
+            switch (channel) {
+                case '__keyevent@0__:expired':
+                    client.emit("keyExpired", key);
+                    break;
+            }
+        })
 
     });
 };
