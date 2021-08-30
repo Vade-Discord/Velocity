@@ -202,7 +202,7 @@ export default class GiveawayCommand extends Command {
                 const prize = subOptions.get('prize');
                 const time = subOptions.get('time');
                 const actualTime = ms(time);
-                if(!actualTime) {
+                if(!actualTime || !time.endsWith("s" || "d" || "w" || "m" || "y")) {
                     return interaction.createFollowup(`You seem to have provided an invalid length of time.`);
                 }
 
@@ -277,6 +277,7 @@ export default class GiveawayCommand extends Command {
                             giveawayHost: member.mention,
                         });
                         await newSchema.save();
+                        await this.client.redis.set(`giveaway.${interaction.guildID}.${m.id}`, true, 'EX', actualTime / 1000);
                         interaction.createFollowup(`Successfully started the giveaway.`);
                     });
                     //
