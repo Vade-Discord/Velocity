@@ -42,10 +42,6 @@ export default class ReadyEvent extends Event {
         } else if(this.client.user.id === this.client.config.CLIENTS.main){
             this.client.bulkEditCommands(commands);
         }
-
-        setInterval(async () => {
-            await this.client.utils.checkGiveaways();
-            }, 15000)
     }
 
 }
