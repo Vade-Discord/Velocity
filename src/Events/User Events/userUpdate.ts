@@ -35,6 +35,7 @@ import guildSchema from '../../Schemas/Main Guilds/GuildSchema';
                           .setDescription(`**From:** ${oldUser.username}\n**To:** ${user.username}`)
                           .setTimestamp()
 
+                          // @ts-ignore
                           await channel.createMessage({embeds: [embed]});
                       }
 
@@ -46,6 +47,7 @@ import guildSchema from '../../Schemas/Main Guilds/GuildSchema';
                               .setThumbnail(user.avatarURL)
                               .setTimestamp()
 
+                          // @ts-ignore
                           await channel.createMessage({embeds: [embed]});
                       }
 
@@ -57,7 +59,8 @@ import guildSchema from '../../Schemas/Main Guilds/GuildSchema';
                               .setThumbnail(user.avatarURL)
                               .setTimestamp()
 
-                          await channel.createMessage({embed: embed});
+                          // @ts-ignore
+                          await channel.createMessage({embeds: [embed]});
                       }
 
 
