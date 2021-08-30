@@ -84,8 +84,8 @@ export default class Util {
   }
 
   async getGuildSchema(guild) {
-    const check = await guild_schema.findOne({ guildID: guild.id });
-    if(check) return check;
+    const check = await guild_schema.findOne({guildID: guild.id});
+    if (check) return check;
     const newSchema = new guild_schema({
       _id: Types.ObjectId(),
       guildID: guild.id,
@@ -99,7 +99,7 @@ export default class Util {
   }
 
   async getProfileSchema(userID) {
-    const check = await profile_schema.findOne({ User: userID });
+    const check = await profile_schema.findOne({User: userID});
     if (check) return check;
     const newSchema = new profile_schema({
       _id: Types.ObjectId(),
@@ -180,7 +180,7 @@ export default class Util {
           this.client.user.id
       );
 
-          
+
       const checkBotPerms = command.botPerms.some((perm) => !getMember.permissions.has(perm));
       if (checkBotPerms) {
         let noPermEmbed = new RichEmbed()
@@ -257,85 +257,85 @@ export default class Util {
 
   }
 
-  async checkGiveaways() {
 
-    const allGiveaways = await giveawaysSchema.find({}).catch(() => null);
+  async giveawayEnded(giveaway) {
+
     let winner = [];
-    if (allGiveaways?.length) {
-      allGiveaways.forEach(async (giveaway) => {
 
-        if (giveaway.endTime < Date.now()) {
+    if (!giveaway.entrants?.length) {
+      const endEmbed = new this.client.embed()
+          .setTitle(`🎉 Giveaway Ended! 🎉`)
+          .setColor('#F00000')
+          .setTimestamp()
+          .setDescription(`Ended: <t:${Math.floor(Date.now() / 1000)}:f>\nHosted By: ${giveaway.giveawayHost}`)
+          .addField(`Prize`, `${giveaway.prize}`)
+          .addField(`Winner`, `No valid participants.`)
+          .setThumbnail(this.client.user.avatarURL)
 
-          if (!giveaway.entrants?.length) {
-            console.log(`No entrants`);
-            const endEmbed = new this.client.embed()
-                .setTitle(`🎉 Giveaway Ended! 🎉`)
-                .setColor('#F00000')
-                .setTimestamp()
-                .setDescription(`Ended: <t:${Math.floor(Date.now() / 1000)}:f>\nHosted By: ${giveaway.giveawayHost}`)
-                .addField(`Prize`, `${giveaway.prize}`)
-                .addField(`Winner`, `No valid participants.`)
-                .setThumbnail(this.client.user.avatarURL)
-
-            this.client.editMessage(giveaway.channelID, giveaway.messageID, {
-              // @ts-ignore
-              embeds: [endEmbed], components: [{
-                type: 1,
-                components: [
-                  {
-                    type: 2,
-                    style: 3,
-                    label: `Enter!`,
-                    custom_id: `giveaway#enter`,
-                    disabled: true,
-                    emoji: { id: this.client.constants.emojis.giveaway.id, name: this.client.constants.emojis.giveaway.name, animated: false },
-                  }
-                ]
-              }
-              ]
-            }).catch(() => null);
-            await giveaway.delete();
-            return;
-          }
-          while (!winner.length || winner?.length < giveaway.winners) {
-            const rand = Math.floor(Math.random() * (giveaway.entrants?.length - 0))
-            const winnerID = giveaway.entrants[rand];
-            let e = (await this.client.getRESTGuildMember(giveaway.guildID, winnerID));
-            giveaway.entrants.splice(rand, 1);
-           if(e) winner.push(e)
-          }
-
-
-          const endEmbed = new this.client.embed()
-              .setTitle(`🎉 Giveaway Ended! 🎉`)
-              .setColor('#F00000')
-              .setTimestamp()
-              .setDescription(`Ended: <t:${Math.floor(Date.now() / 1000)}:f>\nHosted By: ${giveaway.giveawayHost}`)
-              .addField(`Prize`, `${giveaway.prize}`)
-              .addField(`Winner(s)`, `${winner.map((u) => u.mention)?.join(", ")}`)
-              .setThumbnail(this.client.user.avatarURL)
-
-          // @ts-ignore
-          await this.client.editMessage(giveaway.channelID, giveaway.messageID, {embeds: [endEmbed], components: [{
-              type: 1,
-              components: [
-                {
-                  type: 2,
-                  style: 3,
-                  label: `Enter!`,
-                  custom_id: `giveaway#enter`,
-                  disabled: true,
-                  emoji: { id: this.client.constants.emojis.giveaway.id, name: this.client.constants.emojis.giveaway.name, animated: false },
-                }
-              ]
+      this.client.editMessage(giveaway.channelID, giveaway.messageID, {
+        // @ts-ignore
+        embeds: [endEmbed], components: [{
+          type: 1,
+          components: [
+            {
+              type: 2,
+              style: 3,
+              label: `Enter!`,
+              custom_id: `giveaway#enter`,
+              disabled: true,
+              emoji: {
+                id: this.client.constants.emojis.giveaway.id,
+                name: this.client.constants.emojis.giveaway.name,
+                animated: false
+              },
             }
-            ]})
-          await giveaway.delete();
-
+          ]
         }
-      })
-
+        ]
+      }).catch(() => null);
+      await giveaway.delete();
+      return;
     }
+    while (!winner.length || winner?.length < giveaway.winners) {
+      const rand = Math.floor(Math.random() * (giveaway.entrants?.length - 0))
+      const winnerID = giveaway.entrants[rand];
+      let e = (await this.client.getRESTGuildMember(giveaway.guildID, winnerID));
+      giveaway.entrants.splice(rand, 1);
+      if (e) winner.push(e)
+    }
+
+
+    const endEmbed = new this.client.embed()
+        .setTitle(`🎉 Giveaway Ended! 🎉`)
+        .setColor('#F00000')
+        .setTimestamp()
+        .setDescription(`Ended: <t:${Math.floor(Date.now() / 1000)}:f>\nHosted By: ${giveaway.giveawayHost}`)
+        .addField(`Prize`, `${giveaway.prize}`)
+        .addField(`Winner(s)`, `${winner.map((u) => u.mention)?.join(", ")}`)
+        .setThumbnail(this.client.user.avatarURL)
+
+    // @ts-ignore
+    await this.client.editMessage(giveaway.channelID, giveaway.messageID, {
+      embeds: [endEmbed], components: [{
+        type: 1,
+        components: [
+          {
+            type: 2,
+            style: 3,
+            label: `Enter!`,
+            custom_id: `giveaway#enter`,
+            disabled: true,
+            emoji: {
+              id: this.client.constants.emojis.giveaway.id,
+              name: this.client.constants.emojis.giveaway.name,
+              animated: false
+            },
+          }
+        ]
+      }
+      ]
+    })
+    await giveaway.delete();
 
   }
 
