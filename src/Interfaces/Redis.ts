@@ -4,7 +4,7 @@ import { Logger } from "@dimensional-fun/logger";
 import { Bot } from "../Client/Client";
 
 const logger: Logger = new Logger("cache");
-const redisConnect = async (c): Promise<Redis> => {
+const redisConnect = async (client: Bot): Promise<Redis> => {
     return new Promise((resolve, reject) => {
         const publisher = new Redis(redis.port, redis.redisPath);
         const subscriber = new Redis(redis.port, redis.redisPath);
