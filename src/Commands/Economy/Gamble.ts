@@ -133,7 +133,7 @@ export default class GambleCommand extends Command {
             }
 
             case "blackjack": {
-                interaction.createFollowup(`Also not done yet idiot`);
+                interaction.createFollowup(`This subcommand is not complete.`);
                 break;
             }
 
