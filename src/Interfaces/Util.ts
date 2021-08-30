@@ -8,6 +8,7 @@ import {Types} from "mongoose";
 
 // File imports
 import guild_schema from "../Schemas/Main Guilds/GuildSchema";
+import profile_schema from "../Schemas/User Schemas/Profile";
 import giveawaysSchema from "../Schemas/Backend/Giveaways";
 
 interface SelectionObject {
@@ -97,6 +98,19 @@ export default class Util {
     return newSchema;
   }
 
+  async getProfileSchema(userID) {
+    const check = await profile_schema.findOne({ User: userID });
+    if (check) return check;
+    const newSchema = new profile_schema({
+      _id: Types.ObjectId(),
+      User: userID,
+    });
+
+    await newSchema.save();
+
+    return newSchema;
+  }
+
   cleanPerms(perm) {
     const perms: Object = {
       banMembers: "Ban Members",
@@ -166,7 +180,7 @@ export default class Util {
           this.client.user.id
       );
 
-
+          
       const checkBotPerms = command.botPerms.some((perm) => !getMember.permissions.has(perm));
       if (checkBotPerms) {
         let noPermEmbed = new RichEmbed()
