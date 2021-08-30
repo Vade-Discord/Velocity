@@ -114,9 +114,6 @@ export default class PremiumCommand extends Command {
                 }
 
 
-
-
-                break;
             }
 
             default: {
