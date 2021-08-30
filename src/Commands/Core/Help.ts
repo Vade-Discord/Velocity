@@ -3,7 +3,7 @@ import { Paginate } from "@the-nerd-cave/paginate";
 import { createPaginationEmbed } from "../../Classes/Pagination";
 import FuzzySearch from 'fuse.js'
 
-export default class PingCommand extends Command {
+export default class HelpCommand extends Command {
     constructor(client) {
         super(client, 'help', {
             aliases: [""],
@@ -19,10 +19,8 @@ export default class PingCommand extends Command {
         });
     }
 
-    async run(interaction, member) {
-        console.dir(interaction.data.options)
-        const cmd = interaction.data.options?.filter(m => m.name === "query")[0]?.value;
-        //console.log(cmd)
+    async run(interaction, member, options, subOptions) {
+        const cmd = options.get("query");
         const allCategories = [
             ...new Set(this.client.commands.map((cmd) => cmd.category.toLowerCase())),
         ];
@@ -31,12 +29,19 @@ export default class PingCommand extends Command {
         if (!cmd) {
             //const websiteButton = this.client.utils.createButton(interaction, 'Website', 5, 'https://vade-bot.com', 'help#websiteurl');
             const prefix = "/"
-            const totalCommands = this.client.commands.size;
+            const mainCommands = this.client.commands.size;
+            let subCommands = 0;
+            this.client.commands.forEach((command) => {
+                subCommands += command.options.filter((option => option.type === 1)).length
+
+            })
+
+            const totalCommands = mainCommands + subCommands;
 
 
             const mainEmbed = new this.client.embed().setDescription(
-                //`Prefix: ** ${prefix} **\n
-                `Total Commands: **${totalCommands}**\n
+                `**Commands**
+                Total: **${totalCommands}** Main: **${mainCommands}** Sub: **${subCommands}**
                     [Support Server](https://discord.gg/FwBUBzBkYt)  **|** [Website](https://vade-bot.com) **|**  [Dashboard](https://vade-bot.com/dashboard)`
             );
             for (const category of categories) {
@@ -120,8 +125,6 @@ export default class PingCommand extends Command {
                     .setTimestamp();
             });
 
-            //console.log(embeds);
-
             if (embeds.length == 1) {
                 return interaction.createFollowup({
                     embeds: embeds,
@@ -143,6 +146,51 @@ export default class PingCommand extends Command {
             // It isn't a category
             if(allCommands.includes(item)) {
                 const c = allCommands.find(i => i === item);
+                if(c) {
+                    const com = this.client.commands.get(c);
+
+                    const checkOrCross = (bool) => bool ? this.client.constants.emojis.check.mention : this.client.constants.emojis.x.mention;
+                    const cmdEmbed = new this.client.embed()
+                    .setTimestamp()
+                    .setThumbnail(this.client.user.avatarURL)
+                        .setFooter(`Requested by ${member.user.username}#${member.user.discriminator}`)
+                    .setDescription(
+                      `**❯** Name: **${this.client.utils.capitalise(com.name)}**
+                      **❯** Description: **${com.description}**
+                        **❯** Category: **${com.category}**
+                      **❯** Required Permissions: **${
+                      com.userPerms?.length
+                          ? com.userPerms.map(this.client.utils.cleanPerms).join(", ")
+                          : "No Permissions Needed."
+                      }**
+                      **❯** Moderator Command: ${checkOrCross(com.modCommand)}
+                      **❯** Administrator Command: ${checkOrCross(com.adminCommand)}
+                      **❯** [**Premium Command:**](https://vade-bot.com/premium) ${checkOrCross(
+                          com.premiumOnly
+                      )}
+                      `
+                    )
+                        .addField('**❯** Sub-Commands', `
+                    ${com.options.length >= 1 ? 
+                        com.options.filter((option => option.type === 1)).map((option) => `Name: **${this.client.utils.capitalise(option.name)}** \n Description: **${option.description}**`).join("\n\n")
+                : '**None to be displayed.**'}
+                    `);
+                    return interaction.createFollowup({
+                        embeds: [cmdEmbed],
+                        components: [{
+                            type: 1,
+                            components: [{
+                                type: 2,
+                                style: 5,
+                                label: "Website",
+                                url: `https://vade-bot.com`,
+                            }]
+                        }]
+                    });
+                } else {
+                    return interaction.createFollowup(`Unable to locate that command/category.`);
+                }
+        
 
             } else {
                 return interaction.createFollowup(`Unable to locate that command/category.`);
