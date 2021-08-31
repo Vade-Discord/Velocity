@@ -9,8 +9,6 @@
 
           async run(guild, member, oldMember) {
 
-              console.log(member);
-
               if(!this.client.users.get(member.id)) {
                  member = await guild.getRESTMember(member.id);
               }
