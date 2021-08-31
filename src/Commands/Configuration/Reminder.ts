@@ -67,10 +67,11 @@ export default class ReminderCommand extends Command {
 
                 const reminder = subOptions.get("reminder");
                 const time = subOptions.get("time");
-                if(!time.endsWith("s" || "d" || "w" || "m" || "y")) {
+                const msTime = ms(time);
+                if(!msTime) {
                     return interaction.createFollowup(`You seem to have provided an invalid length of time. Example: "1d" (1 day).`);
                 }
-                const msTime = ms(time);
+
 
                 if (fetchList.length > 0) {
                     id = fetchList[fetchList.length - 1].reminderID + 1;
@@ -83,7 +84,7 @@ export default class ReminderCommand extends Command {
                     reminderID: id,
                 });
                 await data.save();
-                await this.client.redis.set(`reminder.${member.id}.${id}`, true, 'EX', msTime / 1000);
+                await this.client.redis.set(`reminder.${member.id}.${id}`, true, 'EX', Math.abs(Math.ceil(msTime / 1000)));
 
                 embed
                     .setTitle("✅ You have successfully set a reminder")
