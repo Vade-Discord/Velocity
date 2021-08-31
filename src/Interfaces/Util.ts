@@ -1,9 +1,9 @@
-import type {Bot} from "../client/Client";
+import type { Bot } from "../client/Client";
 import Command from "./Command";
 
 // Package imports
-import {RichEmbed} from "eris";
-import {Types} from "mongoose";
+import { RichEmbed } from "eris";
+import { Types } from "mongoose";
 
 
 // File imports
@@ -40,15 +40,15 @@ export default class Util {
       return interaction.member.permissions.has("manageMessages");
     }
     return interaction.member.roles.some((role) =>
-        guildModRoles?.ModRole.includes(role)
+      guildModRoles?.ModRole.includes(role)
     );
   }
 
   generateKey() {
     let length = 15,
-        charset =
-            "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789@!$£",
-        retVal = "";
+      charset =
+        "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789@!$£",
+      retVal = "";
     let i = 0, n = charset.length;
     for (; i < length; ++i) {
       retVal += charset.charAt(Math.floor(Math.random() * n));
@@ -58,9 +58,9 @@ export default class Util {
 
   caseID() {
     let length = 10,
-        charset =
-            "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789@!$£",
-        retVal = "";
+      charset =
+        "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789@!$£",
+      retVal = "";
     let i = 0, n = charset.length;
     for (; i < length; ++i) {
       retVal += charset.charAt(Math.floor(Math.random() * n));
@@ -71,15 +71,15 @@ export default class Util {
   capitalise(string: string) {
     if (string)
       return string
-          .split(" ")
-          .map((str) => str.slice(0, 1).toUpperCase() + str.slice(1))
-          .join(" ");
+        .split(" ")
+        .map((str) => str.slice(0, 1).toUpperCase() + str.slice(1))
+        .join(" ");
   }
 
   getHighestRole(member, guild) {
     member = member.id ? member : guild.members.get(member);
     const filteredRoles = guild.roles.filter((r) =>
-        member.roles.includes(r.id)
+      member.roles.includes(r.id)
     );
     return filteredRoles.sort((a, b) => b.position - a.position)[0];
   }
@@ -109,7 +109,7 @@ export default class Util {
 
 
   async getGuildSchema(guild) {
-    const check = await guild_schema.findOne({guildID: guild.id});
+    const check = await guild_schema.findOne({ guildID: guild.id });
     if (check) return check;
     const newSchema = new guild_schema({
       _id: Types.ObjectId(),
@@ -124,7 +124,7 @@ export default class Util {
   }
 
   async getProfileSchema(userID) {
-    const check = await profile_schema.findOne({User: userID});
+    const check = await profile_schema.findOne({ User: userID });
     if (check) return check;
     const newSchema = new profile_schema({
       _id: Types.ObjectId(),
@@ -146,11 +146,24 @@ export default class Util {
 
   async loggingChannel(guild, type: string) {
     if (!type) throw new TypeError(`No type provided.`);
-    const locatedGuild = await guild_schema.findOne({guildID: guild.id});
+    const locatedGuild = await guild_schema.findOne({ guildID: guild.id });
     if (!locatedGuild) return null;
     let locatedType = locatedGuild.Logging[type];
     if (!locatedType) return null;
     return locatedType ? guild.channels.get(locatedType) : null;
+  }
+
+  async roleHierarchy(guildID, memberID, targetID) {
+    const guild = await this.client.getRESTGuild(guildID)
+    const member = await guild.getRESTMember(memberID)
+    const target = await guild.getRESTMember(targetID)
+    const memberRole = this.getHighestRole(member, guild);
+    const targetRole = this.getHighestRole(target, guild);
+    if (memberRole && targetRole) {
+      return memberRole.position > targetRole.position;
+    } else {
+      return true;
+    }
   }
 
   async runPreconditions(interaction, member, g, command: Command) {
@@ -158,11 +171,11 @@ export default class Util {
     if (command.devOnly) {
       if (!this.client.owners.includes(interaction.user ? interaction.user.id : interaction.member.id)) {
         let notOwnerEmbed = new RichEmbed()
-            .setTitle(`Developer Only Command!`)
-            .setDescription(`Only a Bot Developer can run this Command!`)
-            .setColor(`#F00000`)
-            .setTimestamp()
-            .setFooter(`Vade`, this.client.user.avatarURL);
+          .setTitle(`Developer Only Command!`)
+          .setDescription(`Only a Bot Developer can run this Command!`)
+          .setColor(`#F00000`)
+          .setTimestamp()
+          .setFooter(`Vade`, this.client.user.avatarURL);
 
         return interaction.createFollowup({
           embeds: [notOwnerEmbed]
@@ -172,11 +185,11 @@ export default class Util {
     if (command.guildOnly) {
       if (!interaction.guildID) {
         let noGuild = new RichEmbed()
-            .setTitle(`Guild Only!`)
-            .setDescription(`This Command can only be ran in a Guild!`)
-            .setColor(`#F00000`)
-            .setTimestamp()
-            .setFooter(`Vade`, this.client.user.avatarURL);
+          .setTitle(`Guild Only!`)
+          .setDescription(`This Command can only be ran in a Guild!`)
+          .setColor(`#F00000`)
+          .setTimestamp()
+          .setFooter(`Vade`, this.client.user.avatarURL);
         return interaction.createFollowup({
           embeds: [noGuild]
         });
@@ -188,11 +201,11 @@ export default class Util {
     if (command.modCommand) {
       if (!(await this.checkModerator(interaction))) {
         let noMod = new RichEmbed()
-            .setTitle(`Moderator Only!`)
-            .setDescription(`This Command requires you to be a Moderator!`)
-            .setColor(`#F00000`)
-            .setTimestamp()
-            .setFooter(`Vade`, this.client.user.avatarURL);
+          .setTitle(`Moderator Only!`)
+          .setDescription(`This Command requires you to be a Moderator!`)
+          .setColor(`#F00000`)
+          .setTimestamp()
+          .setFooter(`Vade`, this.client.user.avatarURL);
 
         return interaction.createFollowup({
           embeds: [noMod]
@@ -202,20 +215,20 @@ export default class Util {
 
     if (command.botPerms.length) {
       const getMember = await guild.members.get(
-          this.client.user.id
+        this.client.user.id
       );
 
 
       const checkBotPerms = command.botPerms.some((perm) => !getMember.permissions.has(perm));
       if (checkBotPerms) {
         let noPermEmbed = new RichEmbed()
-            .setTitle(`Missing Permissions!`)
-            .setDescription(
-                `I am missing one of the required permissions for this Command. Required Permissions: ${command.botPerms.map((m) => this.cleanPerms(m)).join(", ")}`
-            )
-            .setColor(`#F00000`)
-            .setTimestamp()
-            .setFooter(`Vade`, this.client.user.avatarURL);
+          .setTitle(`Missing Permissions!`)
+          .setDescription(
+            `I am missing one of the required permissions for this Command. Required Permissions: ${command.botPerms.map((m) => this.cleanPerms(m)).join(", ")}`
+          )
+          .setColor(`#F00000`)
+          .setTimestamp()
+          .setFooter(`Vade`, this.client.user.avatarURL);
 
         return interaction.createFollowup({
           embeds: [noPermEmbed]
@@ -226,13 +239,13 @@ export default class Util {
       const userPermCheck = command.userPerms.some((perm) => !member.permissions.has(perm));
       if (userPermCheck) {
         let noPermEmbed = new RichEmbed()
-            .setTitle(`Missing Permissions!`)
-            .setDescription(
-                `You are missing one of the required permissions for this Command. Required Permissions: ${command.userPerms.map((m) => this.cleanPerms(m)).join(", ")}`
-            )
-            .setColor(`#F00000`)
-            .setTimestamp()
-            .setFooter(`Vade`, this.client.user.avatarURL);
+          .setTitle(`Missing Permissions!`)
+          .setDescription(
+            `You are missing one of the required permissions for this Command. Required Permissions: ${command.userPerms.map((m) => this.cleanPerms(m)).join(", ")}`
+          )
+          .setColor(`#F00000`)
+          .setTimestamp()
+          .setFooter(`Vade`, this.client.user.avatarURL);
 
         return interaction.createFollowup({
           embeds: [noPermEmbed]
@@ -276,7 +289,7 @@ export default class Util {
   }
 
   async checkPremium(guildID): Promise<Boolean> {
-    const guildSchema = await guild_schema.findOne({guildID});
+    const guildSchema = await guild_schema.findOne({ guildID });
     if (!guildSchema) return false;
     return !!guildSchema?.Premium?.active;
 
@@ -289,13 +302,13 @@ export default class Util {
 
     if (!giveaway.entrants?.length) {
       const endEmbed = new this.client.embed()
-          .setTitle(`🎉 Giveaway Ended! 🎉`)
-          .setColor('#F00000')
-          .setTimestamp()
-          .setDescription(`Ended: <t:${Math.floor(Date.now() / 1000)}:f>\nHosted By: ${giveaway.giveawayHost}`)
-          .addField(`Prize`, `${giveaway.prize}`)
-          .addField(`Winner`, `No valid participants.`)
-          .setThumbnail(this.client.user.avatarURL)
+        .setTitle(`🎉 Giveaway Ended! 🎉`)
+        .setColor('#F00000')
+        .setTimestamp()
+        .setDescription(`Ended: <t:${Math.floor(Date.now() / 1000)}:f>\nHosted By: ${giveaway.giveawayHost}`)
+        .addField(`Prize`, `${giveaway.prize}`)
+        .addField(`Winner`, `No valid participants.`)
+        .setThumbnail(this.client.user.avatarURL)
 
       this.client.editMessage(giveaway.channelID, giveaway.messageID, {
         // @ts-ignore
@@ -331,13 +344,13 @@ export default class Util {
 
 
     const endEmbed = new this.client.embed()
-        .setTitle(`🎉 Giveaway Ended! 🎉`)
-        .setColor('#F00000')
-        .setTimestamp()
-        .setDescription(`Ended: <t:${Math.floor(Date.now() / 1000)}:f>\nHosted By: ${giveaway.giveawayHost}`)
-        .addField(`Prize`, `${giveaway.prize}`)
-        .addField(`Winner(s)`, `${winner.map((u) => u.mention)?.join(", ")}`)
-        .setThumbnail(this.client.user.avatarURL)
+      .setTitle(`🎉 Giveaway Ended! 🎉`)
+      .setColor('#F00000')
+      .setTimestamp()
+      .setDescription(`Ended: <t:${Math.floor(Date.now() / 1000)}:f>\nHosted By: ${giveaway.giveawayHost}`)
+      .addField(`Prize`, `${giveaway.prize}`)
+      .addField(`Winner(s)`, `${winner.map((u) => u.mention)?.join(", ")}`)
+      .setThumbnail(this.client.user.avatarURL)
 
     // @ts-ignore
     await this.client.editMessage(giveaway.channelID, giveaway.messageID, {
@@ -366,13 +379,13 @@ export default class Util {
 
   async remind(reminderData) {
     const user = (await this.client.getRESTUser(reminderData?.userID));
-    if(user) {
+    if (user) {
       const embed = new this.client.embed()
-          .setAuthor(`You have a reminder!`, user.avatarURL)
-          .setDescription(`> ${reminderData?.reminder}`)
-          .setColor(this.client.constants.colours.green)
-          .setTimestamp()
-          .setFooter(`Vade Utilities`, this.client.user.avatarURL)
+        .setAuthor(`You have a reminder!`, user.avatarURL)
+        .setDescription(`> ${reminderData?.reminder}`)
+        .setColor(this.client.constants.colours.green)
+        .setTimestamp()
+        .setFooter(`Vade Utilities`, this.client.user.avatarURL)
 
       await user.getDMChannel().then((channel) => {
         channel.createMessage({ embeds: [embed] }).catch(() => null);
@@ -384,7 +397,7 @@ export default class Util {
     }
   }
 
-   msToTime(s) {
+  msToTime(s) {
     let ms = s % 1000;
     s = (s - ms) / 1000;
     let secs = s % 60;
