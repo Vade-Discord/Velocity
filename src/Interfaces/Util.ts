@@ -84,6 +84,30 @@ export default class Util {
     return filteredRoles.sort((a, b) => b.position - a.position)[0];
   }
 
+  async roleHierarchy(guildID, memberID, targetID) {
+    const guild = (await this.client.getRESTGuild(guildID));
+    if(guild.ownerID === memberID) {
+      return true;
+    }
+    const member = (await guild.getRESTMember(memberID));
+    const target = (await guild.getRESTMember(targetID));
+    const memberRole = this.getHighestRole(member, guild);
+    const targetRole = this.getHighestRole(target, guild);
+    if(!memberRole && targetRole) {
+      return false;
+    }
+    if(memberRole && !targetRole && guild.ownerID !== targetID) {
+      return true;
+    }
+
+    if (memberRole.position && targetRole.position) {
+      return memberRole.position > targetRole.position;
+    } else {
+      return true;
+    }
+  }
+
+
   async getGuildSchema(guild) {
     const check = await guild_schema.findOne({guildID: guild.id});
     if (check) return check;
@@ -376,4 +400,20 @@ export default class Util {
     else return hrs + ` hour${hrs === 1 ? " " : "s "}` + mins + "m " + secs + "s";
   }
 
+  async muteEnded(muteData) {
+    const guild = (await this.client.getRESTGuild(muteData.guildID));
+    if(!guild) return;
+    const member = (await guild.getRESTMember(muteData.userID));
+    if(!member) return;
+   await member.edit({
+      roles: muteData.roles
+    });
+   const logChannel = await this.loggingChannel(guild, 'moderation');
+
+   const embed = new this.client.embed()
+       .setAuthor(`Mute Expired!`, this.client.user.avatarURL)
+       .setDescription(`${member.mention}'s mute has expired!`)
+       .setColor(this.client.constants.colours.green)
+
+  }
 }
