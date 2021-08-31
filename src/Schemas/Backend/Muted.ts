@@ -13,6 +13,6 @@ const mutedSchema = new mongoose.Schema({
     roles: Array,
 });
 
-const mutes = mongoose.model<IMute>("guild-muted", mutedSchema);
+const mutes = mongoose.model<IMute>("guild-mute", mutedSchema);
 
 export default mutes;

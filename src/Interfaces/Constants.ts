@@ -75,13 +75,13 @@ export default {
         },
         moderation: {
             name: "moderation",
-            id: "820482408238809099",
-            mention: "<:voice:820482408238809099>"
+            id: "859784528125362206",
+            mention: "<:moderation:859784528125362206>"
         },
       voice: {
           name: "voice",
           id: "858884725484552223",
-          mention: "<:moderation:858884725484552223>"
+          mention: "<:voice:858884725484552223>"
       },
         boost: {
             name: "boost",

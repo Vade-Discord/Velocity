@@ -2,7 +2,7 @@ import type { Bot } from "../client/Client";
 import Command from "./Command";
 
 // Package imports
-import { RichEmbed } from "eris";
+import {RichEmbed, TextChannel} from "eris";
 import { Types } from "mongoose";
 
 
@@ -150,7 +150,7 @@ export default class Util {
     if (!locatedGuild) return null;
     let locatedType = locatedGuild.Logging[type];
     if (!locatedType) return null;
-    return locatedType ? guild.channels.get(locatedType) : null;
+    return locatedType ? this.client.getRESTChannel(locatedType) as Promise<TextChannel> : null;
   }
 
   async runPreconditions(interaction, member, g, command: Command) {
@@ -407,13 +407,21 @@ export default class Util {
     if(!member) return;
    await member.edit({
       roles: muteData.roles
-    });
+    }).catch((e) => {
+     if(e) return;
+   });
    const logChannel = await this.loggingChannel(guild, 'moderation');
 
    const embed = new this.client.embed()
-       .setAuthor(`Mute Expired!`, this.client.user.avatarURL)
-       .setDescription(`${member.mention}'s mute has expired!`)
+       .setAuthor(`${member.username}#${member.discriminator}`, member.user.avatarURL)
+       .setTitle(`${this.client.constants.emojis.moderation.mention} Mute Expired`)
+       .setDescription(`**Member:** ${member.mention}`)
        .setColor(this.client.constants.colours.green)
+       .setThumbnail(member.user.avatarURL)
+       .setFooter(`Vade Logging System`)
+       .setTimestamp()
+
+    logChannel ? logChannel?.createMessage({ embeds: [embed] }) : null;
 
   }
 }

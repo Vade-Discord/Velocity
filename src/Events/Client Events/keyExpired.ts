@@ -34,7 +34,7 @@ export default class KeyExpiredEvent extends Event {
             case "mute": {
                 const muteData = (await muteSchema.findOne({ userID: param1, guildID: param2 }));
                 if(muteData) {
-
+                    await this.client.utils.muteEnded(muteData);
                 }
             }
 

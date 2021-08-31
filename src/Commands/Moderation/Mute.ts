@@ -1,5 +1,6 @@
 import Command from "../../Interfaces/Command";
 import ms from 'ms';
+import mutedSchema from "../../Schemas/Backend/Muted";
 
 export default class MuteCommand extends Command {
     constructor(client) {
@@ -21,6 +22,12 @@ export default class MuteCommand extends Command {
                     name: 'duration',
                     description: 'How long the member should be muted for.',
                     required: true,
+                },
+                {
+                    type: 5,
+                    name: 'silent',
+                    description: 'Whether the success message should be sent publicly.',
+                    required: false,
                 }
             ]
         });
@@ -28,13 +35,21 @@ export default class MuteCommand extends Command {
     async run(interaction, member, options, subOptions) {
 
         const member1 = (await member.guild.getRESTMember(options.get("member")))!!;
-        console.log(member1);
+        const silent = options.get("silent") ? 64 : 0;
+        console.log(silent)
         const time = ms(options.get("duration"));
         if(!time) {
-            return interaction.createFollowup('You need to provide a valid time. (Example: "1d")');
+            return interaction.createFollowup({ content: 'You need to provide a valid time. (Example: "1d")', flags: silent });
         }
 
-        // Check role hierarchy
+        const botHierarchy = (await this.client.utils.roleHierarchy(interaction.guildID, this.client.user.id, member1.id));
+        if(!botHierarchy) {
+            return interaction.createFollowup({ content: `I am unable to mute that member, my highest role is lower than their highest role.`, flags: silent });
+        }
+        const hierarchy = (await this.client.utils.roleHierarchy(interaction.guildID, member.id, member1.id));
+        if(!hierarchy) {
+            return interaction.createFollowup({ content: `You cannot mute someone with a higher role than you.`, flags: silent });
+        }
 
         let muteRole;
         const mutedRole = member.guild.roles.find((m) => m.name.toLowerCase() === 'muted');
@@ -48,11 +63,31 @@ export default class MuteCommand extends Command {
             muteRole = mutedRole;
         }
 
-        
+        const newSchema = new mutedSchema({
+            userID: member1.id,
+            guildID: interaction.guildID,
+            roles: member1.roles,
+        });
 
+        await newSchema.save();
+        await this.client.redis.set(`mute.${member1.id}.${interaction.guildID}`, true, 'EX', Math.ceil(Math.floor(time / 1000)));
 
+        await member1.edit({
+            roles: [muteRole.id]
+        });
 
+        interaction.createFollowup({ content: `Successfully muted that member!`, flags: silent });
+        const logChannel = await this.client.utils.loggingChannel(member.guild, 'moderation');
+        const embed = new this.client.embed()
+            .setAuthor(`${member1.username}#${member1.discriminator}`, member1.user.avatarURL)
+            .setTitle(`${this.client.constants.emojis.moderation.mention} Member Muted`)
+            .setDescription(`**Member:** ${member1.mention}`)
+            .setColor('#F00000')
+            .setThumbnail(member1.user.avatarURL)
+            .setFooter(`Vade Logging System`)
+            .setTimestamp()
 
+        logChannel ? logChannel.createMessage({ embeds: [embed] }) : null;
 
 
     }
