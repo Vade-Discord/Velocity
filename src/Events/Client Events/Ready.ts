@@ -14,7 +14,7 @@ export default class ReadyEvent extends Event {
         await mongo();
         this.client.redis = await redisConnect(this.client);
         this.client.logger.info(`${this.client.user.username}#${this.client.user.discriminator} has successfully logged in!`);
-        const guild = this.client.guilds.get("794770969079185420");
+        const guild = await this.client.getRESTGuild("857895083839324190");
 
         this.client.editStatus('online', { name: "Vade Rewrite", type: 5, url: "https://vade-bot.com" });
 
