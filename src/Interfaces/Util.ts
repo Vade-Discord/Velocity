@@ -153,19 +153,6 @@ export default class Util {
     return locatedType ? guild.channels.get(locatedType) : null;
   }
 
-  async roleHierarchy(guildID, memberID, targetID) {
-    const guild = await this.client.getRESTGuild(guildID)
-    const member = await guild.getRESTMember(memberID)
-    const target = await guild.getRESTMember(targetID)
-    const memberRole = this.getHighestRole(member, guild);
-    const targetRole = this.getHighestRole(target, guild);
-    if (memberRole && targetRole) {
-      return memberRole.position > targetRole.position;
-    } else {
-      return true;
-    }
-  }
-
   async runPreconditions(interaction, member, g, command: Command) {
     const guild = await this.client.guilds.get(g.id);
     if (command.devOnly) {
