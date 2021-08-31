@@ -9,7 +9,8 @@ import {Types} from "mongoose";
 // File imports
 import guild_schema from "../Schemas/Main Guilds/GuildSchema";
 import profile_schema from "../Schemas/User Schemas/Profile";
-import giveawaysSchema from "../Schemas/Backend/Giveaways";
+import GiveawaySchema from "../Schemas/Backend/Giveaways";
+import ReminderSchema from "../Schemas/Backend/Reminders";
 
 interface SelectionObject {
   label: string;
@@ -337,6 +338,42 @@ export default class Util {
     })
     await giveaway.delete();
 
+  }
+
+  async remind(reminderData) {
+    const user = (await this.client.getRESTUser(reminderData?.userID));
+    if(user) {
+      const embed = new this.client.embed()
+          .setAuthor(`You have a reminder!`, user.avatarURL)
+          .setDescription(`> ${reminderData?.reminder}`)
+          .setColor(this.client.constants.colours.green)
+          .setTimestamp()
+          .setFooter(`Vade Utilities`, this.client.user.avatarURL)
+
+      await user.getDMChannel().then((channel) => {
+        channel.createMessage({ embeds: [embed] }).catch(() => null);
+      });
+
+      await reminderData.delete();
+    } else {
+      await reminderData.delete();
+    }
+  }
+
+   msToTime(s) {
+    let ms = s % 1000;
+    s = (s - ms) / 1000;
+    let secs = s % 60;
+    s = (s - secs) / 60;
+    let mins = s % 60;
+    s = (s - mins) / 60;
+    let hrs = s % 24;
+    s = (s - hrs) / 24;
+    let days = s % 133225;
+
+    if (days != 0)
+      return days + ` day${days === 1 ? " " : "s "}` + hrs + "h " + mins + "m";
+    else return hrs + ` hour${hrs === 1 ? " " : "s "}` + mins + "m " + secs + "s";
   }
 
 }
