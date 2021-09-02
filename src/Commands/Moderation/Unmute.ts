@@ -50,7 +50,7 @@ export default class UnmuteCommand extends Command {
             .setAuthor(`${member1.username}#${member1.discriminator}`, member1.user.avatarURL)
             .setTitle(`${this.client.constants.emojis.moderation.mention} Member Force-Unmuted`)
             .setDescription(`**Member:** ${member1.mention}\n**Moderator:** ${member.mention}`)
-            .setColor('#F00000')
+            .setColor(this.client.constants.colours.green)
             .setThumbnail(member1.user.avatarURL)
             .setFooter(`Vade Logging System`)
             .setTimestamp()
