@@ -239,6 +239,22 @@ export default class Util {
         });
       }
     }
+    if(command.premiumOnly && interaction?.guildID) {
+      const check = (await this.checkPremium(interaction.guildID));
+      if(!check) {
+        let noPremiumEmbed = new this.client.embed()
+            .setTitle(`Premium Only!`)
+            .setDescription(`You must have Vade Premium activated in order to use this Command! You can get it [here](https://vade-bot.com/premium)`)
+            .setColor('#F00000')
+            .setURL('https://vade-bot.com/premium')
+            .setTimestamp()
+            .setThumbnail(this.client.user.avatarURL)
+
+        return interaction.createFollowup({
+          embeds: [noPremiumEmbed]
+        });
+      }
+    }
   }
 
   trimArray(arr: Array<string>, maxLen = 10) {
