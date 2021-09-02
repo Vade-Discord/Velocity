@@ -30,7 +30,7 @@ export class Bot extends Eris.Client {
   public owners: string[] = ["473858248353513472"];
   public utils: Util = new Util(this);
   public constants: typeof Constants = Constants;
-  public embed: typeof MessageEmbed = MessageEmbed;
+  public embed: typeof MessageEmbed | typeof Eris.RichEmbed = MessageEmbed;
   public manager = undefined;
  public redis: RedisClient = undefined;
   public constructor(_options: Eris.ClientOptions = { intents: undefined}) {
