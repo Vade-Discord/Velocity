@@ -31,7 +31,7 @@
 
               }
 
-              if(oldMember.roles?.length && oldMember.roles?.length !== member.roles?.length || !oldMember.roles?.length && member?.roles.length) { // Role Changes start here.
+              if(oldMember?.roles?.length && oldMember?.roles?.length !== member.roles?.length || !oldMember.roles?.length && member?.roles.length) { // Role Changes start here.
                   console.log(`Length check validated`)
                   let roleEmoji = this.client.constants.emojis.role.mention;
                   let removed = oldMember.roles.length ? oldMember.roles.filter(role => !member.roles.includes(role)) : null;
@@ -44,6 +44,7 @@
                           .setColor("#F00000")
 
                       logChannel.createMessage({ embeds: [logEmbed] });
+                      // or   logChannel.createMessage({ embed: embed  });
                   } else if(added?.length && !removed?.length) {
                       let addedRole = guild.roles.get(added[0]);
                       logEmbed
