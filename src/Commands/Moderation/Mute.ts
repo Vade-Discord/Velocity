@@ -95,7 +95,7 @@ export default class MuteCommand extends Command {
             .setFooter(`Vade Logging System`)
             .setTimestamp()
 
-        logChannel ? logChannel.createMessage({ embeds: [embed] }) : null;
+        logChannel?.createMessage({embeds: [embed]});
 
 
     }
