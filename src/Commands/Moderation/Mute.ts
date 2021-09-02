@@ -25,6 +25,12 @@ export default class MuteCommand extends Command {
                     required: true,
                 },
                 {
+                    type: 3,
+                    name: 'reason',
+                    description: 'The reason for the mute.',
+                    required: false,
+                },
+                {
                     type: 5,
                     name: 'silent',
                     description: 'Whether the success message should be sent publicly.',
@@ -37,6 +43,7 @@ export default class MuteCommand extends Command {
 
         const member1 = (await member.guild.getRESTMember(options.get("member")))!!;
         const silent = options.get("silent") ? 64 : 0;
+        const reason = options.get("reason") ?? 'No reason provided.';
         console.log(silent)
         const time = ms(options.get("duration"));
         if(!time) {
@@ -89,7 +96,7 @@ export default class MuteCommand extends Command {
         const embed = new this.client.embed()
             .setAuthor(`${member1.username}#${member1.discriminator}`, member1.user.avatarURL)
             .setTitle(`${this.client.constants.emojis.moderation.mention} Member Muted`)
-            .setDescription(`**Member:** ${member1.mention}`)
+            .setDescription(`**Member:** ${member1.mention}\n**Moderator:** ${member.mention}\n**Reason:** "${reason}"`)
             .setColor('#F00000')
             .setThumbnail(member1.user.avatarURL)
             .setFooter(`Vade Logging System`)
