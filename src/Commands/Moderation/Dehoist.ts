@@ -7,6 +7,7 @@ export default class DehoistCommand extends Command {
             category: "Moderation",
             userPerms: ['manageNicknames'],
             botPerms: ['manageNicknames'],
+            premiumOnly: true,
             guildOnly: true,
         });
     }
