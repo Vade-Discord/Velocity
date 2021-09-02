@@ -22,7 +22,7 @@
                   .setThumbnail(member.user.avatarURL)
                   .setTimestamp()
                   .setFooter(`Vade Logging System`, this.client.user.avatarURL)
-              if(!oldMember.nick && member?.nick || oldMember?.nick !== member?.nick || oldMember?.nick && !member.nick) {
+              if(!oldMember?.nick && member?.nick || oldMember?.nick !== member?.nick || oldMember?.nick && !member.nick) {
                   logEmbed
                       .setTitle(`Nickname Updated`)
                       .setDescription(`**From:** ${oldMember?.nick ?? 'No Nickname.'}\n**To:** ${member?.nick ?? 'No Nickname.'}`)
