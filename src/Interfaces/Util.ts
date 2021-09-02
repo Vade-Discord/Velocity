@@ -416,7 +416,7 @@ export default class Util {
     else return hrs + ` hour${hrs === 1 ? " " : "s "}` + mins + "m " + secs + "s";
   }
 
-  async muteEnded(muteData) {
+  async muteEnded(muteData, msg = true) {
     const guild = (await this.client.getRESTGuild(muteData.guildID));
     if(!guild) return;
     const member = (await guild.getRESTMember(muteData.userID));
@@ -426,18 +426,23 @@ export default class Util {
     }).catch((e) => {
      if(e) return;
    });
-   const logChannel = await this.loggingChannel(guild, 'moderation');
+   if(msg) {
 
-   const embed = new this.client.embed()
-       .setAuthor(`${member.username}#${member.discriminator}`, member.user.avatarURL)
-       .setTitle(`${this.client.constants.emojis.moderation.mention} Mute Expired`)
-       .setDescription(`**Member:** ${member.mention}`)
-       .setColor(this.client.constants.colours.green)
-       .setThumbnail(member.user.avatarURL)
-       .setFooter(`Vade Logging System`)
-       .setTimestamp()
 
-    logChannel ? logChannel?.createMessage({ embeds: [embed] }) : null;
+     const logChannel = await this.loggingChannel(guild, 'moderation');
+
+     const embed = new this.client.embed()
+         .setAuthor(`${member.username}#${member.discriminator}`, member.user.avatarURL)
+         .setTitle(`${this.client.constants.emojis.moderation.mention} Mute Expired`)
+         .setDescription(`**Member:** ${member.mention}`)
+         .setColor(this.client.constants.colours.green)
+         .setThumbnail(member.user.avatarURL)
+         .setFooter(`Vade Logging System`)
+         .setTimestamp()
+
+     logChannel ? logChannel?.createMessage({embeds: [embed]}) : null;
+
+   }
 
   }
 }
