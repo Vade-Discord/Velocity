@@ -86,11 +86,14 @@ export default class LoggingCommand extends Command {
             return interaction.createFollowup(`Oops! Looks like you didn't provide a type!`);
         }
 
+        const object = guildData.Logging;
+
         switch(type?.toLowerCase()) {
             case "message": {
+                object.message = channel.id;
                 await guildData.updateOne({
                     Logging: {
-                        message: channel.id,
+                        object
                     }
                 });
                 interaction.createFollowup(`Successfully updated the **${type?.toLowerCase()}** logging channel.`);
@@ -98,40 +101,36 @@ export default class LoggingCommand extends Command {
             }
 
             case "welcome": {
+                object.welcome = channel.id
                 await guildData.updateOne({
-                    Logging: {
-                        welcome: channel.id,
-                    }
+                  Logging: object
                 });
                 interaction.createFollowup(`Successfully updated the **${type?.toLowerCase()}** logging channel.`);
                 break;
             }
 
             case "invites": {
+                object.invites = channel.id;
                 await guildData.updateOne({
-                    Logging: {
-                        invites: channel.id,
-                    }
+                   Logging: object
                 });
                 interaction.createFollowup(`Successfully updated the **${type?.toLowerCase()}** logging channel.`);
                 break;
             }
 
             case "voice": {
+                object.voice = channel.id;
                 await guildData.updateOne({
-                    Logging: {
-                        voice: channel.id,
-                    }
+                    Logging: object
                 });
                 interaction.createFollowup(`Successfully updated the **${type?.toLowerCase()}** logging channel.`);
                 break;
             }
 
             case "moderation": {
+                object.moderation = channel.id;
                 await guildData.updateOne({
-                    Logging: {
-                        moderation: channel.id,
-                    }
+                    Logging: object
                 });
                 interaction.createFollowup(`Successfully updated the **${type?.toLowerCase()}** logging channel.`);
                 break;
@@ -139,10 +138,9 @@ export default class LoggingCommand extends Command {
 
 
             case "user": {
+                object.user = channel.id;
                 await guildData.updateOne({
-                    Logging: {
-                        user: channel.id,
-                    }
+                    Logging: object
                 });
                 interaction.createFollowup(`Successfully updated the **${type?.toLowerCase()}** logging channel.`);
                 break;
@@ -157,10 +155,9 @@ export default class LoggingCommand extends Command {
             }
 
             case "channel": {
+                object.channel = channel.id;
                 await guildData.updateOne({
-                    Logging: {
-                        channel: channel.id,
-                    }
+                    Logging: object
                 });
                 interaction.createFollowup(`Successfully updated the **${type?.toLowerCase()}** logging channel.`);
                 break;
