@@ -13,6 +13,6 @@ const tagSchema = new mongoose.Schema({
 
 });
 
-const tags = mongoose.model<ITag>(`Tag`, tagSchema, "guilds");
+const tags = mongoose.model<ITag>(`Tag`, tagSchema, "guild-tags");
 
 export default tags;
