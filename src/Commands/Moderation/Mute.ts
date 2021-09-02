@@ -1,6 +1,7 @@
 import Command from "../../Interfaces/Command";
 import ms from 'ms';
 import mutedSchema from "../../Schemas/Backend/Muted";
+import {Constants} from "eris";
 
 export default class MuteCommand extends Command {
     constructor(client) {
@@ -59,6 +60,13 @@ export default class MuteCommand extends Command {
                 permissions: 0,
                 mentionable: false,
             }));
+
+            await member.guild.channels.forEach((channel) => {
+                if(channel.permissionsOf(this.client.user.id).has("manageChannels")) {
+                    channel.editPermission(muteRole.id, 0, Constants.Permissions.sendMessages | Constants.Permissions.voiceSpeak | Constants.Permissions.voiceRequestToSpeak | Constants.Permissions.sendTTSMessages, "role");
+
+                }
+            });
         } else {
             muteRole = mutedRole;
         }
