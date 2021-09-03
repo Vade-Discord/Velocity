@@ -106,8 +106,6 @@ export default class HelpCommand extends Command {
             return interaction.createFollowup(`Unable to find that command/category. Please try again.`);
         }
 
-        console.log(`Item: ` + item)
-
         if (allCategories.includes(item)) {
 
             const commandsToPaginate = this.client.commands
