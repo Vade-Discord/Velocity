@@ -18,6 +18,11 @@ interface IBank extends Document {
     MentionNotif: boolean;
     Language: string;
     Blacklisted: boolean;
+    Notifications?: {
+        moderation?: boolean;
+        robbery?: boolean;
+        giveaway?: boolean;
+    }
 }
 
 export const bankSchema = new Schema({
@@ -95,6 +100,11 @@ export const bankSchema = new Schema({
         type: String,
         required: false,
     },
+    Notifications: {
+        moderation: Boolean,
+        robbery: Boolean,
+        giveaway: Boolean,
+    }
 });
 
 const bank =
