@@ -1,5 +1,41 @@
 import Command from "../../Interfaces/Command";
 
+const options: {
+    [flag: string]: {
+        alias: string;
+        message: string;
+    };
+} = {
+    "--name": {
+        alias: "-n",
+        message: "Kicks all users whose name has the specified word in",
+    },
+    "--regex": {
+        alias: "-r",
+        message: "Kicks all users whose name match the regex",
+    },
+    "--silent": {
+        alias: "-s",
+        message: "Kicks users silently; does not DM them or displays output",
+    },
+    "--soft": {
+        alias: "-S",
+        message: "Kicks users and clears their messages",
+    },
+    "--hard": {
+        alias: "-H",
+        message: "Kicks users and appends your custom message to the DM",
+    },
+    "--help": {
+        alias: "-h",
+        message: "Displays this nice little help message",
+    },
+    "--dev": {
+        alias: "-d",
+        message: "For testing purposes; does not kick",
+    },
+};
+
 
 export default class BanCommand extends Command {
     constructor(client) {
@@ -67,6 +103,29 @@ export default class BanCommand extends Command {
         const channel = await banMember.user.getDMChannel()
 
         let dmed = false
+
+        if(options.has("options")) {
+            const o = options.get("options");
+            const flags = getFlags([o]);
+            const flagNames = flags.map((f) => f.flag);
+            const booleanFlags = new Set(
+                flags.map(({ flag }) => options[`--${flag}`]?.alias || `-${flag}`)
+            );
+
+            for (const { flag, index } of flags) {
+                switch(flag) {
+                    case "s":
+                    case "soft": {
+
+                        return console.log("soft flag")
+                        break;
+                    }
+                }
+            }
+
+
+
+        }
 
         await channel.createMessage(`You have been banned from ${interaction.channel.guild.name}\nfor the reason:${reason.slice(0, 2000)}`).then(() => dmed = true).catch((err) => { })
         await banMember.ban(7, reason)        
