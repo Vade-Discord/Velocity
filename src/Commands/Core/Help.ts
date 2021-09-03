@@ -102,7 +102,11 @@ export default class HelpCommand extends Command {
 
         const {item} = match;
 
-        //console.log(`Item: ` + item)
+        if(!item || !item?.length) {
+            return interaction.createFollowup(`Unable to find that command/category. Please try again.`);
+        }
+
+        console.log(`Item: ` + item)
 
         if (allCategories.includes(item)) {
 
@@ -171,7 +175,7 @@ export default class HelpCommand extends Command {
                       `
                     )
                         .addField('**❯** Sub-Commands', `
-                    ${com.options.length >= 1 ? 
+                    ${com.options.length >= 1 && com.options.filter((option => option.type === 1)).length >= 1 ? 
                         com.options.filter((option => option.type === 1)).map((option) => `Name: **${this.client.utils.capitalise(option.name)}** \n Description: **${option.description}**`).join("\n\n")
                 : '**None to be displayed.**'}
                     `);
