@@ -111,7 +111,7 @@ export default class RedeemCommand extends Command {
 
                     const weeklyEmbed = new this.client.embed().setDescription(
                         `You can use this Command again in ${ms(
-                            (Profile as any).WeeklyTime)}`)
+                            (Profile as any).WeeklyTime, { long: true })}`)
 
                     return interaction.createFollowup({ embeds: [weeklyEmbed] });
 
