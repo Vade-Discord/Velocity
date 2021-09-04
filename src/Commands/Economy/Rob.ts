@@ -93,6 +93,7 @@ export default class RobCommand extends Command {
                 `${member.username}#${member.discriminator}`,
                 member.avatarURL)
             .setFooter("Vade Economy System")
+            .setColor(b ? this.client.constants.colours.green : "#F00000")
             .setTimestamp();
 
         if(b) {
