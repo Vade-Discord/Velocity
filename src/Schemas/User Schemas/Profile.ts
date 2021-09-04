@@ -22,6 +22,7 @@ interface IBank extends Document {
         moderation?: boolean;
         robbery?: boolean;
         giveaway?: boolean;
+        economy?: boolean;
     }
 }
 
@@ -104,6 +105,7 @@ export const bankSchema = new Schema({
         moderation: Boolean,
         robbery: Boolean,
         giveaway: Boolean,
+        economy: Boolean,
     }
 });
 
