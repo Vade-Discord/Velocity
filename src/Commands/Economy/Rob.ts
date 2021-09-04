@@ -22,7 +22,7 @@ export default class RobCommand extends Command {
         if(data) {
             const cooldownEmbed = new this.client.embed()
                 .setAuthor(`Cooldown!`, this.client.user.avatarURL)
-                .setDescription(`You must wait **${ms(data - Date.now(), { long: true })}** before attempting to rob someone again!`)
+                .setDescription(`You must wait **${ms(Math.ceil(data - Date.now()), { long: true })}** before attempting to rob someone again!`)
                 .setColor("#F00000")
                 .setTimestamp()
                 .setFooter(`Vade Economy`, this.client.user.avatarURL)
@@ -59,7 +59,7 @@ export default class RobCommand extends Command {
         let a;
         let b = false;
         const func =
-            successRate > 60
+            successRate > 50
                 ? async () => {
                     const available = robberBal / 3;
                     const stealAmount = Math.floor(
