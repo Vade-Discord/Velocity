@@ -25,6 +25,10 @@ export default class LoggingCommand extends Command {
                         {
                             name: 'moderation actions',
                             value: 'moderation',
+                        },
+                        {
+                            name: 'economy actions',
+                            value: 'economy',
                         }
                     ]
                 },
@@ -40,7 +44,7 @@ export default class LoggingCommand extends Command {
 
         const type = options.get(`type`);
         if(type) {
-            const validTypes: string[] = ['robbery', 'moderation', 'giveaway'];
+            const validTypes: string[] = ['robbery', 'moderation', 'giveaway', 'economy'];
             if(!validTypes.includes(type?.toLowerCase())) {
                 const invalidEmbed = new this.client.embed()
                     .setAuthor(`Invalid Option!`, this.client.user.avatarURL)
@@ -77,6 +81,20 @@ export default class LoggingCommand extends Command {
                     t = false;
                 } else {
                     object.moderation = true;
+                    t = true;
+                }
+                await profileData.updateOne({
+                    Notifications: object
+                });
+                interaction.createFollowup(`Successfully ${t ? 'enabled' : 'disabled'} the **${type?.toLowerCase()}** notification setting.`);
+                break;
+            }
+            case "economy": {
+                if(object["economy"]) {
+                    object.economy = false;
+                    t = false;
+                } else {
+                    object.economy = true;
                     t = true;
                 }
                 await profileData.updateOne({
