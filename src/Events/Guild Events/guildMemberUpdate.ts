@@ -34,9 +34,9 @@
               if(oldMember?.roles.length && oldMember?.roles.length !== member?.roles.length || !oldMember?.roles.length && member?.roles.length) { // Role Changes start here.
                   console.log(`Length check validated`)
                   let roleEmoji = this.client.constants.emojis.role.mention;
-                  let removed = oldMember.roles.length ? oldMember.roles.filter(role => !member.roles.includes(role)) : null;
-                  let added = member.roles.length ? member.roles.filter(role => !oldMember.roles.includes(role)) : null;
-                  if(!added.length && removed.length) {
+                  let removed = oldMember?.roles.length ? oldMember?.roles.filter(role => !member?.roles.includes(role)) : null;
+                  let added = member?.roles.length ? member.roles.filter(role => !oldMember?.roles.includes(role)) : null;
+                  if(!added?.length && removed.length) {
                       let removedRole = guild.roles.get(removed[0]);
                       logEmbed
                           .setTitle(`${roleEmoji} Role Removed`)
