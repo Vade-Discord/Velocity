@@ -116,10 +116,14 @@ export default class BanCommand extends Command {
                 switch(flag) {
                     case "s":
                     case "soft": {
-
-                        return console.log("soft flag")
-                        break;
+                        await banMember.ban(7, reason).then(() => {
+                            member.guild.unbanMember(banMember.id, reason);
+                        });
+                        await channel.createMessage(`You have been soft-banned from **${member.guild.name}**\nfor the reason:${reason.slice(0, 2000)}`).then(() => dmed = true).catch(() => null)
+                        return interaction.createFollowup(`Successfully soft-banned **${banMember.username}#${banMember.discriminator}**.`);
                     }
+
+
                 }
             }
 
