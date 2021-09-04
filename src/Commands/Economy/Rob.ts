@@ -59,9 +59,9 @@ export default class RobCommand extends Command {
         let a;
         let b = false;
         const func =
-            successRate > 50
+            successRate >= 55
                 ? async () => {
-                    const available = robberBal / 3;
+                    const available = authorRes?.Wallet / 3;
                     const stealAmount = Math.floor(
                         Math.random() * (available - 2000) + 2000
                     );
@@ -78,7 +78,7 @@ export default class RobCommand extends Command {
                     )}**`;
                 }
                 : async () => {
-                    const available = robberBal / 3;
+                    const available = Math.ceil(robberBal / 3);
                     const fine = Math.floor(Math.random() * (available - 2000) + 2000);
                     await authorRes.updateOne({
                         $inc: { Wallet: -fine },
