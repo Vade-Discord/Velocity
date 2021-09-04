@@ -1,5 +1,5 @@
 import Command from "../../Interfaces/Command";
-import keyStorage from "../../Schemas/Premium Schemas/keyStorage";
+import keyStorage from "../../Schemas/Premium-Schemas/KeyStorage";
 import Eris from "eris";
 import { Type } from "@extreme_hero/deeptype";
 import { inspect } from "util";

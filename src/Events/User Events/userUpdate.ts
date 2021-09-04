@@ -1,5 +1,5 @@
   import { Event } from '../../Interfaces/Event';
-import guildSchema from '../../Schemas/Main Guilds/GuildSchema';
+import guildSchema from '../../Schemas/Main-Guilds/GuildSchema';
 
       export default class UserEvent extends Event {
           constructor(client) {

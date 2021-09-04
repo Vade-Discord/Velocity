@@ -1,5 +1,5 @@
 import Command from "../../Interfaces/Command";
-import tagSchema from "../../Schemas/Main Guilds/TagSchema";
+import tagSchema from "../../Schemas/Main-Guilds/TagSchema";
 
 export default class TagCommand extends Command {
     constructor(client) {

@@ -33,7 +33,7 @@
     "mongoose": "^5.13.5",
     "phin": "^3.6.0",
     "pluris": "github:Catboi8/pluris#master",
-    "ts-node": "^10.1.0",
+    "ts-node": "^10.2.1",
     "ts-node-dev": "^1.1.8",
     "typescript": "^4.3.5"
   }

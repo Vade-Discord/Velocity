@@ -1,5 +1,5 @@
 import Command from "../../Interfaces/Command";
-import keySchema from "../../Schemas/Premium Schemas/keyStorage";
+import keySchema from "../../Schemas/Premium-Schemas/keyStorage";
 import humanize from 'humanize-duration';
 
 export default class PremiumCommand extends Command {

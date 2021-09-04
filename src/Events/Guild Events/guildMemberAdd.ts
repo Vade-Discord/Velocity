@@ -1,6 +1,6 @@
 import { Event } from '../../Interfaces/Event';
-import guildSchema from '../../Schemas/Main Guilds/GuildSchema';
-import autoRoles from '../../Schemas/Main Guilds/GuildAutoRoles';
+import guildSchema from '../../Schemas/Main-Guilds/GuildSchema';
+import autoRoles from '../../Schemas/Main-Guilds/GuildAutoRoles';
 import {TextChannel} from "eris";
 
 export default class BanAddEvent extends Event {

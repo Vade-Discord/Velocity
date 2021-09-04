@@ -1,5 +1,5 @@
 import Command from "../../Interfaces/Command";
-import guildSchema from "../../Schemas/Main Guilds/GuildSchema";
+import guildSchema from "../../Schemas/Main-Guilds/GuildSchema";
 
 export default class LoggingCommand extends Command {
     constructor(client) {

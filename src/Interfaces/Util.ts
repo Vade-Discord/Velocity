@@ -7,7 +7,7 @@ import { Types } from "mongoose";
 
 
 // File imports
-import guild_schema from "../Schemas/Main Guilds/GuildSchema";
+import guild_schema from "../Schemas/Main-Guilds/GuildSchema";
 import profile_schema from "../Schemas/User Schemas/Profile";
 import GiveawaySchema from "../Schemas/Backend/Giveaways";
 import ReminderSchema from "../Schemas/Backend/Reminders";
