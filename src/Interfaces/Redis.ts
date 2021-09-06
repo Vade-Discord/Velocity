@@ -6,8 +6,8 @@ import { Bot } from "../Client/Client";
 const logger: Logger = new Logger("cache");
 const redisConnect = async (client: Bot): Promise<Redis> => {
     return new Promise((resolve, reject) => {
-        const publisher = new Redis(redis.port, redis.redisPath);
-        const subscriber = new Redis(redis.port, redis.redisPath);
+        const publisher = new Redis.createClient(redis.port, redis.redisPath);
+        const subscriber = new Redis.createClient(redis.port, redis.redisPath);
 
         subscriber.subscribe('__keyevent@0__:expired')
 
