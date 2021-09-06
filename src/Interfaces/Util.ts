@@ -109,7 +109,7 @@ export default class Util {
 
 
   async getGuildSchema(guild) {
-    const check = await guild_schema.findOne({ guildID: guild.id });
+    const check = await guild_schema.findOne({ guildID: guild.id ?? guild });
     if (check) return check;
     const newSchema = new guild_schema({
       _id: Types.ObjectId(),
@@ -292,9 +292,9 @@ export default class Util {
   }
 
   async checkPremium(guildID): Promise<Boolean> {
-    const guildSchema = await guild_schema.findOne({ guildID });
+    const guildSchema = (await this.getGuildSchema(guildID));
     if (!guildSchema) return false;
-    return !!guildSchema?.Premium?.active;
+    return !!guildSchema.Premium.active;
 
   }
 
