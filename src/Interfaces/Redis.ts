@@ -1,13 +1,13 @@
 import Redis from "ioredis";
-import { redis } from "../config.json";
+import { redis, local } from "../config.json";
 import { Logger } from "@dimensional-fun/logger";
 import { Bot } from "../Client/Client";
 
 const logger: Logger = new Logger("cache");
 const redisConnect = async (client: Bot): Promise<Redis> => {
     return new Promise((resolve, reject) => {
-        const publisher = new Redis.createClient(redis.port, redis.redisPath);
-        const subscriber = new Redis.createClient(redis.port, redis.redisPath);
+        const publisher = local ? new Redis.createClient() : new Redis.createClient(redis.port, redis.redisPath);
+        const subscriber = local ? new Redis.createClient() : Redis.createClient(redis.port, redis.redisPath);
 
         subscriber.subscribe('__keyevent@0__:expired')
 
