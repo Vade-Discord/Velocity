@@ -1,5 +1,5 @@
   import { Event } from '../../Interfaces/Event';
-import guildSchema from '../../Schemas/Main Guilds/GuildSchema';
+import guildSchema from '../../Schemas/Main-Guilds/GuildSchema';
 
       export default class UserEvent extends Event {
           constructor(client) {
@@ -21,6 +21,8 @@ import guildSchema from '../../Schemas/Main Guilds/GuildSchema';
               if (!guilds.length) return;
 
               for (const i of guilds) if (i?.Logging.user) {
+                  const member = (await this.client.getRESTGuildMember(i.guildID, user.id));
+                  if(!member) return;
                   let tag = `${user.username}#${user.discriminator}`
 
                   const channel = this.client.getChannel(i.Logging.user);
@@ -35,7 +37,8 @@ import guildSchema from '../../Schemas/Main Guilds/GuildSchema';
                           .setDescription(`**From:** ${oldUser.username}\n**To:** ${user.username}`)
                           .setTimestamp()
 
-                          await channel.createMessage({embed: embed});
+                          // @ts-ignore
+                          await channel.createMessage({embeds: [embed]});
                       }
 
                       if (oldUser.discriminator !== user.discriminator) {
@@ -46,7 +49,8 @@ import guildSchema from '../../Schemas/Main Guilds/GuildSchema';
                               .setThumbnail(user.avatarURL)
                               .setTimestamp()
 
-                          await channel.createMessage({embed: embed});
+                          // @ts-ignore
+                          await channel.createMessage({embeds: [embed]});
                       }
 
                       if (oldUser.avatar !== user.avatar) {
@@ -57,7 +61,8 @@ import guildSchema from '../../Schemas/Main Guilds/GuildSchema';
                               .setThumbnail(user.avatarURL)
                               .setTimestamp()
 
-                          await channel.createMessage({embed: embed});
+                          // @ts-ignore
+                          await channel.createMessage({embeds: [embed]});
                       }
 
 

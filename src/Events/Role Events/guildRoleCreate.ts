@@ -17,7 +17,7 @@
                   .setTimestamp();
 
               const loggingChannel = await this.client.utils.loggingChannel(guild, 'role');
-              loggingChannel ? loggingChannel.createMessage({ embed: embed }) : null;
+              loggingChannel ? loggingChannel.createMessage({ embeds: [embed] }) : null;
 
 
           }

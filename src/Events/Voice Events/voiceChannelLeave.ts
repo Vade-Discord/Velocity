@@ -13,16 +13,9 @@
           async run(member, oldChannel) {
 
               if (!oldChannel) return;
-              const player = this.client.manager.players.get(oldChannel.guild.id);
+              const player = this.client.manager?.players.get(oldChannel.guild.id);
 
               try {
-                  if (member.id === this.client.user.id) {
-                      if (player) {
-                          console.log(`Located player`)
-                          await player.destroy();
-                      }
-                  }
-
                   const voiceMembers = Array.from(oldChannel.voiceMembers)
                   let userCount = 0
 
@@ -37,27 +30,41 @@
 
                     let timeTracking = false;
                     let time;
-                  const locateSchema = await vcSchema.findOne({ user: member.id });
+                  const locateSchema = await this.client.redis.get(`vcTrack.${oldChannel.guild.id}.${member.id}`);
                   if(locateSchema) {
-                    timeTracking = true;
-                   const totalTime = Date.now() - parseInt(locateSchema.Join.time);
-                   time = humanize(totalTime);
-                  await locateSchema.delete()
-                  }
+                      timeTracking = true;
+                      const totalTime = Date.now() - parseInt(locateSchema);
+                      time = humanize(totalTime);
+                      await this.client.redis.del(`vcTracking.${oldChannel.guild.id}.${member.id}`);
+                      const totalSchema = await vcSchema.findOne({user: member.id, guild: oldChannel.guild.id});
+                      if (totalSchema) {
+                        await totalSchema.updateOne({
+                            $inc: {total: totalTime}
+                        });
+                      } else {
+                          const newSchema = new vcSchema({
+                              user: member.id,
+                              guild: oldChannel.guild.id,
+                              username: `${member.username}#${member.discriminator}`,
+                              total: totalTime
+                          });
+                          await newSchema.save();
+                      }
 
+                  }
 
                   let tag = `${member.user.username}#${member.user.discriminator}`
                   let embed = new this.client.embed()
                       .setAuthor(tag, member.user.avatarURL)
                       .setTitle(`📤 Left Voice Channel`)
-                      .setDescription(`**Channel:** ${oldChannel.mention}\n\n${timeTracking ? `Time Spent: ${time}` : null}`)
+                      .setDescription(`**Channel:** ${oldChannel.mention}\n\n${timeTracking ? `Time Spent: ${time ?? 'Unable to track.'}` : null}`)
                       .setThumbnail(member.user.avatarURL)
                       .setFooter(`Vade Logging System`)
                       .setColor(`#F00000`)
                       .setTimestamp();
 
                   const logChannel = await this.client.utils.loggingChannel(oldChannel.guild, 'voice');
-                  logChannel ? logChannel.createMessage({ embed: embed }) : null;
+                  logChannel ? logChannel.createMessage({ embeds: [embed] }) : null;
 
 
               } catch (e) {

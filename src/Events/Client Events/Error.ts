@@ -8,8 +8,7 @@
           }
 
           async run(error) {
-
-
+            this.client.logger.error(error);
           }
 
       }

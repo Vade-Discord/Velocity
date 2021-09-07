@@ -1,5 +1,6 @@
 'use strict';
 import constants from '../Interfaces/Constants';
+import config from 'src/config.json';
 
 /**
  * @typedef {import('eris').EmbedBase} EmbedBase
@@ -30,9 +31,9 @@ class PaginationEmbed {
      * @param {EmbedBase[]} pages An array containing all embed objects
      * @param {PaginationOptions} [options] An optional options object for overwriting defaults
      */
-    constructor(message, pages = [], options = {}) {
+    constructor(interaction, pages = [], options = {}) {
         this.pages       = pages;
-        this.invoker     = message;
+        this.invoker     = interaction;
         this.invokerRequired = options.invokerRequired || true;
         this.options     = options;
         this.cmdname     = options.commandName;
@@ -116,14 +117,15 @@ class PaginationEmbed {
 
         const messageContent = {
             content: (this.showPages) ? `Page **${this.page}** of **${this.pages.length}**` : undefined,
-            embed: this.pages[this.page - 1],
+            embeds: [this.pages[this.page - 1]],
             components: this.components
         }
 
-        if (this.invoker.author.id === this.invoker._client.user.id) {
+        const CLIENTS = ['850723996513075200', '782309258620305438'];
+        if (CLIENTS.includes(this.invoker.member.id)) {
             this.message = await this.invoker.edit(messageContent);
         } else {
-            this.message = await this.invoker.channel.createMessage(messageContent)
+            this.message = await this.invoker.createFollowup(messageContent)
         }
 
         return this.message
@@ -135,7 +137,7 @@ class PaginationEmbed {
 
         if(interaction.user) interaction.member = interaction.user
 
-        if (interaction.member.id !== this.invoker.author.id && this.invokerRequired === true) {
+        if (interaction.member.id !== this.invoker.member.id && this.invokerRequired === true) {
             return //interaction.createMessage({content: "You must have run the command in order to use the buttons!", flags: 64});
         }
 
@@ -199,23 +201,24 @@ class PaginationEmbed {
         if(!interaction.data) return;
         return interaction.message.edit({
             content: (this.showPages) ? `Page **${this.page}** of **${this.pages.length}**` : undefined,
-            embed: this.pages[this.page - 1],
+            embeds: [this.pages[this.page - 1]],
             components: this.components
         });
     }
 }
 
 /**
-* Create an Embed Paginator
-*
-* @param {Message} message A message object emitted from a messageCreate event coming from Eris, used as an invoker. If sent by the client, the message will be edited.
-* @param {EmbedBase[]} pages An array containing all embed objects
-* @param {PaginationOptions} [options] An optional options object for overwriting defaults
-*/
-export const createPaginationEmbed = async (message, pages, options) => {
-    const paginationEmbed = new PaginationEmbed(message, pages, options);
+ * Create an Embed Paginator
+ *
+ * @param client
+ * @param interaction
+ * @param {EmbedBase[]} pages An array containing all embed objects
+ * @param {PaginationOptions} [options] An optional options object for overwriting defaults
+ */
+export const createPaginationEmbed = async (client, interaction, pages, options) => {
+    const paginationEmbed = new PaginationEmbed(interaction, pages, options);
     const mes = await paginationEmbed.initialize();
-    message._client.Pagination.set(mes.id, paginationEmbed)
+    client.Pagination.set(mes.id, paginationEmbed)
 
     return Promise.resolve(paginationEmbed.message);
 }

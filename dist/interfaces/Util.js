@@ -9,7 +9,7 @@ const axios_1 = __importDefault(require("axios"));
 const fastest_levenshtein_1 = require("fastest-levenshtein");
 const mongoose_1 = require("mongoose");
 // File imports
-const GuildSchema_1 = __importDefault(require("../Schemas/Main Guilds/GuildSchema"));
+const GuildSchema_1 = __importDefault(require("../Schemas/Main-Guilds/GuildSchema"));
 class Util {
     constructor(client) {
         this.yes = ["yes", "si", "yeah", "ok", "sure"];

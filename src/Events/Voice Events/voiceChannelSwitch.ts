@@ -21,7 +21,7 @@
                       .setTimestamp();
 
                   const logChannel = await this.client.utils.loggingChannel(oldChannel.guild, 'voice');
-                  logChannel ? logChannel.createMessage({ embed: embed }) : null;
+                  logChannel ? logChannel.createMessage({ embeds: [embed] }) : null;
               } catch (e) {
                   console.log(e)
               }

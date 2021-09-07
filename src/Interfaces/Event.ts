@@ -21,7 +21,7 @@ export class Event {
                 : options.emitter) || this.client;
     }
 
-   public async run(...args) {
+    public async run(...args) {
         throw new Error(`The run method has not been implemented in ${this.name}`);
     }
-};
+}

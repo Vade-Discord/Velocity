@@ -1,15 +1,16 @@
-import type {Bot} from "../client/Client";
+import type { Bot } from "../client/Client";
 import Command from "./Command";
 
 // Package imports
-import {Collection, Guild, Member, RichEmbed} from "eris";
-import axios from "axios";
-import { distance } from "fastest-levenshtein";
-import {Types} from "mongoose";
+import {RichEmbed, TextChannel} from "eris";
+import { Types } from "mongoose";
 
 
 // File imports
-import guild_schema from "../Schemas/Main Guilds/GuildSchema";
+import guild_schema from "../Schemas/Main-Guilds/GuildSchema";
+import profile_schema from "../Schemas/User Schemas/Profile";
+import GiveawaySchema from "../Schemas/Backend/Giveaways";
+import ReminderSchema from "../Schemas/Backend/Reminders";
 
 interface SelectionObject {
   label: string;
@@ -22,239 +23,44 @@ interface SelectionObject {
 }
 
 export default class Util {
-  succEmbed(arg0: string, channel: any): unknown {
-    throw new Error("Method not implemented.");
-  }
-  validateHex(arg0: string) {
-    throw new Error("Method not implemented.");
-  }
-  sendError(arg0: string, channel: any): unknown {
-    throw new Error("Method not implemented.");
-  }
   public readonly client: Bot;
-
   private readonly yes: string[] = ["yes", "si", "yeah", "ok", "sure"];
   private readonly no: string[] = ["no", "nope", "nada"];
-
-
 
   constructor(client: Bot) {
     this.client = client;
   }
-  roleHierarchy(message, target) {
-    const memberRole = this.getHighestRole(message.member, message.guild);
-    const targetRole = this.getHighestRole(target, message.guild);
-    if (memberRole && targetRole) {
-      return memberRole > targetRole;
-    } else {
-      return true;
-    }
-  }
 
-  async handleStreak(type, target, gameStatus) {
-    const streak = await this.client.redis.get(`streaks.${type}.${target}`);
-    switch(gameStatus) {
-      case "won": {
-        if(streak > 0) {
-          await this.client.redis.set(`streaks.${type}.${target}`, parseInt(streak) + 1, 'EX', 86400);
-          return parseInt(streak) + 1;
-        } else {
-          await this.client.redis.set(`streaks.${type}.${target}`, 1, 'EX', 86400);
-          return 1;
-        }
-      }
-      case "loss": {
-        if(streak > 0) {
-          await this.client.redis.set(`streaks.${type}.${target}`, 0, 'EX', 86400);
-          return 0;
-        } else {
-          return 0;
-        }
-      }
-      default:
-        if(streak > 0) {
-          return streak;
-        } else {
-          return 'No streak.'
-        }
-    }
-  }
-
-  formatNumber(number: string, minimumFractionDigits = 0) {
-    return Number.parseFloat(number).toLocaleString(undefined, {
-      minimumFractionDigits,
-      maximumFractionDigits: 2,
-    });
-  }
-
-  async resolvePrefix(id: string) {
-    // @ts-ignore
-    await this.client.redis.get(`prefix.${id}`, (error, result) => {
-      if(result) return result;
-    });
-    const data = await guild_schema.findOne({ guildID: id });
-    if (data) {
-      if (data.prefix) {
-        // @ts-ignore
-        await this.client.redis.set(`prefix.${id}`, data.prefix, 'EX', 1800);
-        return data.prefix;
-      } else {
-        return "!";
-      }
-    } else {
-      return "!";
-    }
-  }
-
-  async loggingChannel(guild, type: string) {
-    if(!type) throw new TypeError(`No type provided.`);
-    const locatedGuild = await guild_schema.findOne({ guildID: guild.id });
-    if (!locatedGuild) return null;
-    let locatedType = locatedGuild.Logging[type];
-    if(!locatedType) return null;
-    return locatedType ? guild.channels.get(locatedType) : null;
-  }
-
-  createButton(message, label: string = '', style: number, url: string = '', id: string, emotes = {}) {
-    if(url) {
-      return [{
-        "type": 1,
-        "components": [{
-          "type": 2,
-          "label": label,
-          "style": style,
-          "url": url,
-        }]
-      }]
-    }
-     return [{
-          "type": 1,
-          "components": [{
-            "type": 2,
-            "label": label,
-            "style": style,
-            "custom_id": id,
-          }]
-        }]
-  }
-
-  createSelection(id: string, placeholder: string, options: Array<SelectionObject>, minValue: number = 1, maxValue: number = 3) {
-    return [
-  {
-    type: 1,
-    components: [
-      {
-        type: 3,
-        custom_id: id,
-        options,
-        placeholder: placeholder,
-        min_values: minValue,
-        max_values: maxValue
-      }
-    ]
-  }
-];
-
-
-  }
-
-  msConversion(millis: number) {
-    let sec: any = Math.floor(millis / 1000);
-    let hrs: any = Math.floor(sec / 3600);
-    sec -= hrs * 3600;
-    let min: any = Math.floor(sec / 60);
-    sec -= min * 60;
-
-    sec = "" + sec;
-    sec = ("00" + sec).substring(sec.length);
-
-    if (hrs > 0) {
-      min = "" + min;
-      min = ("00" + min).substring(min.length);
-      return hrs + ":" + min + ":" + sec;
-    } else {
-      return min + ":" + sec;
-    }
-  }
-
-
-  getChannel(e, guild, type: number = 1) {
-    const mentionRegex = /^<#[0-9]+>$/;
-    if (mentionRegex.test(e)) {
-      const id = e.substring(2, e.length - 1);
-      if(type !== 1) {
-      let guildChannels = guild.channels.filter((m) => m.type === type);
-      return guildChannels.find((m) => m.id === e);
-      }
-      return guild.channels.get(id);
-    }
-    if (Number.isInteger(+e)) {
-      // ID provided. Validate ID here.
-      return guild.channels.get(e);
-    }
-    if (isNaN(e)) {
-      if(type !== 1) {
-        let guildChannels = guild.channels.filter((m) => m.type === type);
-        const channel = guildChannels.filter((c) => distance(e, c.name) < 2.5);
-        return channel[0];
-      }
-      const channel = guild.channels.filter((c) => distance(e, c.name) < 2.5);
-      if (!channel.length) return null;
-      return channel[0];
-    }
-    return null;
-  }
-
-  async guildPremium(guild) {
-    const guildSchema = await guild_schema.findOne({ guildID: guild.id });
-    if (!guildSchema) return false;
-    if (!guildSchema?.Premium.active) return false;
-    return guildSchema.Premium.expiresOn <= Date.now();
-
-  }
-
-  async createGuildSchema(guild) {
-    const newSchema = new guild_schema({
-      _id: Types.ObjectId(),
-      guildID: guild.id,
-      guildName: guild.name,
-      prefix: "!",
-    });
-
-    await newSchema.save();
-
-    return newSchema;
-  }
-
-  async checkModerator(message) {
-    if (!message.channel.guildID) return true;
+  async checkModerator(interaction) {
+    if (!interaction.guildId) return true;
     const guildModRoles = await guild_schema.findOne({
-      guildID: message.channel.guild.id,
+      guildID: interaction.guildId,
     });
     if (!guildModRoles || !guildModRoles.ModRole.length) {
-      return message.member.permissions.has("manageMessages");
+      return interaction.member.permissions.has("manageMessages");
     }
-    return message.member.roles.some((role) =>
+    return interaction.member.roles.some((role) =>
       guildModRoles?.ModRole.includes(role)
     );
   }
 
   generateKey() {
     let length = 15,
-        charset =
-            "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789@!$£",
-        retVal = "";
+      charset =
+        "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789@!$£",
+      retVal = "";
     let i = 0, n = charset.length;
     for (; i < length; ++i) {
       retVal += charset.charAt(Math.floor(Math.random() * n));
     }
     return `Vade_` + retVal;
   }
+
   caseID() {
     let length = 10,
-        charset =
-            "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789@!$£",
-        retVal = "";
+      charset =
+        "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789@!$£",
+      retVal = "";
     let i = 0, n = charset.length;
     for (; i < length; ++i) {
       retVal += charset.charAt(Math.floor(Math.random() * n));
@@ -278,6 +84,58 @@ export default class Util {
     return filteredRoles.sort((a, b) => b.position - a.position)[0];
   }
 
+  async roleHierarchy(guildID, memberID, targetID) {
+    const guild = (await this.client.getRESTGuild(guildID));
+    if(guild.ownerID === memberID) {
+      return true;
+    }
+    const member = (await guild.getRESTMember(memberID));
+    const target = (await guild.getRESTMember(targetID));
+    const memberRole = this.getHighestRole(member, guild);
+    const targetRole = this.getHighestRole(target, guild);
+    if(!memberRole && targetRole) {
+      return false;
+    }
+    if(memberRole && !targetRole && guild.ownerID !== targetID) {
+      return true;
+    }
+
+    if (memberRole.position && targetRole.position) {
+      return memberRole.position > targetRole.position;
+    } else {
+      return true;
+    }
+  }
+
+
+  async getGuildSchema(guild) {
+    const check = await guild_schema.findOne({ guildID: guild.id ?? guild });
+    if (check) return check;
+    const newSchema = new guild_schema({
+      _id: Types.ObjectId(),
+      guildID: guild.id,
+      guildName: guild.name,
+      prefix: "!",
+    });
+
+    await newSchema.save();
+
+    return newSchema;
+  }
+
+  async getProfileSchema(userID) {
+    const check = await profile_schema.findOne({ User: userID });
+    if (check) return check;
+    const newSchema = new profile_schema({
+      _id: Types.ObjectId(),
+      User: userID,
+    });
+
+    await newSchema.save();
+
+    return newSchema;
+  }
+
   cleanPerms(perm) {
     const perms: Object = {
       banMembers: "Ban Members",
@@ -286,87 +144,19 @@ export default class Util {
     return perms[perm] ?? perm;
   }
 
-  async getMember(message, args, sendMessage = true) {
-    if (!args?.length) {
-      if(sendMessage) {
-        message.channel.createMessage({
-          content: `You need to specify a member.`,
-          messageReference: { messageID: message.id },
-        });
-      }
-      return null;
-    }
-    if (Number(+args)) {
-      let id = message.channel.guild.members.get(args);
-      if (!id)
-        return message.channel.createMessage({
-          content: `Unable to locate "${args}".`,
-          messageReference: { messageID: message.id },
-        });
-
-      let memberArray: string[] = Array();
-      return id;
-    }
-    let member = message.mentions.length
-      ? message.guild.members.get(message.mentions[0].id)
-      : await message.channel.guild.searchMembers(args, 1);
-    if (!member || Array.isArray(member) ? !member.length : false) {
-      message.channel.createMessage({
-        content: `Unable to locate "${args}".`,
-        messageReference: { messageID: message.id },
-      });
-    }
-    return Array.isArray(member) ? (member?.length ? member[0] : null) : member;
+  async loggingChannel(guild, type: string) {
+    if (!type) throw new TypeError(`No type provided.`);
+    const locatedGuild = await guild_schema.findOne({ guildID: guild.id });
+    if (!locatedGuild) return null;
+    let locatedType = locatedGuild.Logging[type];
+    if (!locatedType) return null;
+    return locatedType ? this.client.getRESTChannel(locatedType) as Promise<TextChannel> : null;
   }
 
-  getRandomDadJoke(joke) {
-    let config = {
-      url: "https://icanhazdadjoke.com/",
-      headers: {
-        Accept: "application/json",
-      },
-    };
-    axios(config)
-      .then((response) => {
-        return response.data.joke;
-      })
-      .catch((err) => {
-        console.log(err);
-      });
-  }
-
-  // @ts-ignore
-  hasHierarchy(guild, member1: Member, member2: Member): boolean {
-
-    if(member1.id === guild.ownerID) return true;
-
-    if(member1.roles.length && !member2.roles.length) return true;
-    if(member2.roles.length && !member1.roles.length) return false;
-
-    const member1Roles = member1.roles;
-    const member2Roles = member2.roles; // Two arrays of their role IDs.
-    const firstRoles: Array<any> = [];
-    const secondRoles: Array<any> = [];
-    member1Roles.forEach((role) => {
-     let e =  guild.roles.get(role);
-     firstRoles.push(e);
-    });
-
-    member2Roles.forEach((role) => {
-     let r = guild.roles.get(role);
-     secondRoles.push(r);
-
-    });
-
-    const firstMember = firstRoles.sort((r, e) => e.position - r.position);
-    const secondMember = secondRoles.sort((r, e) => e.position - r.position);
-    return firstMember[0].position > secondMember[0].position;
-
-  }
-
-  async runPreconditions(message, command: Command, args) {
+  async runPreconditions(interaction, member, g, command: Command) {
+    const guild = await this.client.guilds.get(g.id);
     if (command.devOnly) {
-      if (!this.client.owners.includes(message.author.id)) {
+      if (!this.client.owners.includes(interaction.user ? interaction.user.id : interaction.member.id)) {
         let notOwnerEmbed = new RichEmbed()
           .setTitle(`Developer Only Command!`)
           .setDescription(`Only a Bot Developer can run this Command!`)
@@ -374,31 +164,29 @@ export default class Util {
           .setTimestamp()
           .setFooter(`Vade`, this.client.user.avatarURL);
 
-        return message.channel.createMessage({
-          embed: notOwnerEmbed,
-          messageReferenceID: message.id,
+        return interaction.createFollowup({
+          embeds: [notOwnerEmbed]
         });
       }
     }
     if (command.guildOnly) {
-      if (!message.channel.guild) {
+      if (!interaction.guildID) {
         let noGuild = new RichEmbed()
           .setTitle(`Guild Only!`)
           .setDescription(`This Command can only be ran in a Guild!`)
           .setColor(`#F00000`)
           .setTimestamp()
           .setFooter(`Vade`, this.client.user.avatarURL);
-        return message.channel.createMessage({
-          embed: noGuild,
-          messageReferenceID: message.id,
+        return interaction.createFollowup({
+          embeds: [noGuild]
         });
       }
     }
 
-    if (!message.channel.guild) return;
+    if (!guild) return;
 
     if (command.modCommand) {
-      if (!(await this.checkModerator(message))) {
+      if (!(await this.checkModerator(interaction))) {
         let noMod = new RichEmbed()
           .setTitle(`Moderator Only!`)
           .setDescription(`This Command requires you to be a Moderator!`)
@@ -406,71 +194,294 @@ export default class Util {
           .setTimestamp()
           .setFooter(`Vade`, this.client.user.avatarURL);
 
-        return message.channel.createMessage({
-          embed: noMod,
-          messageReferenceID: message.id,
+        return interaction.createFollowup({
+          embeds: [noMod]
         });
       }
     }
 
-    if (command.botPerms) {
-      for (const perm of command.botPerms) {
+    if (command.botPerms.length) {
+      const getMember = await guild.members.get(
+        this.client.user.id
+      );
+
+
+      const checkBotPerms = command.botPerms.some((perm) => !getMember.permissions.has(perm));
+      if (checkBotPerms) {
         let noPermEmbed = new RichEmbed()
           .setTitle(`Missing Permissions!`)
           .setDescription(
-            `I am missing the ${this.cleanPerms(
-              perm
-            )} Permission! I need it for you to run this Command!`
+            `I am missing one of the required permissions for this Command. Required Permissions: ${command.botPerms.map((m) => this.cleanPerms(m)).join(", ")}`
           )
           .setColor(`#F00000`)
           .setTimestamp()
           .setFooter(`Vade`, this.client.user.avatarURL);
 
-        const getMember = message.channel.guild.members.get(
-          this.client.user.id
-        );
-        if (!getMember?.permissions.has(perm)) {
-          return message.channel.createMessage({
-            embed: noPermEmbed,
-            messageReferenceID: message.id,
-          });
-        }
+        return interaction.createFollowup({
+          embeds: [noPermEmbed]
+        });
       }
     }
-    if (command.userPerms) {
-      for (const perm of command.userPerms) {
+    if (command.userPerms.length) {
+      const userPermCheck = command.userPerms.some((perm) => !member.permissions.has(perm));
+      if (userPermCheck) {
         let noPermEmbed = new RichEmbed()
           .setTitle(`Missing Permissions!`)
           .setDescription(
-            `You are missing the ${this.cleanPerms(
-              perm
-            )} Permission! You need it to run this Command!`
+            `You are missing one of the required permissions for this Command. Required Permissions: ${command.userPerms.map((m) => this.cleanPerms(m)).join(", ")}`
           )
           .setColor(`#F00000`)
           .setTimestamp()
           .setFooter(`Vade`, this.client.user.avatarURL);
-        if (!message.member.permissions.has(perm)) {
-          return message.channel.createMessage({
-            embed: noPermEmbed,
-            messageReferenceID: message.id,
-          });
-        }
+
+        return interaction.createFollowup({
+          embeds: [noPermEmbed]
+        });
       }
     }
+    if(command.premiumOnly && interaction?.guildID) {
+      const check = (await this.checkPremium(interaction.guildID));
+      if(!check) {
+        let noPremiumEmbed = new this.client.embed()
+            .setTitle(`Premium Only!`)
+            .setDescription(`You must have Vade Premium activated in order to use this Command! You can get it [here](https://vade-bot.com/premium)`)
+            .setColor('#F00000')
+            .setURL('https://vade-bot.com/premium')
+            .setTimestamp()
+            .setThumbnail(this.client.user.avatarURL)
+
+        return interaction.createFollowup({
+          embeds: [noPremiumEmbed]
+        });
+      }
+    }
+  }
+
+  trimArray(arr: Array<string>, maxLen = 10) {
+    if (arr.length > maxLen) {
+      const len = arr.length - maxLen;
+      arr = arr.slice(0, maxLen);
+      arr.push(`${len} more...`);
+    }
+    return arr;
+  }
+
+  msConversion(millis: number) {
+    let sec: any = Math.floor(millis / 1000);
+    let hrs: any = Math.floor(sec / 3600);
+    sec -= hrs * 3600;
+    let min: any = Math.floor(sec / 60);
+    sec -= min * 60;
+
+    sec = "" + sec;
+    sec = ("00" + sec).substring(sec.length);
+
+    if (hrs > 0) {
+      min = "" + min;
+      min = ("00" + min).substring(min.length);
+      return hrs + ":" + min + ":" + sec;
+    } else {
+      return min + ":" + sec;
+    }
+  }
+
+  async hasVoted(user: string) {
+    await this.client.redis.get(`votes.top.gg.${user}`, function (err, result) {
+      return !!result;
+    })
+  }
+
+  async checkPremium(guildID): Promise<Boolean> {
+    const guildSchema = (await this.getGuildSchema(guildID));
+    if (!guildSchema) return false;
+    return !!guildSchema.Premium.active;
 
   }
 
-  getRoles(s: string, guild: Guild) {
-    if (/^[0-9]+$/.test(s)) return guild.roles.get(s);
-    else if (/^<@&[0-9]+>$/.test(s)) {
-      const id = s.substring(3, s.length - 1);
-      return guild.roles.get(id);
+
+  async giveawayEnded(giveaway) {
+
+    let winner = [];
+
+    if (!giveaway.entrants?.length) {
+      const endEmbed = new this.client.embed()
+        .setTitle(`🎉 Giveaway Ended! 🎉`)
+        .setColor('#F00000')
+        .setTimestamp()
+        .setDescription(`Ended: <t:${Math.floor(Date.now() / 1000)}:f>\nHosted By: ${giveaway.giveawayHost}`)
+        .addField(`Prize`, `${giveaway.prize}`)
+        .addField(`Winner`, `No valid participants.`)
+        .setThumbnail(this.client.user.avatarURL)
+
+      this.client.editMessage(giveaway.channelID, giveaway.messageID, {
+        // @ts-ignore
+        embeds: [endEmbed], components: [{
+          type: 1,
+          components: [
+            {
+              type: 2,
+              style: 3,
+              label: `Enter!`,
+              custom_id: `giveaway#enter`,
+              disabled: true,
+              emoji: {
+                id: this.client.constants.emojis.giveaway.id,
+                name: this.client.constants.emojis.giveaway.name,
+                animated: false
+              },
+            }
+          ]
+        }
+        ]
+      }).catch(() => null);
+      await giveaway.delete();
+      return;
     }
-    const role = guild.roles.filter((c) => distance(s, c.name) < 2.5);
-    if(role?.length) {
-      return role[0];
+    while (!winner.length || winner?.length < giveaway.winners) {
+      const rand = Math.floor(Math.random() * (giveaway.entrants?.length - 0))
+      const winnerID = giveaway.entrants[rand];
+      let e = (await this.client.getRESTGuildMember(giveaway.guildID, winnerID));
+      giveaway.entrants.splice(rand, 1);
+      if (e) winner.push(e)
+    }
+
+
+    const endEmbed = new this.client.embed()
+      .setTitle(`🎉 Giveaway Ended! 🎉`)
+      .setColor('#F00000')
+      .setTimestamp()
+      .setDescription(`Ended: <t:${Math.floor(Date.now() / 1000)}:f>\nHosted By: ${giveaway.giveawayHost}`)
+      .addField(`Prize`, `${giveaway.prize}`)
+      .addField(`Winner(s)`, `${winner.map((u) => u.mention)?.join(", ")}`)
+      .setThumbnail(this.client.user.avatarURL)
+
+    // @ts-ignore
+    await this.client.editMessage(giveaway.channelID, giveaway.messageID, {
+      embeds: [endEmbed], components: [{
+        type: 1,
+        components: [
+          {
+            type: 2,
+            style: 3,
+            label: `Enter!`,
+            custom_id: `giveaway#enter`,
+            disabled: true,
+            emoji: {
+              id: this.client.constants.emojis.giveaway.id,
+              name: this.client.constants.emojis.giveaway.name,
+              animated: false
+            },
+          }
+        ]
+      }
+      ]
+    })
+    await giveaway.delete();
+
+  }
+
+  async remind(reminderData) {
+    const user = (await this.client.getRESTUser(reminderData?.userID));
+    if (user) {
+      const embed = new this.client.embed()
+        .setAuthor(`You have a reminder!`, user.avatarURL)
+        .setDescription(`> ${reminderData?.reminder}`)
+        .setColor(this.client.constants.colours.green)
+        .setTimestamp()
+        .setFooter(`Vade Utilities`, this.client.user.avatarURL)
+
+      await user.getDMChannel().then((channel) => {
+        channel.createMessage({ embeds: [embed] }).catch(() => null);
+      });
+
+      await reminderData.delete();
     } else {
-      return null;
+      await reminderData.delete();
     }
+  }
+
+  msToTime(s) {
+    let ms = s % 1000;
+    s = (s - ms) / 1000;
+    let secs = s % 60;
+    s = (s - secs) / 60;
+    let mins = s % 60;
+    s = (s - mins) / 60;
+    let hrs = s % 24;
+    s = (s - hrs) / 24;
+    let days = s % 133225;
+
+    if (days != 0)
+      return days + ` day${days === 1 ? " " : "s "}` + hrs + "h " + mins + "m";
+    else return hrs + ` hour${hrs === 1 ? " " : "s "}` + mins + "m " + secs + "s";
+  }
+  getFlags(args: string[]): { flag: string; index: number }[] {
+    const set = new Set();
+    const res: { flag: string; index: number }[] = [];
+    args.forEach((arg, index) => {
+      if (!/^--?\w+$/.test(arg)) return;
+
+      if (/^-\w+$/.test(arg)) {
+        const flags = arg
+            .slice(1)
+            .split("")
+            .map((flag) => {
+              if (set.has(flag)) return;
+
+              set.add(flag);
+
+              return {
+                flag,
+                index,
+              };
+            })
+            .filter(($) => !!$);
+
+        //@ts-ignore
+        res.push(...flags);
+      } else if (/^--\w+$/.test(arg)) {
+        const flag = arg.slice(2);
+
+        if (set.has(flag)) return;
+
+        set.add(flag);
+
+        res.push({
+          flag,
+          index,
+        });
+      } else throw new TypeError(`Invalid flag format: '${arg}'`);
+    });
+    return res;
+  }
+
+  async muteEnded(muteData, msg = true) {
+    const guild = (await this.client.getRESTGuild(muteData.guildID));
+    if(!guild) return;
+    const member = (await guild.getRESTMember(muteData.userID));
+    if(!member) return;
+   await member.edit({
+      roles: muteData.roles
+    }).catch((e) => {
+     if(e) return;
+   });
+   if(msg) {
+
+
+     const logChannel = await this.loggingChannel(guild, 'moderation');
+
+     const embed = new this.client.embed()
+         .setAuthor(`${member.username}#${member.discriminator}`, member.user.avatarURL)
+         .setTitle(`${this.client.constants.emojis.moderation.mention} Mute Expired`)
+         .setDescription(`**Member:** ${member.mention}`)
+         .setColor(this.client.constants.colours.green)
+         .setThumbnail(member.user.avatarURL)
+         .setFooter(`Vade Logging System`)
+         .setTimestamp()
+
+     logChannel ? logChannel?.createMessage({embeds: [embed]}) : null;
+
+   }
+
   }
 }

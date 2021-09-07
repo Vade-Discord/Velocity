@@ -22,7 +22,7 @@ export default class BanAddEvent extends Event {
             .setTimestamp();
 
         const logChannel = await this.client.utils.loggingChannel(guild, 'moderation');
-        logChannel ? logChannel.createMessage({ embed: embed }) : null;
+        logChannel ? logChannel.createMessage({ embeds: [embed] }) : null;
     }
 
 }

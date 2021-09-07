@@ -1,5 +1,8 @@
-node_modules
-tsconfig.json
-config.json
-.idea
-dist/
+/node_modules/
+/.idea/
+/dist/
+.gitignore
+/src/config.json
+/.vscode/
+.yarnrc
+/.yarn/

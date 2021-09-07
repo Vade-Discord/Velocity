@@ -19,7 +19,7 @@ class MessageEmbed {
      * @property {string} [title] The title of this embed
      * @property {string} [description] The description of this embed
      * @property {string} [url] The URL of this embed
-     * @property {Date|number} [timestamp] The timestamp of this embed
+     * @property {Date|string} [timestamp] The timestamp of this embed
      * @property {ColorResolvable} [color] The color of this embed
      * @property {EmbedFieldData[]} [fields] The fields of this embed
      * @property {Partial<MessageEmbedAuthor>} [author] The author of this embed
@@ -355,7 +355,7 @@ class MessageEmbed {
 
     /**
      * Sets the timestamp of this embed.
-     * @param {Date|number} [timestamp=Date.now()] The timestamp or date
+     * @param {Date|number|string} [timestamp=Date.now()] The timestamp or date
      * @returns {MessageEmbed}
      */
     setTimestamp(timestamp = Date.now()) {
