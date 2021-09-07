@@ -21,6 +21,8 @@ import guildSchema from '../../Schemas/Main-Guilds/GuildSchema';
               if (!guilds.length) return;
 
               for (const i of guilds) if (i?.Logging.user) {
+                  const member = (await this.client.getRESTGuildMember(i.guildID, user.id));
+                  if(!member) return;
                   let tag = `${user.username}#${user.discriminator}`
 
                   const channel = this.client.getChannel(i.Logging.user);
