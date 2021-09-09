@@ -24,7 +24,7 @@ export default class KeyExpiredEvent extends Event {
                 break;
             }
             case "reminder": {
-                const reminderData = (await reminderSchema.findOne({ userID: param1 }));
+                const reminderData = (await reminderSchema.findOne({ userID: param1, reminderID: param2 }));
               if(reminderData) {
                   await this.client.utils.remind(reminderData);
               }
