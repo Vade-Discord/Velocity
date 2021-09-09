@@ -381,6 +381,7 @@ export default class Util {
   }
 
   async remind(reminderData) {
+    console.log(`Reminder function fired`)
     const user = (await this.client.getRESTUser(reminderData?.userID));
     if (user) {
       const embed = new this.client.embed()
