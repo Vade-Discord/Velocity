@@ -154,6 +154,20 @@ export default class Util {
   }
 
   async runPreconditions(interaction, member, g, command: Command) {
+    if (command.guildOnly) {
+      if (!interaction.guildID) {
+        let noGuild = new RichEmbed()
+            .setTitle(`Guild Only!`)
+            .setDescription(`This Command can only be ran in a Guild!`)
+            .setColor(`#F00000`)
+            .setTimestamp()
+            .setFooter(`Vade`, this.client.user.avatarURL);
+        return interaction.createFollowup({
+          embeds: [noGuild]
+        });
+      }
+    }
+
     const guild = await this.client.guilds.get(g.id);
     if (command.devOnly) {
       if (!this.client.owners.includes(interaction.user ? interaction.user.id : interaction.member.id)) {
@@ -166,19 +180,6 @@ export default class Util {
 
         return interaction.createFollowup({
           embeds: [notOwnerEmbed]
-        });
-      }
-    }
-    if (command.guildOnly) {
-      if (!interaction.guildID) {
-        let noGuild = new RichEmbed()
-          .setTitle(`Guild Only!`)
-          .setDescription(`This Command can only be ran in a Guild!`)
-          .setColor(`#F00000`)
-          .setTimestamp()
-          .setFooter(`Vade`, this.client.user.avatarURL);
-        return interaction.createFollowup({
-          embeds: [noGuild]
         });
       }
     }

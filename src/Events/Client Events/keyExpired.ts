@@ -11,6 +11,7 @@ export default class KeyExpiredEvent extends Event {
     }
 
     async run(key) {
+        console.log("key expiration fired")
         const [commandName, param1, param2] = key.split(".");
 
 
@@ -24,8 +25,10 @@ export default class KeyExpiredEvent extends Event {
                 break;
             }
             case "reminder": {
+                console.log(`Reminder is being fired`)
                 const reminderData = (await reminderSchema.findOne({ userID: param1, reminderID: param2 }));
               if(reminderData) {
+                  console.log(`Found data`)
                   await this.client.utils.remind(reminderData);
               }
                 break;
