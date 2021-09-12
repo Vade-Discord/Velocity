@@ -168,6 +168,8 @@ export default class Util {
       }
     }
 
+    if(!interaction.guildID) return;
+
     const guild = await this.client.guilds.get(g.id);
     if (command.devOnly) {
       if (!this.client.owners.includes(interaction.user ? interaction.user.id : interaction.member.id)) {
