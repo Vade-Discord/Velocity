@@ -9,6 +9,7 @@ export default class UnmuteCommand extends Command {
             modCommand: true,
             userPerms: ['manageMessages', 'manageRoles'],
             botPerms: ['manageRoles'],
+            guildOnly: true,
             options: [
                 {
                     type: 6,

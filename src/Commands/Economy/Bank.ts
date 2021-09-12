@@ -7,6 +7,7 @@ export default class BankCommand extends Command {
             aliases: [""],
             description: "Bank commands.",
             category: "Economy",
+            guildOnly: true,
             options: [
                 {
                     type: 1,

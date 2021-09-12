@@ -9,6 +9,7 @@ export default class RedeemCommand extends Command {
             aliases: [""],
             description: "Redeem commands.",
             category: "Economy",
+            guildOnly: true,
             options: [
                 {
                     type: 1,

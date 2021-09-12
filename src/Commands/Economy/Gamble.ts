@@ -7,6 +7,7 @@ export default class GambleCommand extends Command {
         super(client, 'gamble', {
             description: "Gamble away all of your coins!",
             category: "Economy",
+            guildOnly: true,
             options: [
                 {
                     type: 1,

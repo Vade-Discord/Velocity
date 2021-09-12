@@ -14,7 +14,8 @@ export default class RobCommand extends Command {
                     description: 'The user you would like to rob.',
                     required: true,
                 }
-            ]
+            ],
+            guildOnly: true,
         });
     }
     async run(interaction, member, options) {

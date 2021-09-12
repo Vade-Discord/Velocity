@@ -45,6 +45,7 @@ export default class BanCommand extends Command {
             category: "Moderation",
             userPerms: ['manageNicknames'],
             botPerms: ['banMembers', "manageChannels"],
+            guildOnly: true,
             options: [
                 {
                     type: 6,

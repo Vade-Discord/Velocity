@@ -5,6 +5,7 @@ export default class VoicekickCommand extends Command {
         super(client, 'voice', {
             description: "Contains all voice-related commands.",
             category: "Moderation",
+            guildOnly: true,
             options: [
                 {
                     name: 'disconnect',

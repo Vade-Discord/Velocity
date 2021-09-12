@@ -5,6 +5,7 @@ export default class PayCommand extends Command {
         super(client, 'pay', {
             description: "Send another member cash from your wallet.",
             category: "Economy",
+            guildOnly: true,
             options: [
                 {
                     type: 6,

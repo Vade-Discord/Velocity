@@ -8,6 +8,7 @@ export default class RoleCommand extends Command {
             category: "Moderation",
             userPerms: ['manageRoles'],
             botPerms: ['manageRoles'],
+            guildOnly: true,
             options: [
                 {
                     type: 1,
