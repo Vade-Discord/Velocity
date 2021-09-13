@@ -49,6 +49,25 @@ Time: <t:${Math.floor((Date.now()) / 1000)}:R>`)
                 });
             }
         }
+        if(guildData?.Moderation?.antiLink) {
+            if(/(?:(?:https?|ftp|file):\/\/|www\.|ftp\.)(?:\([-A-Z0-9+&@#\/%=~_|$?!:,.]*\)|[-A-Z0-9+&@#\/%=~_|$?!:,.])*(?:\([-A-Z0-9+&@#\/%=~_|$?!:,.]*\)|[A-Z0-9+&@#\/%=~_|$])/igm.test(message.content)) {
+                message.delete().then(() => {
+                    message.channel.createMessage(`${message.author.mention}, you cannot send links!`).then(async (msg) => {
+                        await wait(5000);
+                        if(message && !message.deleted) {
+                            msg.delete();
+                        }
+                    });
+                    logEmbed
+                        .setTitle(`Anti-link triggered!`)
+
+                    logChannel ? logChannel.createMessage({ embeds: [logEmbed] }) : null;
+                    return;
+                });
+            }
+
+
+        }
 
 
 
