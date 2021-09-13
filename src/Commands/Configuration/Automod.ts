@@ -18,6 +18,11 @@ export default class AutomodCommand extends Command {
                     type: 1,
                     name: 'profanity-filter',
                     description: 'Auto delete any curse, racist or generally rude words.',
+                },
+                {
+                    type: 1,
+                    name: 'anti-invite',
+                    description: 'Auto delete any discord invites.',
                 }
             ]
         });
@@ -47,6 +52,28 @@ export default class AutomodCommand extends Command {
                     });
 
                     interaction.createFollowup('Succesfully **enabled** the anti links module.');
+                }
+
+
+                break;
+            }
+            case 'anti-invite': {
+
+
+                if(guildData?.Moderation?.antiInvite) {
+                    object['antiInvite'] = false;
+                    await guildData.updateOne({
+                        Moderation: object
+                    });
+
+                    interaction.createFollowup('Succesfully **disabled** the anti invites module.');
+                } else {
+                    object['antiInvite'] = true;
+                    await guildData.updateOne({
+                        Moderation: object
+                    });
+
+                    interaction.createFollowup('Succesfully **enabled** the anti invites module.');
                 }
 
 
