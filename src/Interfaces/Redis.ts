@@ -5,11 +5,17 @@ import { Bot } from "../Client/Client";
 
 const logger: Logger = new Logger("cache");
 const redisConnect = async (client: Bot): Promise<Redis> => {
-    return new Promise((resolve, reject) => {
-        const publisher = new Redis(redis.port, redis.redisPath);
-        const subscriber = new Redis(redis.port, redis.redisPath);
-
-        subscriber.subscribe('__keyevent@0__:expired')
+    return new Promise( (resolve, reject) => {
+        const publisher = new Redis({
+            port: redis.port,
+            host: redis.host,
+            password: redis.redisPassword
+        });
+        const subscriber = new Redis({
+            port: redis.port,
+            host: redis.host,
+            password: redis.redisPassword
+        });
 
         publisher.on("error", (err) => {
             logger.error(`(Publisher) Redis encountered an error: `, err);
@@ -29,7 +35,8 @@ const redisConnect = async (client: Bot): Promise<Redis> => {
         })
         
         subscriber.on("ready", () => {
-            logger.info("(Subscriber) Redis has successfully connected.")
+            logger.info("(Subscriber) Redis has successfully connected.");
+            subscriber.subscribe('__keyevent@0__:expired');
         })
 
         subscriber.on('message', (channel, key) => {
