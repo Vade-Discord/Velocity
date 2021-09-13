@@ -31,15 +31,12 @@ export default class Util {
     this.client = client;
   }
 
-  async checkModerator(interaction) {
-    if (!interaction.guildId) return true;
-    const guildModRoles = await guild_schema.findOne({
-      guildID: interaction.guildId,
-    });
-    if (!guildModRoles || !guildModRoles.ModRole.length) {
-      return interaction.member.permissions.has("manageMessages");
+  async checkModerator(member, guild) {
+    const guildModRoles = (await this.getGuildSchema(guild))!!;
+    if (!guildModRoles || !guildModRoles?.ModRole.length) {
+      return member.permissions.has("manageMessages");
     }
-    return interaction.member.roles.some((role) =>
+    return member.roles.some((role) =>
       guildModRoles?.ModRole.includes(role)
     );
   }
