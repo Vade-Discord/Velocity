@@ -61,7 +61,7 @@ export default class HeadsOrTailsCommand extends Command {
                     break;
                 }
             }
-            await this.client.redis.set(`cooldowns.heads-tails.${member.id}`, true, 'EX', 15);
+            await this.client.redis.set(`cooldowns.heads-tails.${member.id}`, true, 'EX', 10);
             interaction.editOriginalMessage({ content: 'This game has ended.', components: [] });
 
             return;
