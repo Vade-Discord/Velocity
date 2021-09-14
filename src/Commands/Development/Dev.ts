@@ -1,6 +1,6 @@
 import Command from "../../Interfaces/Command";
 import keyStorage from "../../Schemas/Premium-Schemas/KeyStorage";
-import Eris from "eris";
+import Eris, {TextChannel} from "eris";
 import { Type } from "@extreme_hero/deeptype";
 import { inspect } from "util";
 import { Types } from 'mongoose';
@@ -35,15 +35,27 @@ export default class EvaluateCommand extends Command {
                     options: [
                         {
                             type: 3,
-                            name: 'changes',
-                            description: `The changes that come with this update.`,
+                            name: 'added',
+                            description: `What has been added.`,
                             required: true,
+                        },
+                        {
+                            type: 3,
+                            name: 'version',
+                            description: `The new version number`,
+                            required: true,
+                        },
+                        {
+                            type: 3,
+                            name: 'removed',
+                            description: `What has been removed.`,
+                            required: false,
                         },
                         {
                             type: 5,
                             name: 'newsletter',
                             description: `Should this notify the newsletter subscribers?`,
-                            required: true,
+                            required: false,
                         }
                     ],
                 },
@@ -210,6 +222,24 @@ export default class EvaluateCommand extends Command {
                 await newSchema.save();
 
                 interaction.createFollowup(`Here is the generated key with an expiration time of \`${humanize(ms(length))}\`\n\n\`${key}\``);
+                break;
+            }
+
+            case "update": {
+
+                const updateChannelID = this.client.config.PRIVATE.update_log;
+                const updateChannel = (await this.client.getRESTChannel(updateChannelID));
+                const botUpdates = this.client.config.ROLES.update_ping;
+                if(updateChannel.type !== 0 && updateChannel.type !== 5) return;
+                const added = subOptions.get("added");
+                const removed = subOptions.get("removed");
+                const version = subOptions.get("version");
+                const text = `<@&${botUpdates}> Version \`${version}\` released by **${member.username}#${member.discriminator}**\`\`\`diff\nAdded: \n\n ${added.split("+")?.join("\n+")} \n\n${removed ? `Removed: \n\n ${removed.split("-")?.join("\n-")}` : ''}\`\`\``;
+                updateChannel ? updateChannel.createMessage(text) : null;
+
+                interaction.createFollowup(`Successfully published the update!`);
+
+
                 break;
             }
 
