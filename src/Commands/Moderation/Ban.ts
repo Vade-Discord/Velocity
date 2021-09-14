@@ -124,7 +124,6 @@ export default class BanCommand extends Command {
                         return interaction.createFollowup(`Successfully soft-banned **${banMember.username}#${banMember.discriminator}**.`);
                     }
 
-
                 }
             }
 
