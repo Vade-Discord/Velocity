@@ -30,6 +30,25 @@ export default class EvaluateCommand extends Command {
                 },
                 {
                     type: 1,
+                    name: 'update',
+                    description: `Publish an update to the Bot. Notifies the newsletter subscribers alongside the changelog.`,
+                    options: [
+                        {
+                            type: 3,
+                            name: 'changes',
+                            description: `The changes that come with this update.`,
+                            required: true,
+                        },
+                        {
+                            type: 5,
+                            name: 'newsletter',
+                            description: `Should this notify the newsletter subscribers?`,
+                            required: true,
+                        }
+                    ],
+                },
+                {
+                    type: 1,
                     name: 'emit',
                     description: `Emit an event directly through the bot.`,
                     options: [
