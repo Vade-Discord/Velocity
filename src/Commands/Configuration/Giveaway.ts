@@ -202,9 +202,10 @@ export default class GiveawayCommand extends Command {
                 const prize = subOptions.get('prize');
                 const time = subOptions.get('time');
                 const actualTime = ms(time);
-                if(!actualTime || !time.endsWith("s" || "d" || "w" || "m" || "y" || "h")) {
+                if(!time.endsWith("s" || "d" || "w" || "m" || "y" || "h")) {
                     return interaction.createFollowup(`You seem to have provided an invalid length of time.`);
                 }
+
 
 
                 const roleRequirement = subOptions.has("role-required") ? member.guild.roles.get(subOptions.get("role-required")).mention : 'No Role Required.';
