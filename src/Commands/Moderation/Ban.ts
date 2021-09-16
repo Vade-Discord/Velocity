@@ -43,7 +43,7 @@ export default class BanCommand extends Command {
             aliases: [""],
             description: "Ban a user.",
             category: "Moderation",
-            userPerms: ['manageNicknames'],
+            userPerms: ['banMembers'],
             botPerms: ['banMembers', "manageChannels"],
             guildOnly: true,
             options: [
@@ -66,6 +66,7 @@ export default class BanCommand extends Command {
                     required: false,
                 },
             ],
+            modCommand: true,
         });
     }
     async run(interaction, member, options, subOptions) {
