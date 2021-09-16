@@ -218,7 +218,7 @@ export default class Util {
     if (!guild) return;
 
     if (command.modCommand) {
-      if (!(await this.checkModerator(interaction, guild))) {
+      if (!(await this.checkModerator(member, guild))) {
         let noMod = new RichEmbed()
           .setTitle(`Moderator Only!`)
           .setDescription(`This Command requires you to be a Moderator!`)
