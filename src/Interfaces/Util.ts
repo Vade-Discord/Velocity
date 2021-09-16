@@ -53,6 +53,37 @@ export default class Util {
     return `Vade_` + retVal;
   }
 
+  validateMs(time) {
+    let actualTime = 0;
+    let magnitudes = time.split(/[sdmh]/).filter((word) => word != "");
+    let typesOfTime = time.split(/[0-9]+/).filter((word) => word != "");
+
+    if (
+        magnitudes.length == typesOfTime.length &&
+        -1 == time.search(/[abcefgijklnopqrtuvwxyz]/)
+    ) {
+      for (let i = 0; i < magnitudes.length; i++) {
+        switch (typesOfTime[i]) {
+          case "s":
+            actualTime += magnitudes[i] * 1000;
+            break;
+          case "m":
+            actualTime += magnitudes[i] * 60000;
+            break;
+          case "h":
+            actualTime += magnitudes[i] * 3600000;
+            break;
+          case "d":
+            actualTime += magnitudes[i] * 86400000;
+            break;
+          default:
+        }
+      }
+      return actualTime;
+    }
+
+  }
+
   caseID() {
     let length = 10,
       charset =

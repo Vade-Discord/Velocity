@@ -201,8 +201,8 @@ export default class GiveawayCommand extends Command {
 
                 const prize = subOptions.get('prize');
                 const time = subOptions.get('time');
-                const actualTime = ms(time);
-                if(!time.endsWith("s" || "d" || "w" || "m" || "y" || "h")) {
+                const actualTime = this.client.utils.validateMs(time);
+                if(!actualTime) {
                     return interaction.createFollowup(`You seem to have provided an invalid length of time.`);
                 }
 
