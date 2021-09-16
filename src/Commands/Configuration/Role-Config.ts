@@ -38,11 +38,32 @@ export default class RoleConfigCommand extends Command {
             ]
         });
     }
-    async run(interaction, member) {
+    async run(interaction, member, options, subOptions) {
+
+        const roleID = subOptions.get("role");
+        const role = (await member.guild.getRESTRoles()).filter((role) => role.id === roleID)[0];
+        const guildData = (await this.client.utils.getGuildSchema(interaction.guildID))!!;
 
         switch(interaction.data.options[0].name) {
             case "mod-role": {
+                const type = subOptions.get("add-remove");
+                if(type === 'add') {
+                    await guildData.updateOne({
+                        $push: { ModRole: roleID }
+                    });
 
+                } else {
+                    if(!guildData?.ModRole.includes(roleID)) {
+                        return interaction.createFollowup(`That role doesn't seem to be one of the servers Moderator roles.`);
+                    }
+
+                    await guildData.updateOne({
+                        $pull: { ModRole: roleID }
+                    });
+
+                }
+
+                interaction.createFollowup(`Successfully ${type === 'add' ? 'added' : 'removed'} **${role.name}** as a Moderator role.`);
 
                 break;
             }
