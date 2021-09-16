@@ -30,7 +30,8 @@ Time: <t:${Math.floor((Date.now()) / 1000)}:R>`)
             .setTimestamp();
 
         if (guildData?.Moderation?.antiProfanity) {
-            const profanity = message.content.split(" ").filter((word) => profanityArray.some((letter) => distance(letter, word) < 2));
+            const ignore = ['ok', 'alr'];
+            const profanity = message.content.split(" ").filter((word) => !ignore.includes(word) && profanityArray.some((letter) => distance(letter, word) < 1.2));
             if (profanity.length) {
                 message.delete().then(() => {
                     message.channel.createMessage(`${message.author.mention}, watch your language!`).then(async (msg) => {
