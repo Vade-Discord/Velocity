@@ -137,6 +137,7 @@ export default class Util {
 
 
   async getGuildSchema(guild) {
+
     const check = await guild_schema.findOne({ guildID: guild.id ?? guild });
     if (check) return check;
     const newSchema = new guild_schema({
@@ -217,7 +218,7 @@ export default class Util {
     if (!guild) return;
 
     if (command.modCommand) {
-      if (!(await this.checkModerator(interaction))) {
+      if (!(await this.checkModerator(interaction, guild))) {
         let noMod = new RichEmbed()
           .setTitle(`Moderator Only!`)
           .setDescription(`This Command requires you to be a Moderator!`)
