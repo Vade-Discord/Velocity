@@ -56,6 +56,7 @@ export default class PremiumCommand extends Command {
                         .setTimestamp();
 
                     keyChannel ? keyChannel?.createMessage({embeds: [deletedEmbed] }) : null;
+                    await checkKey.delete();
 
                     return;
 
@@ -110,6 +111,7 @@ export default class PremiumCommand extends Command {
                         .setTimestamp();
 
                     keyChannel ?  keyChannel?.createMessage({ embeds: [addedTimeEmbed] }) : null;
+                    await checkKey.delete();
                     return interaction.createFollowup({ content: `Successfully added \`${humanize(checkKey.length)}\`to this guilds Premium Subscription` });
                 }
 
