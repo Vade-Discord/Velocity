@@ -203,8 +203,11 @@ export default class EvaluateCommand extends Command {
             }
 
             case "generate-key": {
-               const length = subOptions.get("duration");
-                if(ms(length) > ms('360d')) {
+               const length = this.client.utils.validateMs(subOptions.get("duration"));
+               if(!length) {
+                   return interaction.createFollowup(`Time inputted incorrectly.`);
+               }
+                if(length > ms('360d')) {
                     return interaction.createFollowup({ content: `The key shouldn't last longer than one year.` });
 
                 }
