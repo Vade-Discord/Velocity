@@ -10,6 +10,7 @@ interface IBank extends Document {
     WeeklyTime: number;
     MonthlyTime: number;
     JobSwitchTime: number;
+    FactionID: string;
     Wage: number;
     Worked: boolean;
     LastPaid: number;
@@ -111,7 +112,8 @@ export const bankSchema = new Schema({
         robbery: Boolean,
         giveaway: Boolean,
         economy: Boolean,
-    }
+    },
+   FactionID: String,
 });
 
 const bank =
