@@ -1,6 +1,7 @@
 import { Event } from '../../Interfaces/Event';
 import { profanityArray } from '../../Assets/Profanity.json';
 import {promisify} from "util";
+import messageSchema from "../../Schemas/Backend/Messages";
 import {distance} from "fastest-levenshtein";
 const wait = promisify(setTimeout);
 
@@ -14,9 +15,28 @@ export default class MessagecreateEvent extends Event {
 
         if (!message.content || !message.channel.guild) return;
         if (message.author.bot) return;
-        if (message.member.permissions.has("manageMessages") || (await this.client.utils.checkModerator(message.member, message.channel.guild))) return;
 
         const guildData = (await this.client.utils.getGuildSchema(message.channel.guild))!!;
+
+        if(guildData?.MessageCounter === true) {
+            const messageData = (await messageSchema.findOne({ userID: message.author.id, guildID: message.channel.guild.id }));
+            if(!messageData) {
+                const newSchema = new messageSchema({
+                    userID: message.author.id,
+                    guildID: message.channel.guild.id,
+                    amount: 1,
+                });
+                await newSchema.save()
+            } else {
+                await messageData.updateOne({
+                    $inc: { amount: 1 }
+                });
+            }
+        }
+
+        if (message.member.permissions.has("manageMessages") || (await this.client.utils.checkModerator(message.member, message.channel.guild))) return;
+
+
         const logChannel = (await this.client.utils.loggingChannel(message.channel.guild, 'moderation'));
         const tag = `${message.author.username}#${message.author.discriminator}`;
         const user = message.author;
@@ -28,6 +48,7 @@ Time: <t:${Math.floor((Date.now()) / 1000)}:R>`)
             .setFooter(`Vade Logging System`)
             .setColor(`#F00000`)
             .setTimestamp();
+
 
         if (guildData?.Moderation?.antiProfanity) {
             const ignore = ['ok', 'alr'];
