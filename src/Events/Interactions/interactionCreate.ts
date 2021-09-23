@@ -49,7 +49,7 @@ export default class InteractionCreateEvent extends Event {
             if (cmd == 'pagination') {
                 const pages = await this.client.Pagination.get(interaction.message.id)
                 //@ts-ignore
-                pages.run(interaction)
+                pages.update(interaction)
             }
             const {member} = interaction;
             switch (interaction.data.component_type) {
@@ -71,7 +71,7 @@ export default class InteractionCreateEvent extends Event {
                     if (cmd == 'pagination') {
                         const pages = await this.client.Pagination.get(interaction.message.id)
                         //@ts-ignore
-                        pages.run(interaction)
+                       return pages.run(interaction)
                     }
                     await interaction.acknowledge();
                     const command = this.client.commands.get(cmd);
