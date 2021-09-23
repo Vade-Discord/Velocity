@@ -12,13 +12,14 @@ export default class ShopCommand extends Command {
     }
     async run(interaction, member) {
 
-        const mapped = allItems.map((i) => {
-            return `${i.emoji} ${i.name}\n${i.description}\n\n`
+        const nf = new Intl.NumberFormat();
+        const mapped = allItems.sort((x, y) => x.price - y.price).map((i) => {
+            return `${i.emoji} ${i.name} - **$${nf.format(i.price)}**\n${i.description}\n\n`
         });
 
 
         // @ts-ignore
-        const toPaginate = new Paginate(mapped, 8).getPaginatedArray();
+        const toPaginate = new Paginate(mapped, 6).getPaginatedArray();
 
         const embeds = toPaginate.map((page, index) => {
             return new this.client.embed()

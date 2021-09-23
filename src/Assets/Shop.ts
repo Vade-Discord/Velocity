@@ -67,7 +67,7 @@ const items = [
     description: "Vade Premium :0",
     price: Number.MAX_SAFE_INTEGER,
     id: "vade",
-    emoji: "<:Vade:797482916166762527>",
+    emoji: "<:vade:833110730374119475>",
   },
 ];
 

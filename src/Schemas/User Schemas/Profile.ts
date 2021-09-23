@@ -1,5 +1,10 @@
 import { Document, Model, model, models, Schema } from "mongoose";
 
+interface shopItem {
+    name?: string,
+    amount?: number,
+}
+
 interface IBank extends Document {
     User: string;
     Job: string;
@@ -25,7 +30,8 @@ interface IBank extends Document {
         robbery?: boolean;
         giveaway?: boolean;
         economy?: boolean;
-    }
+    },
+    Inventory: shopItem[];
 }
 
 export const bankSchema = new Schema({
@@ -114,6 +120,7 @@ export const bankSchema = new Schema({
         economy: Boolean,
     },
    FactionID: String,
+    Inventory: Array,
 });
 
 const bank =
