@@ -1,7 +1,6 @@
 import Command from "../../Interfaces/Command";
 import factionSchema from "../../Schemas/Backend/Faction";
 import { v4 } from 'uuid'
-import fac from "../../Schemas/Backend/Faction";
 
 
 export default class FactionCommand extends Command {
