@@ -6,6 +6,7 @@ export interface IFactions extends mongoose.Document {
     name: string;
     description: string;
     memberCount: string;
+    creationDate: number;
 
 }
 
