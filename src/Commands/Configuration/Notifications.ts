@@ -29,6 +29,10 @@ export default class LoggingCommand extends Command {
                         {
                             name: 'economy actions',
                             value: 'economy',
+                        },
+                        {
+                            name: 'faction related actions',
+                            value: 'faction'
                         }
                     ]
                 },
@@ -81,6 +85,20 @@ export default class LoggingCommand extends Command {
                     t = false;
                 } else {
                     object.moderation = true;
+                    t = true;
+                }
+                await profileData.updateOne({
+                    Notifications: object
+                });
+                interaction.createFollowup(`Successfully ${t ? 'enabled' : 'disabled'} the **${type?.toLowerCase()}** notification setting.`);
+                break;
+            }
+            case "faction": {
+                if(object["faction"]) {
+                    object.faction = false;
+                    t = false;
+                } else {
+                    object.faction = true;
                     t = true;
                 }
                 await profileData.updateOne({
