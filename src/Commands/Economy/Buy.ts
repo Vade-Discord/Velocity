@@ -25,7 +25,7 @@ export default class BuyCommand extends Command {
     async run(interaction, member, options, subOptions) {
 
         const item = options.get("item");
-        const amount = options.get("amount") ?? 1;
+        const amount: number = options.get("amount") ?? 1;
         const located = allItems.find((i) => distance(i.name, item) < 2.5);
         if(!located) {
             return interaction.createFollowup('Unable to locate that item. Please try again.');
@@ -48,6 +48,22 @@ export default class BuyCommand extends Command {
             name: located.id,
             amount: check ? check + amount : amount,
         }
+
+        const alreadyHas = profile?.Inventory.findIndex((x => x.name === located.id));
+        if(alreadyHas !== -1) {
+
+            await profile.updateOne({
+                $inc: { Wallet: -itemPrice },
+                $set: { [`Inventory.${alreadyHas}.amount`] : check + amount }
+            });
+        } else {
+            await profile.updateOne({
+                $inc: { Wallet: -itemPrice },
+                $push: { Inventory: object }
+            });
+        }
+
+        interaction.createFollowup(`Successfully added those items to your inventory!`)
 
 
     }
