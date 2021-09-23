@@ -63,7 +63,7 @@ export default class BuyCommand extends Command {
             });
         }
 
-        interaction.createFollowup(`Successfully added those items to your inventory!`)
+        interaction.createFollowup(`Successfully added those items to your inventory!`);
 
 
     }
