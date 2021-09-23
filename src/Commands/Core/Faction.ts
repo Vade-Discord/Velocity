@@ -41,6 +41,19 @@ export default class FactionCommand extends Command {
                             required: false,
                         },
                     ]
+                },
+                {
+                    type: 1,
+                    name: 'invite',
+                    description: 'Invite another member to join your faction.',
+                    options: [
+                        {
+                            type: 6,
+                            name: 'user',
+                            description: 'The user that you would like to invite.',
+                            required: true,
+                        },
+                    ]
                 }
             ]
         });
@@ -98,12 +111,39 @@ export default class FactionCommand extends Command {
                     .addField('Name', `${factionData.name}`)
                     .addField('Description', `${factionData.description}`)
                     .addField('Member Count',`${factionData.memberCount}`)
-                    .addField('Creation Date', `${new Date(factionData.creationDate)}`)
+                    .addField('Faction ID', `${factionData.ID}`)
                     .setFooter('Vade Factions', this.client.user.avatarURL)
                     .setColor(this.client.constants.colours.green)
                     .setTimestamp()
 
                 return interaction.createFollowup({ embeds: [factionEmbed] });
+            }
+
+            case "invite": {
+                const user = subOptions.get("user");
+                const profile = (await this.client.utils.getProfileSchema(user))!!;
+                const authorProfile = (await this.client.utils.getProfileSchema(member.id))!!;
+                const factionData = await factionSchema.findOne({ ID: authorProfile.FactionID });
+                if(!authorProfile?.FactionID || !factionData || factionData.ownerID !== member.id) {
+                    return interaction.createFollowup(`In order to invite someone to a faction you must own it. Please ask the owner of the faction to invite the member.`);
+                }
+                const notification = profile?.Notifications["faction"];
+                interaction.createFollowup(`<@${user}>, you have been invited to join ${member.mention}'s faction. Their faction ID is: \`${factionData.ID}\`. \n\nTo accept or deny this invite, please use the \`/faction deny <Faction ID>\``);
+                if(notification) {
+                    const u = (await this.client.getRESTUser(user));
+                    if(!u) return;
+                    u.getDMChannel((c) => {
+                        const invitedEmbed = new this.client.embed()
+                            .setAuthor('Faction Invite!')
+                            .setDescription(`You have been invited to join ${member.username}#${member.discriminator}'s faction!\nTo accept this invite simply use command below! \n\n \`/faction accept ${factionData.ID}\``)
+                            .setFooter('Want to disable these notifications? Use the /notifications command!', this.client.user.avatarURL)
+                            .setThumbnail(member.user.avatarURL)
+                            .setTimestamp()
+                            .setColor(this.client.constants.colours.green)
+                        c.createMessage({ embeds: [invitedEmbed] });
+                    })
+                }
+                break;
             }
 
         }
