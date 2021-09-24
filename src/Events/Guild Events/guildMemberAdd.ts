@@ -17,7 +17,7 @@ export default class GuildMemberAddEvent extends Event {
     async run(guild, member) {
 
         const me = await guild.getRESTMember(this.client.user.id);
-        const guildData = await guildSchema.findOne({ guildID: guild.id });
+        const guildData = (await this.client.utils.getGuildSchema(guild))!!;
 
         const guildAutoRoleData = (await autoRoles.findOne({guildID: guild.id}));
 
@@ -32,11 +32,14 @@ export default class GuildMemberAddEvent extends Event {
 
             const invites = (await guild.getInvites());
             const gi = this.client.invites.get(guild.id) || new Collection();
+                // NEW
             const invite: Invite =
-                invites.find((x) => gi.find((x) => (x.code)) && gi.get(x.code).uses < x.uses) ||
-                gi.find((x) => !invites?.find((y) => y.code === x.code)) ||
+                invites.find((x) => gi?.get(x.code).uses < x.uses && gi?.has(x.code)) ||
+                gi?.find((x) => !invites.find((e) => e.code === x.code)) ||
                 guild.vanityURL;
+
             this.client.invites.set(guild.id, invites);
+            console.log(invite)
 
             if(!invite) {
                 inviteChannel.createMessage(`${member.mention} joined! Unable to locate who they were invited by.`);

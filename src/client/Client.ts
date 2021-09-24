@@ -28,7 +28,6 @@ export class Bot extends Eris.Client {
   public autoplay: string[] = Array();
   public config: typeof Config;
   public owners: string[] = ["473858248353513472"];
-  public invites: Collection<string, any> = new Collection();
   public utils: Util = new Util(this);
   public constants: typeof Constants = Constants;
   public embed: typeof MessageEmbed | typeof Eris.RichEmbed = MessageEmbed;
@@ -41,7 +40,8 @@ export class Bot extends Eris.Client {
         "guildMessages",
         "guildVoiceStates",
         "directMessages",
-        "guildMembers"
+        "guildMembers",
+        "guildInvites"
       ],
         seedVoiceConnections: true,
         restMode: true,

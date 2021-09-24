@@ -1,5 +1,5 @@
 import { Event } from '../../Interfaces/Event';
-import { Collection } from "@discordjs/collection";
+import Collection from "@discordjs/collection";
 
 export default class InviteCreateEvent extends Event {
     constructor(client) {
@@ -9,7 +9,7 @@ export default class InviteCreateEvent extends Event {
 
     async run(guild, invite) {
 
-        const gi: Collection<string, any> = this.client.invites.get(guild.id);
+        const gi: any = this.client.invites.get(guild.id);
             gi.set(invite.code, invite);
             this.client.invites.set(guild.id, gi);
     }
