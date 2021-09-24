@@ -1,9 +1,13 @@
 import { Event } from '../../Interfaces/Event';
 import guildSchema from '../../Schemas/Main-Guilds/GuildSchema';
-import autoRoles from '../../Schemas/Main-Guilds/GuildAutoRoles';
-import {TextChannel} from "eris";
+import inviteMemberSchema from "../../Schemas/Invite Schemas/inviteMember";
+import inviterSchema from "../../Schemas/Invite Schemas/inviter";
 
-export default class BanAddEvent extends Event {
+import autoRoles from '../../Schemas/Main-Guilds/GuildAutoRoles';
+import {Invite, TextChannel} from "eris";
+import Collection from "@discordjs/collection";
+
+export default class GuildMemberAddEvent extends Event {
     constructor(client) {
         super(client, "guildMemberAdd", {
 
@@ -24,13 +28,70 @@ export default class BanAddEvent extends Event {
         }
         const welcomeChannel = await this.client.utils.loggingChannel(guild, 'welcome');
         const inviteChannel = await this.client.utils.loggingChannel(guild, 'invites');
-        if (welcomeChannel) {
-            if(welcomeChannel instanceof TextChannel && welcomeChannel.permissionsOf(this.client.user.id).has("sendMessages")) {
-                welcomeChannel.createMessage(guildData && guildData?.welcomeMessage ? `${member.mention}, ${guildData?.welcomeMessage}` : `${member.mention} has joined the server.`)
-            }
-        }
         if (inviteChannel) {
 
+            const invites = (await guild.getInvites());
+            const gi = this.client.invites.get(guild.id) || new Collection();
+            const invite: Invite =
+                invites.find((x) => gi.find((x) => (x.code)) && gi.get(x.code).uses < x.uses) ||
+                gi.find((x) => !invites?.find((y) => y.code === x.code)) ||
+                guild.vanityURL;
+            this.client.invites.set(guild.id, invites);
+
+            if(!invite) {
+                inviteChannel.createMessage(`${member.mention} joined! Unable to locate who they were invited by.`);
+            } else {
+                if(invite === guild.vanityURL) {
+                    inviteChannel.createMessage(`${member.mention} joined via Vanity URL!`);
+                } else {
+                    if(invite.inviter) {
+                        await inviteMemberSchema.findOneAndUpdate(
+                            { guildID: guild.id, userID: member.id },
+                            { $set: { inviter: invite.inviter.id, date: Date.now() } },
+                            { upsert: true }
+                        );
+                        if (
+                            Date.now() - member.user.createdAt <=
+                            1000 * 60 * 60 * 24 * 7
+                        ) {
+                            await inviterSchema.findOneAndUpdate(
+                                { guildID: guild.id, userID: invite.inviter.id },
+                                { $inc: { total: 1, fake: 1 } },
+                                { upsert: true }
+                            );
+                            const inviterData = await inviterSchema.findOne({
+                                guildID: guild.id,
+                                userID: invite.inviter.id,
+                            });
+                            const total = inviterData ? inviterData?.total : 0;
+                            inviteChannel.createMessage(
+                                `${member.mention} joined our server. Was invited by ${invite.inviter.username}#${invite.inviter.discriminator} (**${total}** Invites)`
+                            );
+                        } else {
+                            await inviterSchema.findOneAndUpdate(
+                                {guildID: guild.id, userID: invite.inviter.id},
+                                {$inc: {total: 1, regular: 1}},
+                                {upsert: true}
+                            );
+                            const inviterData = await inviterSchema.findOne({
+                                guildID: guild.id,
+                                userID: invite.inviter.id,
+                            });
+                            const total = inviterData ? inviterData.total : 0;
+                            inviteChannel.createMessage(
+                                `${member.mention} joined our server. They were invited by ${invite.inviter.username}#${invite.inviter.discriminator} (**${total}** Invites)`
+                            );
+                        }
+                    }
+                }
+            }
+
+
+        }
+        if (welcomeChannel) {
+            if(welcomeChannel instanceof TextChannel && welcomeChannel.permissionsOf(this.client.user.id).has("sendMessages")) {
+              return  welcomeChannel.createMessage(guildData && guildData?.welcomeMessage ? `${member.mention}, ${guildData?.welcomeMessage}` : `${member.mention} has joined the server.`)
+            }
         }
 
 
