@@ -63,7 +63,7 @@ export default class BuyCommand extends Command {
             });
         }
 const nf = new Intl.NumberFormat();
-        interaction.createFollowup(`You have successfully purchased **${amount} ${located.name}${amount > 1 ? 's' : ''}** for a total of **${nf.format(itemPrice)}**.`);
+        interaction.createFollowup(`You have successfully purchased **${amount} ${located.name}${amount > 1 ? 's' : ''}** for a total of **$${nf.format(itemPrice)}**.`);
 
 
     }
