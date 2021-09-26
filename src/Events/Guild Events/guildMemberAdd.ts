@@ -4,7 +4,7 @@ import inviteMemberSchema from "../../Schemas/Invite Schemas/inviteMember";
 import inviterSchema from "../../Schemas/Invite Schemas/inviter";
 
 import autoRoles from '../../Schemas/Main-Guilds/GuildAutoRoles';
-import {Invite, TextChannel} from "eris";
+import { Invite, TextChannel } from "eris";
 import Collection from "@discordjs/collection";
 
 export default class GuildMemberAddEvent extends Event {
@@ -19,10 +19,10 @@ export default class GuildMemberAddEvent extends Event {
         const me = await guild.getRESTMember(this.client.user.id);
         const guildData = (await this.client.utils.getGuildSchema(guild))!!;
 
-        const guildAutoRoleData = (await autoRoles.findOne({guildID: guild.id}));
+        const guildAutoRoleData = (await autoRoles.findOne({ guildID: guild.id }));
 
-        if(me.permissions.has("manageRoles") && guildAutoRoleData && guildAutoRoleData?.enabled && guildAutoRoleData.roles?.length) {
-          await member.edit({
+        if (me.permissions.has("manageRoles") && guildAutoRoleData && guildAutoRoleData?.enabled && guildAutoRoleData.roles?.length) {
+            await member.edit({
                 roles: guildAutoRoleData?.roles
             });
         }
@@ -31,22 +31,39 @@ export default class GuildMemberAddEvent extends Event {
         if (inviteChannel) {
 
             const invites = (await guild.getInvites());
-            const gi = await this.client.redis.get(`invites.${member.guild.id}`)
-                // NEW
-            console.log(gi)
-            const invite: Invite =
-                invites.find((x) => gi?.find((e) => e.code === x.code).uses < x.uses && gi?.includes(x.code)) ||
-                gi?.find((x) => !invites.find((e) => e.code === x.code)) ||
-                guild.vanityURL;
-            console.log(invite)
+            let gi = await this.client.redis.get(`invites.${member.guild.id}`)
+            // NEW
+            gi = JSON.parse(gi);
+            console.log(`GI: `, gi)
+            let invite;
+            const key = await invites.forEach(async (inv) => {
+                if (gi.includes(inv.code)) {
+                    const key = (await this.client.redis.get(`invites.${guild.id}.${inv.code}`));
+                    const keyObject = JSON.parse(key)
+                    if (key) {
+                        console.log("key exists")
+                        if (keyObject.uses !== inv.uses) {
+                            console.log(`Uses not equal`)
+                            const keyObject = (await this.client.redis.set(`tempstorage.${guild.id}`));
+                            return keyObject;
+                        }
+                    }
+                }
+            });
+            if (key) {
+                console.log(key)
+                return;
+            }
+            console.log("Invite " + invite)
 
-            if(!invite) {
+
+            if (!invite) {
                 inviteChannel.createMessage(`${member.mention} joined! Unable to locate who they were invited by.`);
             } else {
-                if(invite === guild.vanityURL) {
+                if (invite.code === guild.vanityURL) {
                     inviteChannel.createMessage(`${member.mention} joined via Vanity URL!`);
                 } else {
-                    if(invite.inviter) {
+                    if (invite.inviter) {
                         await inviteMemberSchema.findOneAndUpdate(
                             { guildID: guild.id, userID: member.id },
                             { $set: { inviter: invite.inviter.id, date: Date.now() } },
@@ -71,9 +88,9 @@ export default class GuildMemberAddEvent extends Event {
                             );
                         } else {
                             await inviterSchema.findOneAndUpdate(
-                                {guildID: guild.id, userID: invite.inviter.id},
-                                {$inc: {total: 1, regular: 1}},
-                                {upsert: true}
+                                { guildID: guild.id, userID: invite.inviter.id },
+                                { $inc: { total: 1, regular: 1 } },
+                                { upsert: true }
                             );
                             const inviterData = await inviterSchema.findOne({
                                 guildID: guild.id,
@@ -91,8 +108,8 @@ export default class GuildMemberAddEvent extends Event {
 
         }
         if (welcomeChannel) {
-            if(welcomeChannel instanceof TextChannel && welcomeChannel.permissionsOf(this.client.user.id).has("sendMessages")) {
-              return  welcomeChannel.createMessage(guildData && guildData?.welcomeMessage ? `${member.mention}, ${guildData?.welcomeMessage}` : `${member.mention} has joined the server.`)
+            if (welcomeChannel instanceof TextChannel && welcomeChannel.permissionsOf(this.client.user.id).has("sendMessages")) {
+                return welcomeChannel.createMessage(guildData && guildData?.welcomeMessage ? `${member.mention}, ${guildData?.welcomeMessage}` : `${member.mention} has joined the server.`)
             }
         }
 
