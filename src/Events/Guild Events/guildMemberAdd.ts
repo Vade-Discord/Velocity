@@ -31,14 +31,13 @@ export default class GuildMemberAddEvent extends Event {
         if (inviteChannel) {
 
             const invites = (await guild.getInvites());
-            const gi = this.client.invites.get(guild.id) || new Collection();
+            const gi = await this.client.redis.get(`invites.${member.guild.id}`)
                 // NEW
+            console.log(gi)
             const invite: Invite =
-                invites.find((x) => gi?.get(x.code).uses < x.uses && gi?.has(x.code)) ||
+                invites.find((x) => gi?.find((e) => e.code === x.code).uses < x.uses && gi?.includes(x.code)) ||
                 gi?.find((x) => !invites.find((e) => e.code === x.code)) ||
                 guild.vanityURL;
-
-            this.client.invites.set(guild.id, invites);
             console.log(invite)
 
             if(!invite) {
