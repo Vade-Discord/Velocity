@@ -33,6 +33,9 @@ export default class Util {
 
   async checkModerator(member, guild) {
     const guildModRoles = (await this.getGuildSchema(guild))!!;
+    if(member.permissions.has("manageMessages")) {
+      return true;
+    }
     if (!guildModRoles || !guildModRoles?.ModRole.length) {
       return member.permissions.has("manageMessages");
     }

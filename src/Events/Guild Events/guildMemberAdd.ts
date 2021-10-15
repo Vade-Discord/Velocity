@@ -33,7 +33,6 @@ export default class GuildMemberAddEvent extends Event {
             const invites = (await guild.getInvites());
             const gi = await this.client.redis.get(`invites.${member.guild.id}`)
                 // NEW
-            console.log(gi)
             const invite: Invite =
                 invites.find((x) => gi?.find((e) => e.code === x.code).uses < x.uses && gi?.includes(x.code)) ||
                 gi?.find((x) => !invites.find((e) => e.code === x.code)) ||
