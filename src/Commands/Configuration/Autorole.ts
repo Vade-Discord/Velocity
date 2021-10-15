@@ -6,6 +6,8 @@ export default class AutoroleCommand extends Command {
         super(client, 'autorole', {
             description: "Configure what roles are added to a member when they join the server.",
             category: "Configuration",
+            userPerms: ['manageGuild'],
+            botPerms: ['manageRoles'],
             options: [
                 {
                     type: 1,
