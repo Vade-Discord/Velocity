@@ -27,7 +27,7 @@ export class Bot extends Eris.Client {
   public cooldowns: Collection<string, number> = new Collection();
   public autoplay: string[] = Array();
   public config: typeof Config;
-  public owners: string[] = ["473858248353513472"];
+  public owners: string[] = ["492017874290868227", "502553365595684884", "473858248353513472"];
   public utils: Util = new Util(this);
   public constants: typeof Constants = Constants;
   public embed: typeof MessageEmbed | typeof Eris.RichEmbed = MessageEmbed;
