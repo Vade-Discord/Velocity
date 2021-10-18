@@ -17,8 +17,10 @@ export default class KeyExpiredEvent extends Event {
         switch(commandName) {
 
             case "giveaway": {
+                console.log('giveaway expired.');
                 const giveawayData = (await giveawaySchema.findOne({ guildID: param1, messageID: param2 }));
                 if(giveawayData) {
+                    console.log('giveaway registered.');
                     await this.client.utils.giveawayEnded(giveawayData);
                 }
                 break;
