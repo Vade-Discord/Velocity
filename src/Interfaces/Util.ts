@@ -336,6 +336,8 @@ export default class Util {
 
   async giveawayEnded(giveaway) {
 
+    console.log('Giveaway event fired.')
+
     let winner = [];
 
     if (!giveaway.entrants?.length) {
@@ -391,7 +393,8 @@ export default class Util {
       .setThumbnail(this.client.user.avatarURL)
 
     // @ts-ignore
-    await this.client.editMessage(giveaway.channelID, giveaway.messageID, {
+    console.log(giveaway)
+    this.client.editMessage(giveaway.channelID, giveaway.messageID, {
       embeds: [endEmbed], components: [{
         type: 1,
         components: [
