@@ -34,7 +34,7 @@ export default class MessagecreateEvent extends Event {
             }
         }
 
-        if (message.member.permissions.has("manageMessages") || (await this.client.utils.checkModerator(message.member, message.channel.guild))) return;
+        if (message.member?.permissions.has("manageMessages") || (await this.client.utils.checkModerator(message.member, message.channel.guild))) return;
 
 
         const logChannel = (await this.client.utils.loggingChannel(message.channel.guild, 'moderation'));
