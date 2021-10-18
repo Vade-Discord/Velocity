@@ -131,7 +131,7 @@ export default class RoleCommand extends Command {
                     if(humans.length) {
                         try {
                             interaction.createFollowup({ content: `Adding the roles... this could take a while.`, flags: 64 });
-                            humans.forEach(async (human) => {
+                         await humans.forEach(async (human) => {
                                 if (add) {
                                     human.addRole(roleID, `${member.username}#${member.discriminator} used the role command.`);
                                 } else {
@@ -162,7 +162,7 @@ export default class RoleCommand extends Command {
                 if(bots.length) {
                     try {
                         interaction.createFollowup({ content: `Adding the roles... this could take a while.`, flags: 64 });
-                        bots.forEach(async (human) => {
+                       await bots.forEach(async (human) => {
                             if (add) {
                                 human.addRole(roleID, `${member.username}#${member.discriminator} used the role command.`);
                             } else {
