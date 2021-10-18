@@ -91,7 +91,7 @@ export async function Lavalink(client: Bot) {
 
         let playingMessage;
         try {
-            playingMessage = await client.createMessage(player.textChannel, {embed: np});
+            playingMessage = await client.createMessage(player.textChannel, {embeds: [np]});
             // @ts-ignore
             player.npMessage = playingMessage.id;
             const checkSchema = await client.redis.get(`queue.${player.guild}`);
@@ -130,7 +130,7 @@ export async function Lavalink(client: Bot) {
                     player.textChannel
                 )
                 if(channel.type !== 0) return;
-                return channel.createMessage({ embed: embed });
+                return channel.createMessage({ embeds: [embed] });
 
             }
         }

@@ -7,7 +7,7 @@ export default class PlayCommand extends Command {
             category: "Music",
             options: [
                 {
-                    type: 1,
+                    type: 3,
                     name: 'input',
                     description: 'Either the song name or url.',
                     required: true,
@@ -19,7 +19,7 @@ export default class PlayCommand extends Command {
 
         let embed = new this.client.embed();
         const { channelID } = member.voiceState;
-        const channel = channelID ? member.guild.getRESTChannel(channelID) : null;
+        const channel = channelID ? member.guild.channels.get(channelID) : null;
 
         if(!channel) {
             return interaction.createFollowup('You need to join a Voice Channel first!');
