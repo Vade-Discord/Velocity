@@ -12,6 +12,7 @@ export default class ReadyEvent extends Event {
 
     async run() {
         await mongo();
+        await Lavalink(this.client);
         this.client.redis = await redisConnect(this.client);
         this.client.logger.info(`${this.client.user.username}#${this.client.user.discriminator} has successfully logged in!`);
         const guild = await this.client.getRESTGuild(this.client.config.GUILDS.testing);
