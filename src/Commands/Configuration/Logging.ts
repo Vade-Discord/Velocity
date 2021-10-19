@@ -54,6 +54,10 @@ export default class LoggingCommand extends Command {
                                     name: 'channel updates',
                                     value: 'channel',
                                 },
+                                {
+                                    name: 'suggestion channel',
+                                    value: 'suggestion'
+                                }
                             ]
                         },
                     ]
