@@ -12,6 +12,7 @@ export default class GuildMemberRemoveEvent extends Event {
 
     async run(guild, member) {
 
+        const user = (await this.client.getRESTUser(member.id))!!;
         const me = await guild.getRESTMember(this.client.user.id);
         const guildData = (await this.client.utils.getGuildSchema(guild))!!;
 
@@ -26,7 +27,7 @@ export default class GuildMemberRemoveEvent extends Event {
             });
             if (!inviteMemberData) {
                 inviteChannel.createMessage(
-                    `\`${member.username}#${member.discriminator}\` They left our server but I could not find out who they were invited by.`
+                    `\`${user.username}#${user.discriminator}\` They left our server but I could not find out who they were invited by.`
                 );
             } else {
                 const inviter = (await this.client.getRESTUser(inviteMemberData.inviter));
@@ -42,7 +43,7 @@ export default class GuildMemberRemoveEvent extends Event {
                 const total = inviterData ? inviterData.total : 0;
                 const totalInvite = total < 0 ? 0 : total;
                 inviteChannel.createMessage(
-                    `\`${member.username}#${member.discriminator}\` left our server. They were invited by ${inviter.username}#${inviter.discriminator} (**${totalInvite}** Invites)`
+                    `\`${user.username}#${user.discriminator}\` left our server. They were invited by ${inviter.username}#${inviter.discriminator} (**${totalInvite}** Invites)`
                 );
             }
 
@@ -50,7 +51,7 @@ export default class GuildMemberRemoveEvent extends Event {
 
         if(welcomeChannel) {
 
-            welcomeChannel.createMessage(`${member.username}#${member.discriminator} has left the server.`);
+            welcomeChannel.createMessage(`${user.username}#${user.discriminator} has left the server.`);
         }
 
 
