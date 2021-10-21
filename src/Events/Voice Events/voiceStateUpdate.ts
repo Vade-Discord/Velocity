@@ -7,7 +7,7 @@
               });
           }
 
-          async run(member, oldState, newState) {
+          async run(member, oldState) {
 
               const tag = `${member.username}#${member.discriminator}`;
               const logging = (await this.client.utils.loggingChannel(member.guild, 'voice'));
@@ -18,8 +18,8 @@
                   .setAuthor(`${tag}`, member.avatarURL)
                   .setFooter(`Vade Logging System`, this.client.user.avatarURL)
 
-              if(!oldState?.muted && newState?.muted|| oldState?.muted && !newState?.muted) {
-                  const mutedOrUnmuted = !(oldState?.muted && !newState?.muted);
+              if(!oldState?.muted && member?.muted|| oldState?.muted && !member?.muted) {
+                  const mutedOrUnmuted = !(oldState?.muted && !member?.muted);
                      embed
                       .setTitle(`${mutedOrUnmuted ? `🔇 Server-Muted` : '🔊 Server-Unmuted'}`)
                       .setColor(mutedOrUnmuted ? "#00C09A" : "#F00000")
