@@ -67,7 +67,7 @@ export default class LoggingCommand extends Command {
     }
     async run(interaction, member, options, subOptions) {
         const guild = await this.client.getRESTGuild(interaction.guildID);
-        const guildData = await guildSchema.findOne({ guildID: interaction.guildID }) ?? (await this.client.utils.createGuildSchema(guild))!;
+        const guildData = (await this.client.utils.getGuildSchema(interaction.guildID))!!;
         const c = subOptions.get(`channel`);
         const channel = await this.client.getRESTChannel(c);
 
