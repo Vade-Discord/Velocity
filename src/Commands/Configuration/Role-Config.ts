@@ -2,8 +2,8 @@ import Command from "../../Interfaces/Command";
 
 export default class RoleConfigCommand extends Command {
     constructor(client) {
-        super(client, 'role-config', {
-            description: "Configure the guilds mod-role, giveaway host role and more!",
+        super(client, 'config', {
+            description: "Explore all of the configuration commands available!",
             category: "Configuration",
             options: [
                 {
