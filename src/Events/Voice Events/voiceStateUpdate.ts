@@ -18,7 +18,7 @@
                   .setAuthor(`${tag}`, member.avatarURL)
                   .setFooter(`Vade Logging System`, this.client.user.avatarURL)
 
-              if(!oldState?.muted && member?.muted|| oldState?.muted && !member?.muted) {
+              if(!oldState?.muted && member?.muted || oldState?.muted && !member?.muted) {
                   const mutedOrUnmuted = !(oldState?.muted && !member?.muted);
                      embed
                       .setTitle(`${mutedOrUnmuted ? `🔇 Server-Muted` : '🔊 Server-Unmuted'}`)
