@@ -23,7 +23,12 @@ export default class AutomodCommand extends Command {
                     type: 1,
                     name: 'anti-invite',
                     description: 'Auto delete any discord invites.',
-                }
+                },
+                {
+                    type: 1,
+                    name: 'anti-scam',
+                    description: 'Automaticlaly delete any phishing links.',
+                },
             ]
         });
     }
@@ -52,6 +57,28 @@ export default class AutomodCommand extends Command {
                     });
 
                     interaction.createFollowup('Succesfully **enabled** the anti links module.');
+                }
+
+
+                break;
+            }
+            case 'anti-scam': {
+
+
+                if(guildData?.Moderation?.antiLink) {
+                    object['antiScam'] = false;
+                    await guildData.updateOne({
+                        Moderation: object
+                    });
+
+                    interaction.createFollowup('Succesfully **disabled** the anti-scam module.');
+                } else {
+                    object['antiScam'] = true;
+                    await guildData.updateOne({
+                        Moderation: object
+                    });
+
+                    interaction.createFollowup('Succesfully **enabled** the anti-scam module.');
                 }
 
 
