@@ -36,6 +36,7 @@ export interface IGuild extends mongoose.Document {
         antiLink?: boolean;
         antiInvite?: boolean;
         antiProfanity?: boolean;
+        antiScam?: boolean;
     },
     Premium?: {
         key?: string;
@@ -96,6 +97,7 @@ const guildSchema = new mongoose.Schema({
         antiLink: Boolean,
         antiInvite: Boolean,
         antiProfanity: Boolean,
+        antiScam: Boolean,
     },
     Premium: {
         key: String,
