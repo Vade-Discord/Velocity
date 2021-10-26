@@ -9,8 +9,10 @@ import { Types } from "mongoose";
 // File imports
 import guild_schema from "../Schemas/Main-Guilds/GuildSchema";
 import profile_schema from "../Schemas/User Schemas/Profile";
+import { scamLinks } from "../Assets/Scam.json";
 import GiveawaySchema from "../Schemas/Backend/Giveaways";
 import ReminderSchema from "../Schemas/Backend/Reminders";
+import phin from "phin";
 
 interface SelectionObject {
   label: string;
@@ -416,6 +418,20 @@ export default class Util {
     })
     await giveaway.delete();
 
+  }
+
+  async antiScam(msg): Promise<boolean> {
+    const scamRegex = !!scamLinks.find((word) => {
+      const regex = new RegExp(`\\b${word}\\b`, 'i');
+      return regex.test(msg.content);
+    });
+    if(scamRegex) {
+      msg.delete();
+      msg.channel.createMessage(`${msg.member.mention} attempted to send a phishing link!`);
+      return true;
+    } else {
+      return false;
+    }
   }
 
   async remind(reminderData) {
