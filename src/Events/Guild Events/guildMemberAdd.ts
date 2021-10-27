@@ -23,7 +23,7 @@ export default class GuildMemberAddEvent extends Event {
                 .setDescription(`You have been automatically kicked from **${guild.name}** due to the anti-raid module being active. This is automatically disabled after **1 hour**.`)
                 .setFooter('Vade Moderation', this.client.user.avatarURL);
 
-            member.user.getDMChannel((e) => {
+            await member.user.getDMChannel((e) => {
                 e.createMessage({embeds: [embed]}).catch(() => null);
             }).catch(() => null);
             member.kick(`Anti-Raid is active!`).catch(() => null);
@@ -34,7 +34,7 @@ export default class GuildMemberAddEvent extends Event {
             const antiRaidTriggered = new this.client.embed()
                 .setAuthor(`${tag} kicked due to Anti-Raid`, user.avatarURL)
                 .setTitle(`${moderationEmoji} User Kicked`)
-                .setDescription(`**User:** ${tag} (${user.id})
+                .setDescription(`**User:** ${tag} (${member.id})
 Time Kicked: <t:${Date.now()}:d>`)
                 .setThumbnail(member.user.avatarURL)
                 .setFooter(`Vade Logging System`)
