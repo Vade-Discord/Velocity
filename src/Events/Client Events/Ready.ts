@@ -34,15 +34,6 @@ export default class ReadyEvent extends Event {
         };
 
         let i = 0;
-        setInterval(
-            () =>
-                this.client.editStatus(`online`, {
-                    type: 5,
-                    name: `/help | ${activities[i++ % 3]}`,
-                    url: "https://vade-bot.com"
-                }),
-            15000
-        );
         const commands = [];
         const contextCommands = [];
         await this.client.commands.forEach((command) => {
@@ -67,6 +58,16 @@ export default class ReadyEvent extends Event {
         } else if(this.client.user.id === this.client.config.CLIENTS.main){
             this.client.bulkEditCommands(commands);
         }
+
+        setInterval(
+            () =>
+                this.client.editStatus(`online`, {
+                    type: 5,
+                    name: `/help | ${activities[i++ % 3]}`,
+                    url: "https://vade-bot.com"
+                }),
+            15000
+        );
     }
 
 }
