@@ -21,7 +21,7 @@ export default class ReadyEvent extends Event {
 
         const activities = {
             get "0"() {
-                return `${nf.format(this.client.guilds.size)} servers!`;
+                return `Powering your servers!`;
             },
             get "1"() {
                 return `discord.gg/vade | vade-bot.com`;
