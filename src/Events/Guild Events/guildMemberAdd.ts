@@ -16,6 +16,34 @@ export default class GuildMemberAddEvent extends Event {
 
     async run(guild, member) {
 
+        if((await this.client.redis.get(`antiraid.${guild.id}`))) {
+            const embed = new this.client.embed()
+                .setAuthor('Anti-Raid is active!')
+                .setColor('#F00000')
+                .setDescription(`You have been automatically kicked from **${guild.name}** due to the anti-raid module being active. This is automatically disabled after **1 hour**.`)
+                .setFooter('Vade Moderation', this.client.user.avatarURL);
+
+            member.user.getDMChannel((e) => {
+                e.createMessage({ embeds: [embed] }).catch(() => null);
+            }).catch(() => null);
+            member.kick(`Anti-Raid is active!`).catch(() => null);
+
+            let moderationEmoji = this.client.constants.emojis.moderation.mention;
+            let tag = `${member.user.username}#${member.user.discriminator}`
+
+            const antiRaidTriggered = new this.client.embed()
+                .setAuthor(`${tag} kicked due to Anti-Raid`, user.avatarURL)
+                .setTitle(`${moderationEmoji} User Kicked`)
+                .setDescription(`**User:** ${tag} (${user.id})
+Time Kicked: <t:${Date.now()}:d>`)
+                .setThumbnail(member.user.avatarURL)
+                .setFooter(`Vade Logging System`)
+                .setColor(`#F00000`)
+                .setTimestamp();
+            const modChannel = (await this.client.utils.loggingChannel(guild, 'moderation'));
+            modChannel ? modChannel.createMessage({ embeds: [antiRaidTriggered] }) : null;
+
+
         const me = await guild.getRESTMember(this.client.user.id);
         const guildData = (await this.client.utils.getGuildSchema(guild))!!;
 
