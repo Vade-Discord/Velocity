@@ -3,6 +3,8 @@ import mongo from '../../Interfaces/Database';
 import redisConnect from "../../Interfaces/Redis";
 import { Lavalink } from "../../Interfaces/Lavalink";
 
+let e;
+
 export default class ReadyEvent extends Event {
     constructor(client) {
         super(client, "ready", {
@@ -11,6 +13,7 @@ export default class ReadyEvent extends Event {
     }
 
     async run() {
+        e = this.client;
         await mongo();
         await Lavalink(this.client);
         this.client.redis = await redisConnect(this.client);
@@ -21,14 +24,14 @@ export default class ReadyEvent extends Event {
 
         const activities = {
             get "0"() {
-                return `Powering your servers!`;
+                return `Powering ${nf.format(e.guilds.size)} servers!`;
             },
             get "1"() {
                 return `discord.gg/vade | vade-bot.com`;
             },
             get "2"() {
                 return `${nf.format(
-                    this.client.users.size
+                    e.users.size
                 )} users!`;
             },
         };
