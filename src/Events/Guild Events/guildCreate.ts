@@ -26,7 +26,7 @@ export default class guildCreateEvent extends Event {
                 const channel = (await this.client.getRESTChannel(this.client.config.PRIVATE.guild_logs));
             if (channel && channel instanceof TextChannel) {
                 // @ts-ignore
-                channel.createMessage({embeds: [embed]})
+                channel.createMessage({embeds: [embed]}).catch(() => null);
             }
 
             const systemChannel = guild.channels.some((channel) => channel.type === 0 && channel.permissionsOf(this.client.user.id).has("sendMessages"));
@@ -42,7 +42,7 @@ export default class guildCreateEvent extends Event {
 
 
                 const channelToSend = guild.channels.filter((channel) => channel.type === 0 && channel.permissionsOf(this.client.user.id).has("sendMessages"));
-                systemChannel ? channelToSend[0].createMessage({ embeds: [newlyAdded] }) : null;
+                systemChannel ? channelToSend[0].createMessage({ embeds: [newlyAdded] }).catch(() => null) : null;
             }
 
         }
