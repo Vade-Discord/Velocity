@@ -24,7 +24,7 @@ export default class GuildMemberAddEvent extends Event {
                 .setFooter('Vade Moderation', this.client.user.avatarURL);
 
             member.user.getDMChannel((e) => {
-                e.createMessage({ embeds: [embed] }).catch(() => null);
+                e.createMessage({embeds: [embed]}).catch(() => null);
             }).catch(() => null);
             member.kick(`Anti-Raid is active!`).catch(() => null);
 
@@ -41,7 +41,9 @@ Time Kicked: <t:${Date.now()}:d>`)
                 .setColor(`#F00000`)
                 .setTimestamp();
             const modChannel = (await this.client.utils.loggingChannel(guild, 'moderation'));
-            modChannel ? modChannel.createMessage({ embeds: [antiRaidTriggered] }) : null;
+            modChannel ? modChannel.createMessage({embeds: [antiRaidTriggered]}) : null;
+
+        }
 
 
         const me = await guild.getRESTMember(this.client.user.id);
