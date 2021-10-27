@@ -17,16 +17,18 @@ export default class ReadyEvent extends Event {
         this.client.logger.info(`${this.client.user.username}#${this.client.user.discriminator} has successfully logged in!`);
         const guild = await this.client.getRESTGuild(this.client.config.GUILDS.testing);
 
+        const nf = new Intl.NumberFormat();
+
         const activities = {
             get "0"() {
-                return `${this.client.guilds.cache.size} servers!`;
+                return `${nf.format(this.client.guilds.size)} servers!`;
             },
             get "1"() {
-                return `discord.gg/opensource | vade-bot.com`;
+                return `discord.gg/vade | vade-bot.com`;
             },
             get "2"() {
                 return `${nf.format(
-                    this.client.users.cache.size
+                    this.client.users.size
                 )} users!`;
             },
         };
