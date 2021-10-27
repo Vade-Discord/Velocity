@@ -17,8 +17,30 @@ export default class ReadyEvent extends Event {
         this.client.logger.info(`${this.client.user.username}#${this.client.user.discriminator} has successfully logged in!`);
         const guild = await this.client.getRESTGuild(this.client.config.GUILDS.testing);
 
-        this.client.editStatus('online', { name: "Vade Rewrite", type: 5, url: "https://vade-bot.com" });
+        const activities = {
+            get "0"() {
+                return `${this.client.guilds.cache.size} servers!`;
+            },
+            get "1"() {
+                return `discord.gg/opensource | vade-bot.com`;
+            },
+            get "2"() {
+                return `${nf.format(
+                    this.client.users.cache.size
+                )} users!`;
+            },
+        };
 
+        let i = 0;
+        setInterval(
+            () =>
+                this.client.editStatus(`online`, {
+                    type: 5,
+                    name: `/help | ${activities[i++ % 3]}`,
+                    url: "https://vade-bot.com"
+                }),
+            15000
+        );
         const commands = [];
         const contextCommands = [];
         await this.client.commands.forEach((command) => {
