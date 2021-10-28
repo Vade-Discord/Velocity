@@ -7,6 +7,8 @@ import autoRoles from '../../Schemas/Main-Guilds/GuildAutoRoles';
 import {Invite, TextChannel} from "eris";
 import Collection from "@discordjs/collection";
 
+let e;
+
 export default class GuildMemberAddEvent extends Event {
     constructor(client) {
         super(client, "guildMemberAdd", {
@@ -16,6 +18,7 @@ export default class GuildMemberAddEvent extends Event {
 
     async run(guild, member) {
 
+        e = this.client;
         if((await this.client.redis.get(`antiraid.${guild.id}`))) {
             const embed = new this.client.embed()
                 .setAuthor('Anti-Raid is active!')
@@ -61,18 +64,14 @@ Time Kicked: <t:${Date.now()}:d>`)
         if (inviteChannel) {
 
             const invites = (await guild.getInvites());
-            const gi = await this.client.redis.get(`invites.${member.guild.id}`)
+            const gi = JSON.parse((await this.client.redis.get(`invites.${member.guild.id}`)));
                 // NEW
-            const invite: Invite =
-                invites.find((x) => gi?.find((e) => e.code === x.code).uses < x.uses && gi?.includes(x.code)) ||
-                gi?.find((x) => !invites.find((e) => e.code === x.code)) ||
-                guild.vanityURL;
-            console.log(invite)
+            const invite: Invite =  invites.find(async (x) => gi?.find(async (e) => e === x.code && (e.redis.get(`invites.${member.guild.id}.${e}`).uses < x.uses)));
 
             if(!invite) {
                 inviteChannel.createMessage(`${member.mention} joined! Unable to locate who they were invited by.`);
             } else {
-                if(invite === guild.vanityURL) {
+                if(invite.code === guild.vanityURL) {
                     inviteChannel.createMessage(`${member.mention} joined via Vanity URL!`);
                 } else {
                     if(invite.inviter) {

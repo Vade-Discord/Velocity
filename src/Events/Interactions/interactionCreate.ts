@@ -66,21 +66,7 @@ export default class InteractionCreateEvent extends Event {
                 }
                 case 2: {
 
-                    const data = interaction.data.custom_id;
-                    const cmd = data.split("#")[0];
-                    if (cmd == 'pagination') {
-                        const pages = await this.client.Pagination.get(interaction.message.id)
-                        //@ts-ignore
-                       return pages.run(interaction)
-                    }
-                    await interaction.acknowledge();
-                    const command = this.client.commands.get(cmd);
-                    if (!command || !command.run) return;
-                    await command.run(interaction, member, mainOptions, subOptions);
-                    setTimeout((e) => {
-                        mainOptions.clear();
-                        subOptions.clear();
-                    }, 10000)
+                    this.client.emit("clickButton", interaction, member, mainOptions, subOptions)
                     break;
                 }
                 default:
