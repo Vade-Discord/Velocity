@@ -141,8 +141,6 @@ class PaginationEmbed {
             return //interaction.createMessage({content: "You must have run the command in order to use the buttons!", flags: 64});
         }
 
-       await interaction.acknowledge()
-
         const event = interaction.data.custom_id.split("#")[1];
         switch (event.toLowerCase()) {
             case "first": {
