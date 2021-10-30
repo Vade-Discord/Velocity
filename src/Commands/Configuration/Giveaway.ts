@@ -116,6 +116,12 @@ export default class GiveawayCommand extends Command {
                             description: `The role required to enter (If any).`,
                             required: false,
                         },
+                        {
+                            type: 5,
+                            name: 'velocity-required',
+                            description: `Should the member have to use Velocity in one of their servers?`,
+                            required: false,
+                        },
                     ]
                 },
             ],
@@ -143,6 +149,16 @@ export default class GiveawayCommand extends Command {
                         member.user.getDMChannel().then((c) => {
                             c.createMessage(`You are unable to enter this giveaway due to you missing the required role.`).catch((e) => {
                                 interaction.createFollowup({ content: `You are unable to enter this giveaway due to you missing the required role.`, flags: 64 });
+                            });
+                        });
+                        return;
+                    }
+                }
+                if(giveawayData.velocityRequired) {
+                    if(this.client.guilds.filter((g) => g.ownerID === member.id).length < 1) {
+                        member.user.getDMChannel().then((c) => {
+                            c.createMessage(`You are unable to enter this giveaway due to you not using Velocity in one of your servers. You can use \`/invite\` to invite it.`).catch((e) => {
+                                interaction.createFollowup({ content: `You are unable to enter this giveaway due to you not using Velocity in one of your servers. You can use \`/invite\` to invite it.`, flags: 64 });
                             });
                         });
                         return;
@@ -265,6 +281,7 @@ export default class GiveawayCommand extends Command {
                         const role = subOptions.has("role-required") ? subOptions.get("role-required") : null;
                         const vc = subOptions.has("voice-time") ? ms(subOptions.get("voice-time")) : null;
                         const joinTime = subOptions.has("guild-time") ? ms(subOptions.get("guild-time")) : null;
+                        const velocityRequired = subOptions.has("velocity-required") ? true : null;
                         const newSchema = new giveawaySchema({
                             guildID: interaction.guildID,
                             endTime: Date.now() + actualTime,
@@ -275,6 +292,7 @@ export default class GiveawayCommand extends Command {
                             roleRequired: role,
                             voiceRequired: vc,
                             guildTime: joinTime,
+                            velocityRequired,
                             giveawayHost: member.mention,
                         });
                         await newSchema.save();
