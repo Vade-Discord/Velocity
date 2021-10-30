@@ -92,6 +92,18 @@ export default class MuteCommand extends Command {
             roles: [muteRole.id]
         });
 
+        const components =  [{
+            type: 1,
+            components: [
+                {
+                    type: 2,
+                    style: 4,
+                    label: "Unmute",
+                    custom_id: `muteLog#${member1.id}`
+                },
+            ]
+        }]
+
         interaction.createFollowup({ content: `Successfully muted that member!`, flags: silent });
         const logChannel = await this.client.utils.loggingChannel(member.guild, 'moderation');
         const embed = new this.client.embed()
@@ -103,7 +115,7 @@ export default class MuteCommand extends Command {
             .setFooter(`Vade Logging System`)
             .setTimestamp()
 
-        logChannel?.createMessage({embeds: [embed]});
+        logChannel?.createMessage({embeds: [embed], components });
 
 
     }
