@@ -1,4 +1,5 @@
 import { Event } from '../../Interfaces/Event';
+import muteSchema from '../../Schemas/Backend/Muted';
 
 export default class InteractionCreateEvent extends Event {
     constructor(client) {
@@ -47,6 +48,32 @@ export default class InteractionCreateEvent extends Event {
 
 
                             break;
+                        }
+
+                        case "muteLog": {
+
+                            console.log('Ban log button clicked');
+
+                            if(!isModerator) {
+                                return interaction.createMessage({ content: 'You must be a server moderator to use this!', flags: 64 });
+                            }
+                            const mutedMemberID = args[1];
+                            const timerCheck = (await this.client.redis.get(`mute.${mutedMemberID}.${interaction.guildID}`));
+                            if(!timerCheck) {
+                               return interaction.createMessage({ content: 'There was no mute data found, that member must already be unmuted.', flags: 64 });
+                            }
+                            const muteData = (await muteSchema.findOne({ userID: mutedMemberID, guildID: interaction.guildID }));
+                            if(muteData) {
+                                await this.client.utils.muteEnded(muteData);
+                                interaction.createMessage({ content: 'Successfully unbanned!', flags: 64 });
+                            } else {
+                                interaction.createMessage({ content: 'There was no mute data found, that member must already be unmuted.', flags: 64 });
+                            }
+
+
+
+                            break;
+
                         }
 
 
