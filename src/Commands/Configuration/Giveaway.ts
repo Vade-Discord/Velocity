@@ -60,6 +60,12 @@ export default class GiveawayCommand extends Command {
                             description: `The amount of time they should have been in the guild for.`,
                             required: false,
                         },
+                        {
+                            type: 5,
+                            name: 'velocity-required',
+                            description: `Should the member have to use Velocity in one of their servers?`,
+                            required: false,
+                        },
                     ]
                 },
                 {
