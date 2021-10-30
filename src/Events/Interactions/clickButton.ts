@@ -65,7 +65,7 @@ export default class InteractionCreateEvent extends Event {
                             const muteData = (await muteSchema.findOne({ userID: mutedMemberID, guildID: interaction.guildID }));
                             if(muteData) {
                                 await this.client.utils.muteEnded(muteData);
-                                interaction.createMessage({ content: 'Successfully unbanned!', flags: 64 });
+                                interaction.createMessage({ content: 'Successfully removed that mute!', flags: 64 });
                             } else {
                                 interaction.createMessage({ content: 'There was no mute data found, that member must already be unmuted.', flags: 64 });
                             }
