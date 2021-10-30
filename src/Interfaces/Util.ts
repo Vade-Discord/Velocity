@@ -259,7 +259,7 @@ export default class Util {
         });
       }
     }
-    if (command.userPerms.length) {
+    if (command.userPerms.length && !(await this.checkModerator(member, guild))) {
       const userPermCheck = command.userPerms.some((perm) => !member.permissions.has(perm));
       if (userPermCheck) {
         let noPermEmbed = new RichEmbed()
