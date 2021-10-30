@@ -82,7 +82,7 @@ export default class UserinfoCommand extends Command {
                         memberRoles?.length < 10
                             ? memberRoles.map((m => m.mention))?.join(", ")
                             : memberRoles.length > 10
-                                ? (this.client.utils.trimArray(memberRoles).map((r) => r.mention)
+                                ? (this.client.utils.trimArray(memberRoles)).map((r) => r.mention)
                                 : "None"
                     }
                 `
