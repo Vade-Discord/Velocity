@@ -55,7 +55,7 @@ export default class Util {
     for (; i < length; ++i) {
       retVal += charset.charAt(Math.floor(Math.random() * n));
     }
-    return `Vade_` + retVal;
+    return `Velocity_` + retVal;
   }
 
   validateMs(time) {
@@ -195,7 +195,7 @@ export default class Util {
             .setDescription(`This Command can only be ran in a Guild!`)
             .setColor(`#F00000`)
             .setTimestamp()
-            .setFooter(`Vade`, this.client.user.avatarURL);
+            .setFooter(`Velocity`, this.client.user.avatarURL);
         return interaction.createFollowup({
           embeds: [noGuild]
         });
@@ -212,7 +212,7 @@ export default class Util {
           .setDescription(`Only a Bot Developer can run this Command!`)
           .setColor(`#F00000`)
           .setTimestamp()
-          .setFooter(`Vade`, this.client.user.avatarURL);
+          .setFooter(`Velocity`, this.client.user.avatarURL);
 
         return interaction.createFollowup({
           embeds: [notOwnerEmbed]
@@ -229,7 +229,7 @@ export default class Util {
           .setDescription(`This Command requires you to be a Moderator!`)
           .setColor(`#F00000`)
           .setTimestamp()
-          .setFooter(`Vade`, this.client.user.avatarURL);
+          .setFooter(`Velocity`, this.client.user.avatarURL);
 
         return interaction.createFollowup({
           embeds: [noMod]
@@ -252,7 +252,7 @@ export default class Util {
           )
           .setColor(`#F00000`)
           .setTimestamp()
-          .setFooter(`Vade`, this.client.user.avatarURL);
+          .setFooter(`Velocity`, this.client.user.avatarURL);
 
         return interaction.createFollowup({
           embeds: [noPermEmbed]
@@ -269,7 +269,7 @@ export default class Util {
           )
           .setColor(`#F00000`)
           .setTimestamp()
-          .setFooter(`Vade`, this.client.user.avatarURL);
+          .setFooter(`Velocity`, this.client.user.avatarURL);
 
         return interaction.createFollowup({
           embeds: [noPermEmbed]
@@ -281,7 +281,7 @@ export default class Util {
       if(!check) {
         let noPremiumEmbed = new this.client.embed()
             .setTitle(`Premium Only!`)
-            .setDescription(`You must have Vade Premium activated in order to use this Command! You can get it [here](https://vade-bot.com/premium)`)
+            .setDescription(`You must have Velocity Premium activated in order to use this Command! You can get it [here](https://vade-bot.com/premium)`)
             .setColor('#F00000')
             .setURL('https://vade-bot.com/premium')
             .setTimestamp()
@@ -443,7 +443,7 @@ export default class Util {
         .setDescription(`> ${reminderData?.reminder}`)
         .setColor(this.client.constants.colours.green)
         .setTimestamp()
-        .setFooter(`Vade Utilities`, this.client.user.avatarURL)
+        .setFooter(`Velocity Utilities`, this.client.user.avatarURL)
 
       await user.getDMChannel().then((channel) => {
         channel.createMessage({ embeds: [embed] }).catch(() => null);
@@ -531,7 +531,7 @@ export default class Util {
          .setDescription(`**Member:** ${member.mention}`)
          .setColor(this.client.constants.colours.green)
          .setThumbnail(member.user.avatarURL)
-         .setFooter(`Vade Logging System`)
+         .setFooter(`Velocity Logging System`)
          .setTimestamp()
 
      logChannel ? logChannel?.createMessage({embeds: [embed]}) : null;
