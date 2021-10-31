@@ -24,7 +24,7 @@ export default class GuildMemberAddEvent extends Event {
                 .setAuthor('Anti-Raid is active!')
                 .setColor('#F00000')
                 .setDescription(`You have been automatically kicked from **${guild.name}** due to the anti-raid module being active. This is automatically disabled after **1 hour**.`)
-                .setFooter('Vade Moderation', this.client.user.avatarURL);
+                .setFooter('Velocity Moderation', this.client.user.avatarURL);
 
             (await member.user.getDMChannel()).then((e) => {
                 e.createMessage({ embeds: [embed] }).catch(() => null);
@@ -40,7 +40,7 @@ export default class GuildMemberAddEvent extends Event {
                 .setDescription(`**User:** ${tag} (${member.id})
 Time Kicked: <t:${Date.now()}:d>`)
                 .setThumbnail(member.user.avatarURL)
-                .setFooter(`Vade Logging System`)
+                .setFooter(`Velocity Logging System`)
                 .setColor(`#F00000`)
                 .setTimestamp();
             const modChannel = (await this.client.utils.loggingChannel(guild, 'moderation'));
