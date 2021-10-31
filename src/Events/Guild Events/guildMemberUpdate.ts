@@ -23,7 +23,7 @@ export default class GuildMemberEvent extends Event {
                 .setColor("YELLOW")
                 .setThumbnail(member.user.avatarURL)
                 .setTimestamp()
-                .setFooter(`Vade Logging System`, this.client.user.avatarURL)
+                .setFooter(`Velocity Logging System`, this.client.user.avatarURL)
             if (oldMember.nick !== member.nick) {
                 logEmbed
                     .setTitle(`Nickname Updated`)
