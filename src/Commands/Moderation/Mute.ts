@@ -112,7 +112,7 @@ export default class MuteCommand extends Command {
             .setDescription(`**Member:** ${member1.mention}\n**Moderator:** ${member.mention}\n**Reason:** "${reason}"`)
             .setColor('#F00000')
             .setThumbnail(member1.user.avatarURL)
-            .setFooter(`Vade Logging System`)
+            .setFooter(`Velocity Logging System`)
             .setTimestamp()
 
         logChannel?.createMessage({embeds: [embed], components });
