@@ -35,7 +35,7 @@ export default class guildCreateEvent extends Event {
                 const newlyAdded = new this.client.embed()
                     .setTitle(`Thanks for adding me to your Server!`)
                     .setDescription(
-                        `Hello! Thank you for adding Vade to your server! \n\nFor a list of Commands you can run \`/help\`. \nIf you'd like help on a specific command/category, you can do \`/help <Command/Category>\`.`
+                        `Hello! Thank you for adding Velocity to your server! \n\nFor a list of Commands you can run \`/help\`. \nIf you'd like help on a specific command/category, you can do \`/help <Command/Category>\`.`
                     )
                     .addField(`Support Server`, `https://discord.com/invite/DFa5wNFWgP`)
                     .addField(`Lead Developer`, `Ethan#7000 (473858248353513472)`);
