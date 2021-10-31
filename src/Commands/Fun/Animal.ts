@@ -88,6 +88,23 @@ export default class AnimalCommand extends Command {
                     break;
                 }
 
+                case "red-panda": {
+
+
+                    let { body } = await phin<{ image: string }>({
+                        url: "https://some-random-api.ml/animal/red_panda",
+                        parse: "json",
+                    });
+
+                    embed
+                        .setImage(body.image)
+                        .setDescription(`[Click To View](${body.image})`);
+
+                    interaction.createFollowup({embeds: [embed]});
+
+                    break;
+                }
+
                 case "dog": {
 
                     let {body} = await phin<{ url: string }>({
