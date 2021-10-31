@@ -17,7 +17,7 @@ export default class BanAddEvent extends Event {
             .setTitle(`${moderationEmoji} User Unbanned`)
             .setDescription(`**User:** ${tag} (${user.id})`)
             .setThumbnail(user.avatarURL)
-            .setFooter(`Vade Logging System`)
+            .setFooter(`Velocity Logging System`)
             .setColor(`#00C09A`)
             .setTimestamp();
 
