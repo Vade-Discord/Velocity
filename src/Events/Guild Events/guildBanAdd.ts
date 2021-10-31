@@ -23,7 +23,7 @@
                   .setDescription(`**User:** ${tag} (${user.id})
 Time Banned: <t:${Date.now()}:d>`)
                   .setThumbnail(user.avatarURL)
-                  .setFooter(`Vade Logging System`)
+                  .setFooter(`Velocity Logging System`)
                   .setColor(`#F00000`)
                   .setTimestamp();
 
