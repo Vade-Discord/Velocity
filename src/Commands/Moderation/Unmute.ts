@@ -53,7 +53,7 @@ export default class UnmuteCommand extends Command {
             .setDescription(`**Member:** ${member1.mention}\n**Moderator:** ${member.mention}`)
             .setColor(this.client.constants.colours.green)
             .setThumbnail(member1.user.avatarURL)
-            .setFooter(`Vade Logging System`)
+            .setFooter(`Velocity Logging System`)
             .setTimestamp()
 
         logChannel?.createMessage({embeds: [embed]});

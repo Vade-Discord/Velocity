@@ -20,7 +20,7 @@ class PingCommand extends Command_1.default {
                 .setTitle(`Pong!`)
                 .setDescription(`Bot Latency: ${ping}ms`)
                 .setTimestamp()
-                .setFooter(`Vade`, this.client.user.avatarURL);
+                .setFooter(`Velocity`, this.client.user.avatarURL);
             m.edit({ content: `Pong!`, embed: pingEmbed });
         });
     }

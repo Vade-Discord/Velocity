@@ -26,7 +26,7 @@ export default class AvatarCommand extends Command {
                 .setAuthor(`${user.username}#${user.discriminator}'s Avatar`, this.client.user.avatarURL)
                 .setImage(avatar)
                 .setTimestamp()
-                .setFooter(`Vade Utilities`, this.client.user.avatarURL)
+                .setFooter(`Velocity Utilities`, this.client.user.avatarURL)
 
             return interaction.createFollowup({ embeds: [embed]});
         } else {

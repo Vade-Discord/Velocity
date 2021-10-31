@@ -265,7 +265,7 @@ export default class GiveawayCommand extends Command {
                     .addField(`Prize`, `${prize}`)
                     .addField(`Requirements`, `Role Requirement: ${roleRequirement} \nVoice Requirement: ${voiceRequirement} \nServer Time: ${guildRequirement} \n\n`)
                     .setTimestamp()
-                    .setFooter(`Vade Giveaways @ https://vade-bot.com`)
+                    .setFooter(`Velocity Giveaways @ https://vade-bot.com`)
                     .setThumbnail(this.client.user.avatarURL)
 
                 if(channel instanceof TextChannel || channel instanceof NewsChannel) {

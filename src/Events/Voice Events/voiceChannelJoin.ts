@@ -22,7 +22,7 @@ export default class VcJoinEvent extends Event {
                         .setTitle(`📥 Joined Voice Channel`)
                         .setDescription(`**Channel:** ${newChannel.mention}`)
                         .setThumbnail(member.user.avatarURL)
-                        .setFooter(`Vade Logging System`)
+                        .setFooter(`Velocity Logging System`)
                         .setColor(`#00C09A`)
                         .setTimestamp();
 

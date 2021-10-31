@@ -63,8 +63,8 @@ const items = [
     emoji: "🚗",
   },
   {
-    name: "Vade",
-    description: "Vade Premium :0",
+    name: "Velocity",
+    description: "Velocity Premium :0",
     price: Number.MAX_SAFE_INTEGER,
     id: "vade",
     emoji: "<:vade:833110730374119475>",

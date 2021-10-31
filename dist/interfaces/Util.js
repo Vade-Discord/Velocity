@@ -159,7 +159,7 @@ class Util {
         for (; i < length; ++i) {
             retVal += charset.charAt(Math.floor(Math.random() * n));
         }
-        return `Vade_` + retVal;
+        return `Velocity_` + retVal;
     }
     capitalise(string) {
         if (string)
@@ -227,7 +227,7 @@ class Util {
                     .setDescription(`Only a Bot Developer can run this Command!`)
                     .setColor(`#F00000`)
                     .setTimestamp()
-                    .setFooter(`Vade`, this.client.user.avatarURL);
+                    .setFooter(`Velocity`, this.client.user.avatarURL);
                 return message.channel.createMessage({
                     embed: notOwnerEmbed,
                     messageReferenceID: message.id,
@@ -241,7 +241,7 @@ class Util {
                     .setDescription(`This Command can only be ran in a Guild!`)
                     .setColor(`#F00000`)
                     .setTimestamp()
-                    .setFooter(`Vade`, this.client.user.avatarURL);
+                    .setFooter(`Velocity`, this.client.user.avatarURL);
                 return message.channel.createMessage({
                     embed: noGuild,
                     messageReferenceID: message.id,
@@ -257,7 +257,7 @@ class Util {
                     .setDescription(`This Command requires you to be a Moderator!`)
                     .setColor(`#F00000`)
                     .setTimestamp()
-                    .setFooter(`Vade`, this.client.user.avatarURL);
+                    .setFooter(`Velocity`, this.client.user.avatarURL);
                 return message.channel.createMessage({
                     embed: noMod,
                     messageReferenceID: message.id,
@@ -271,7 +271,7 @@ class Util {
                     .setDescription(`I am missing the ${this.cleanPerms(perm)} Permission! I need it for you to run this Command!`)
                     .setColor(`#F00000`)
                     .setTimestamp()
-                    .setFooter(`Vade`, this.client.user.avatarURL);
+                    .setFooter(`Velocity`, this.client.user.avatarURL);
                 const getMember = message.channel.guild.members.get(this.client.user.id);
                 if (!getMember?.permissions.has(perm)) {
                     return message.channel.createMessage({
@@ -288,7 +288,7 @@ class Util {
                     .setDescription(`You are missing the ${this.cleanPerms(perm)} Permission! You need it to run this Command!`)
                     .setColor(`#F00000`)
                     .setTimestamp()
-                    .setFooter(`Vade`, this.client.user.avatarURL);
+                    .setFooter(`Velocity`, this.client.user.avatarURL);
                 if (!message.member.permissions.has(perm)) {
                     return message.channel.createMessage({
                         embed: noPermEmbed,

@@ -37,7 +37,7 @@ class UnbanCommand extends Command_1.default {
             .setTitle(`Result`)
             .setDescription(`**__Success__**\n\n${success.length ? success.join("\n") : 'Invalid ban IDs provided.'}\n\n **__Errors__**\n\n${error.length ? error.join("\n") : 'No invalid ban IDs provided. Good job!'}`)
             .setColor('#83fc9c')
-            .setFooter(`Vade Moderation`, this.client.user.avatarURL)
+            .setFooter(`Velocity Moderation`, this.client.user.avatarURL)
             .setTimestamp();
         message.channel.createMessage({ embed: embed });
     }

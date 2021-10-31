@@ -23,7 +23,7 @@ export default class ShopCommand extends Command {
 
         const embeds = toPaginate.map((page, index) => {
             return new this.client.embed()
-                .setTitle(`Vade Economy | Shop`)
+                .setTitle(`Velocity Economy | Shop`)
                 .setDescription(
                     page.join("\n") ??
                     `No more Items to be listed on page ${index + 1}`

@@ -59,7 +59,7 @@
                       .setTitle(`📤 Left Voice Channel`)
                       .setDescription(`**Channel:** ${oldChannel.mention}\n\n${timeTracking ? `Time Spent: ${time ?? 'Unable to track.'}` : null}`)
                       .setThumbnail(member.user.avatarURL)
-                      .setFooter(`Vade Logging System`)
+                      .setFooter(`Velocity Logging System`)
                       .setColor(`#F00000`)
                       .setTimestamp();
 

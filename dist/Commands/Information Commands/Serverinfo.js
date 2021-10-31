@@ -31,7 +31,7 @@ class ServerinfoCommand extends Command_1.default {
             .addField("Role Info", `Roles: ${totalRoles}`)
             .addField("General Info", `Placeholder`)
             .setColor("#f3f0f0")
-            .setFooter(`Vade | Server Information`, this.client.user.avatarURL)
+            .setFooter(`Velocity | Server Information`, this.client.user.avatarURL)
             .setTimestamp();
         message.channel.createMessage({ embed: embed });
     }

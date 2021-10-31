@@ -65,7 +65,7 @@ export default class AnimalCommand extends Command {
         const embed = new this.client.embed()
             .setColor(this.client.constants.colours.green)
             .setTimestamp()
-            .setFooter(`Vade Images`, this.client.user.avatarURL)
+            .setFooter(`Velocity Images`, this.client.user.avatarURL)
 
 
         try {

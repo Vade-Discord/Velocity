@@ -16,7 +16,7 @@ class ReadyEvent extends Event_1.Event {
         await Database_1.default();
         await Lavalink_1.Lavalink(this.client);
         console.log(`${this.client.user.username}${this.client.user.discriminator} has successfully logged in!`);
-        this.client.editStatus('online', { name: "Vade Rewrite", type: 5, url: "https://vade-bot.com" });
+        this.client.editStatus('online', { name: "Velocity Rewrite", type: 5, url: "https://vade-bot.com" });
     }
 }
 exports.default = ReadyEvent;

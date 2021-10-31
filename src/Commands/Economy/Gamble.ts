@@ -74,7 +74,7 @@ export default class GambleCommand extends Command {
                     .setDescription(`-- SPINNING --`)
                     .setTimestamp()
                     .setAuthor(`${member.username}#${member.discriminator}`, member.user.avatarURL)
-                    .setFooter(`Vade Economy System`);
+                    .setFooter(`Velocity Economy System`);
 
                 const gameMessage = await interaction.createFollowup({ embeds: [embed]});
                 for (let i = 0; i < 3; i++) {
@@ -128,7 +128,7 @@ export default class GambleCommand extends Command {
                         .setColor(this.client.constants.colours.green)
                         .setAuthor(`${member.username}#${member.discriminator}`, member.avatarURL)
                         .setTimestamp()
-                        .setFooter("Vade Economy System");
+                        .setFooter("Velocity Economy System");
                 gameMessage.edit({ embeds: [endEmbed] });
                 break;
             }

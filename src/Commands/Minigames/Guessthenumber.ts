@@ -42,7 +42,7 @@ export default class GuessthenumberCommand extends Command {
                    .setAuthor(`🔢 Guess The Number!`, this.client.user.avatarURL)
                    .setDescription(`${member.mention} has started a guess the number event!\nYou have **10 minutes** to guess it!`)
                    .setThumbnail(this.client.user.avatarURL)
-                   .setFooter(`Vade Minigames`, this.client.user.avatarURL)
+                   .setFooter(`Velocity Minigames`, this.client.user.avatarURL)
                    .setColor(this.client.constants.colours.turquoise)
 
                await this.client.redis.set(`minigames.${interaction.guildID}.gtn`, channel.id, 'EX', 600);
@@ -61,7 +61,7 @@ export default class GuessthenumberCommand extends Command {
                       .setAuthor(`🔢 Game Over!`, this.client.user.avatarURL)
                       .setDescription(`${e.author.mention} has got the number!`)
                       .setThumbnail(this.client.user.avatarURL)
-                      .setFooter(`Vade Minigames`, this.client.user.avatarURL)
+                      .setFooter(`Velocity Minigames`, this.client.user.avatarURL)
                       .setColor(this.client.constants.colours.green)
 
                    // @ts-ignore

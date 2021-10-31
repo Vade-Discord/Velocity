@@ -16,7 +16,7 @@
                       .setTitle(`🔀 Voice Channel Changed`)
                       .setDescription(`**From:** ${oldChannel.mention}\n**To:** ${newChannel.mention}`)
                       .setThumbnail(member.user.avatarURL)
-                      .setFooter(`Vade Logging System`)
+                      .setFooter(`Velocity Logging System`)
                       .setColor(`YELLOW`)
                       .setTimestamp();
 

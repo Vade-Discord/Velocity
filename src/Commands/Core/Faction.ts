@@ -111,7 +111,7 @@ export default class FactionCommand extends Command {
                     .addField('Description', `${factionData.description}`)
                     .addField('Member Count',`${factionData.memberCount}`)
                     .addField('Faction ID', `${factionData.ID}`)
-                    .setFooter('Vade Factions', this.client.user.avatarURL)
+                    .setFooter('Velocity Factions', this.client.user.avatarURL)
                     .setColor(this.client.constants.colours.green)
                     .setTimestamp()
 
