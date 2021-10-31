@@ -26,7 +26,7 @@ export default class RobCommand extends Command {
                 .setDescription(`You must wait **${ms(Math.ceil(data - Date.now()), { long: true })}** before attempting to rob someone again!`)
                 .setColor("#F00000")
                 .setTimestamp()
-                .setFooter(`Vade Economy`, this.client.user.avatarURL)
+                .setFooter(`Velocity Economy`, this.client.user.avatarURL)
 
             return interaction.createFollowup({ embeds: [cooldownEmbed] });
         }
@@ -93,7 +93,7 @@ export default class RobCommand extends Command {
             .setAuthor(
                 `${member.username}#${member.discriminator}`,
                 member.avatarURL)
-            .setFooter("Vade Economy System")
+            .setFooter("Velocity Economy System")
             .setColor(b ? this.client.constants.colours.green : "#F00000")
             .setTimestamp();
 
