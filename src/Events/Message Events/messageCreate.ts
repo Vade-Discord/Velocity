@@ -47,7 +47,7 @@ export default class MessagecreateEvent extends Event {
             .setDescription(`**User:** ${tag} (${message.author.id}) 
 Time: <t:${Math.floor((Date.now()) / 1000)}:R>`)
             .setThumbnail(user.avatarURL)
-            .setFooter(`Vade Logging System`)
+            .setFooter(`Velocity Logging System`)
             .setColor(`#F00000`)
             .setTimestamp();
 
