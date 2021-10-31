@@ -3,7 +3,7 @@ import Command from "../../Interfaces/Command";
 export default class NameCommand extends Command {
     constructor(client) {
         super(client, 'newsletter', {
-            description: "Subscribe to Vade's newsletter and receive important news and updates!",
+            description: "Subscribe to Velocity's newsletter and receive important news and updates!",
             category: "Core",
         });
     }
