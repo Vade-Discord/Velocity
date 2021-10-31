@@ -36,7 +36,7 @@ export default class PremiumCommand extends Command {
                 const keyChannel = this.client.guilds.get(GUILDS.main)?.channels.get(PRIVATE.keylog);
                 if(keyChannel.type !== 0) return;
                 const key = subOptions.get("key");
-                if(!key.startsWith("Vade_")) {
+                if(!key.startsWith("Velocity_")) {
                     return interaction.createFollowup(`The key you provided was invalid.`);
                 }
 
@@ -51,7 +51,7 @@ export default class PremiumCommand extends Command {
                         .addField(`Key`, `\`${key}\``)
                         .addField(`Delete reason`, `The key has expired.`)
                         .addField(`Guild`, `${member.guild.name} (${interaction.guildID})`)
-                        .setFooter(`Vade | Key logging`)
+                        .setFooter(`Velocity | Key logging`)
                         .setColor(`#F00000`)
                         .setTimestamp();
 
@@ -80,7 +80,7 @@ export default class PremiumCommand extends Command {
                         .addField(`Key`, `\`${key}\``)
                         .addField(`Premium Activation Reason`, `A user has redeemed a premium key in the server.`)
                         .addField(`Guild`, `${member.guild.name} (${interaction.guildID})`)
-                        .setFooter(`Vade | Key logging`)
+                        .setFooter(`Velocity | Key logging`)
                         .setColor(`#cefad0`)
                         .setTimestamp();
 
@@ -106,7 +106,7 @@ export default class PremiumCommand extends Command {
                         .addField(`Key`, `\`${key}\``)
                         .addField(`Time Added Reason`, `Another key was redeemed resulting in a stack forming.`)
                         .addField(`Guild`, `${member.guild.name} (${interaction.guildID})`)
-                        .setFooter(`Vade | Key logging`)
+                        .setFooter(`Velocity | Key logging`)
                         .setColor(`#cefad0`)
                         .setTimestamp();
 
