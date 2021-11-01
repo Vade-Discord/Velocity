@@ -217,7 +217,7 @@ export default class EvaluateCommand extends Command {
                     _id: Types.ObjectId(),
                     key,
                     expirationTime: Date.now() + parseInt(ms(length)),
-                    length: ms(length),
+                    length: parseInt(ms(length)),
                     createdBy: member.id,
                     createdOn: Date.now(),
                 });
