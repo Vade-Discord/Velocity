@@ -216,8 +216,8 @@ export default class EvaluateCommand extends Command {
                 const newSchema = new keyStorage({
                     _id: Types.ObjectId(),
                     key,
-                    expirationTime: Date.now() + parseInt(length),
-                    length: parseInt(length),
+                    expirationTime: Date.now() + length,
+                    length: length,
                     createdBy: member.id,
                     createdOn: Date.now(),
                 });
