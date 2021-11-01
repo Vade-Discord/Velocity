@@ -216,15 +216,15 @@ export default class EvaluateCommand extends Command {
                 const newSchema = new keyStorage({
                     _id: Types.ObjectId(),
                     key,
-                    expirationTime: Date.now() + parseInt(ms(length)),
-                    length: parseInt(ms(length)),
+                    expirationTime: Date.now() + parseInt(length),
+                    length: parseInt(length),
                     createdBy: member.id,
                     createdOn: Date.now(),
                 });
 
                 await newSchema.save();
 
-                interaction.createFollowup(`Here is the generated key with an expiration time of \`${humanize(ms(length))}\`\n\n\`${key}\``);
+                interaction.createFollowup(`Here is the generated key with an expiration time of \`${humanize(length)}\`\n\n\`${key}\``);
                 break;
             }
 
