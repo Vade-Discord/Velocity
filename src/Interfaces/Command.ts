@@ -73,7 +73,7 @@ export default class Command {
         throw new Error(`Command ${this.name} doesn't provide a run method!`);
     }
 
-    async autocomplete(interaction, options) {
+    async autocomplete(interaction, options, member) {
         throw new Error(`Command ${this.name} doesn't provide an autocomplete method!`);
     }
 }
