@@ -28,6 +28,7 @@ export function votes(api: API): Router {
     const router = new Router({ prefix: "/votes" });
 
     router.post("/top-gg", async (ctx: Koa.Context) => {
+        api.bot.logger.info("API Request from Top.gg");
         const auth = ctx.header.authorization;
         if (!auth || auth !== api.bot.config.API.TOPGG_AUTH) {
             ctx.status = 401;
@@ -71,13 +72,7 @@ export function votes(api: API): Router {
     });
 
     router.post("/discord-boats", async (ctx: Koa.Context) => {
-        const auth = ctx.header.Authorization;
-        if (!auth || auth !== api.bot.config.API.DISCORD_BOATS_AUTH) {
-            ctx.status = 401;
-            ctx.body = { success: false, message: "incorrect authorization" };
-            return;
-        }
-
+        api.bot.logger.info("API Request from Discord.boats");
         const body: DiscordBoats = ctx.request.body;
         try {
             await discordBoats.validate(body);
