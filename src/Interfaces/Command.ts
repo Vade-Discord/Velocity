@@ -72,4 +72,8 @@ export default class Command {
     async run(interaction, member, options: Map<string, string>, subOptions: Map<string, string>) {
         throw new Error(`Command ${this.name} doesn't provide a run method!`);
     }
+
+    async autocomplete(interaction, options) {
+        throw new Error(`Command ${this.name} doesn't provide an autocomplete method!`);
+    }
 }

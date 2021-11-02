@@ -1,5 +1,5 @@
 import { Event } from '../../Interfaces/Event';
-import {CommandInteraction, ComponentInteraction, PingInteraction} from "eris";
+import {CommandInteraction, ComponentInteraction, PingInteraction, AutocompleteInteraction} from "eris";
 import {main} from "../../api/routers/main";
 
 export default class InteractionCreateEvent extends Event {
@@ -72,6 +72,9 @@ export default class InteractionCreateEvent extends Event {
                 default:
                     return console.log(`Unknown component type.`);
             }
+        } else if (interaction instanceof AutocompleteInteraction) {
+            let command = this.client.commands.get(interaction.data.name) || this.client.commands.get(interaction.data.id)
+            return command.autocomplete(interaction, interaction.data.options)
         } else {
             return console.log(`Unknown interaction type.`);
         }

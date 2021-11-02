@@ -13,6 +13,7 @@ export default class BuyCommand extends Command {
                     name: 'item',
                     description: 'The item that you would like to purchase.',
                     required: true,
+                    autocomplete: true
                 },
                 {
                     type: 10,
@@ -68,6 +69,38 @@ const nf = new Intl.NumberFormat();
         interaction.createFollowup(`You have successfully purchased **${amount} ${located.name}${amount > 1 ? 's' : ''}** for a total of **$${nf.format(itemPrice)}**.`);
 
 
+    }
+
+    async autocomplete(interaction, options) {
+        const [focused] = options.filter((option) => option.focused === true)
+        const result = []
+
+        if(focused) {
+            let items = await allItems
+                .filter((item) => item.name.startsWith(focused.value))
+                .sort(
+                    (a, b) => 
+                        (a.name > b.name) ? 1 :
+                                -1
+                )
+
+                items.forEach((item) => {
+                return result.push({
+                    name: item.name,
+                    value: item.name
+                })
+            })
+
+        }
+
+        if(result.length >= 26) result.length = 25
+            
+        if(!result[0]) result[0] = {
+            name: `No Options Avalible`,
+            value: `none`
+        }
+
+        return interaction.result(result)
     }
 
 }
