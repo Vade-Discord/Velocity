@@ -581,9 +581,9 @@ eris-reactions@^0.1.2:
   resolved "https://registry.yarnpkg.com/eris-reactions/-/eris-reactions-0.1.4.tgz#4b642f7411144f164b6097138c262eac6b03def1"
   integrity sha512-U2rMtfywnhh4TmqFcF7uo/ciyQN8vb9ptwSJMQs/uaY1a401f+t3sei1R3IR2gYqaFejJzgjTmzBMT6jIBPYYQ==
 
-eris@Catboi8/eris#interactions:
+eris@Catboi8/eris#interactions-minmax:
   version "0.16.0-dev"
-  resolved "https://codeload.github.com/Catboi8/eris/tar.gz/6fe517a0662e4a7583bc89df8672725b5b68082a"
+  resolved "https://codeload.github.com/Catboi8/eris/tar.gz/855f23e32f754e95a4b73dea031ed8e5fd335d07"
   dependencies:
     ws "^7.4.6"
   optionalDependencies:
