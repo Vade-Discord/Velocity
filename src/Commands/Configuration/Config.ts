@@ -34,6 +34,20 @@ export default class RoleConfigCommand extends Command {
                             required: true,
                         }
                     ]
+                },
+                {
+                    type: 1,
+                    name: 'welcome-message',
+                    description: 'Customise your servers welcome message with built in formats.',
+                    options: [
+                        {
+                            type: 3,
+                            name: 'message',
+                            description: 'The message you would like to set it as.',
+                            autocomplete: true,
+                            required: true,
+                        }
+                    ]
                 }
             ]
         });
@@ -68,11 +82,53 @@ export default class RoleConfigCommand extends Command {
                 break;
             }
 
+            case "welcome-message": {
+
+                const msg = subOptions.get("message")
+
+
+                break;
+            }
+
 
             default: {
                 return;
             }
         }
+
+    }
+
+    async autocomplete(interaction, options, member) {
+
+
+
+        const [focused] = options.filter((option) => option.options.filter((op) => op.focused === true))
+
+        let result = []
+
+
+
+        if(focused) {
+
+            if(!focused.options[0].value?.length) {
+                return;
+            }
+            const message = await this.client.utils.Interpolate(focused.options[0].value, {
+                username: `${member.username}`,
+                tag: `${member.username}#${member.discriminator}`,
+                id: `${member.id}`,
+                guildName: `${member.guild.name}`,
+                guildID: `${member.guild.id}`
+            });
+
+            result.push({
+                name: message,
+                value: message
+            })
+        }
+        if(!result[0]) return
+
+        return interaction.result(result);
 
     }
 
