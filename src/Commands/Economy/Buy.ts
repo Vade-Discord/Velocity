@@ -77,7 +77,7 @@ const nf = new Intl.NumberFormat();
 
         if(focused) {
             let items = await allItems
-                .filter((item) => item.name.startsWith(focused.value))
+                .filter((item) => item.name.toLowerCase().startsWith(focused.value.toLowerCase()))
                 .sort(
                     (a, b) => 
                         (a.name > b.name) ? 1 :
