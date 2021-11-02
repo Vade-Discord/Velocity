@@ -74,7 +74,7 @@ export default class InteractionCreateEvent extends Event {
             }
         } else if (interaction instanceof AutocompleteInteraction) {
             let command = this.client.commands.get(interaction.data.name) || this.client.commands.get(interaction.data.id)
-            return command.autocomplete(interaction, interaction.data.options)
+            return command.autocomplete(interaction, interaction.data.options, member)
         } else {
             return console.log(`Unknown interaction type.`);
         }
