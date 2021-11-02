@@ -12,6 +12,18 @@ const topGG = joi.object<TopGG>({
     query: joi.string().optional(),
 });
 
+const discordBoats = joi.object<DiscordBoats>({
+    "bot": {
+        id: joi.string().required(),
+        name: joi.string().required()
+    },
+    "user": {
+        id: joi.string().required(),
+        username: joi.string().required(),
+        discriminator: joi.number().required()
+    }
+});
+
 export function votes(api: API): Router {
     const router = new Router({ prefix: "/votes" });
 
@@ -40,13 +52,55 @@ export function votes(api: API): Router {
         try {
 
 
-            console.log(`User with ID ${body.user} voted for the bot!`);
+            console.log(`User with ID ${body.user} voted for the bot! [TOP.GG]`);
             const user = (await api.bot.getRESTUser(body.user));
             const logChannelID = api.bot.config.PRIVATE.vote_log;
             const channel = (await api.bot.getRESTChannel(logChannelID));
             if (channel?.type === 0) {
                 const embed = new api.bot.embed()
                     .setDescription(`${user.username}#${user.discriminator} (\`${body.user}\`) has voted for **Velocity**! Vote for us **[HERE](https://top.gg/bot/850723996513075200/vote)**!`)
+                    .setColor(api.bot.constants.colours.green)
+                    .setTimestamp()
+                    .setFooter(`Velocity | Vote Logging`)
+
+                channel ? channel.createMessage({embeds: [embed]}) : null;
+            }
+        } catch (e) {
+            api.bot.logger.error('API ERROR: ', e);
+        }
+    });
+
+    router.post("/discord-boats", async (ctx: Koa.Context) => {
+        const auth = ctx.header.Authorization;
+        if (!auth || auth !== api.bot.config.API.DISCORD_BOATS_AUTH) {
+            ctx.status = 401;
+            ctx.body = { success: false, message: "incorrect authorization" };
+            return;
+        }
+
+        const body: DiscordBoats = ctx.request.body;
+        try {
+            await discordBoats.validate(body);
+        } catch (error) {
+            ctx.status = 400;
+            ctx.body = {
+                success: false,
+                errors: error.errors,
+                message: error.message,
+            };
+
+            return;
+        }
+        await api.bot.redis.set(`votes.discord-boats.${body.user.id}`, true, 'EX', 43200);
+        try {
+
+            console.log(`User with ID ${body.user.id} voted for the bot! [DISCORD-BOATS]`);
+            const user = (await api.bot.getRESTUser(body.user.id));
+            const logChannelID = api.bot.config.PRIVATE.vote_log;
+            const channel = (await api.bot.getRESTChannel(logChannelID));
+            if (channel?.type === 0) {
+                const embed = new api.bot.embed()
+                    .setDescription(`${user.username}#${user.discriminator} (\`${body.user.id}\`) has voted for **Velocity** on **Discord Boats**! Vote for us **[HERE](https://discord.boats/bot/850723996513075200/vote)**!`)
                     .setColor(api.bot.constants.colours.green)
                     .setTimestamp()
                     .setFooter(`Velocity | Vote Logging`)
@@ -67,4 +121,16 @@ interface TopGG {
     type: "upvote" | "test";
     isWeekend: boolean;
     query?: string;
+}
+
+interface DiscordBoats {
+    "bot": {
+        id: string,
+        name: string
+    },
+    "user": {
+        id: string,
+        username: string,
+        discriminator: number
+    }
 }
