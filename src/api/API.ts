@@ -8,7 +8,7 @@ import { main } from "./routers/main";
 import type { Bot } from "../client/Client";
 
 export class API {
-    static PORT = 2004;
+    static PORT = 3003;
 
     readonly bot: Bot;
 
