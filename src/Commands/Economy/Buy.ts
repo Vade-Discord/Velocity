@@ -5,7 +5,7 @@ import { distance } from "fastest-levenshtein";
 export default class BuyCommand extends Command {
     constructor(client) {
         super(client, 'buy', {
-            description: "Purchase an item from the shop!",
+            description: "Purchase an item from the shop! Purchase between 1 and 100!",
             category: "Economy",
             options: [
                 {
@@ -17,7 +17,9 @@ export default class BuyCommand extends Command {
                 {
                     type: 10,
                     name: 'amount',
-                    description: 'The amount of items that you would like to purchase.',
+                    description: 'The amount of items that you would like to purchase. (Between 1 and 100)',
+                    min_value: 1,
+                    max_value: 100
                 }
             ]
         });
