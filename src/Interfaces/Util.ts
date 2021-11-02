@@ -46,6 +46,12 @@ export default class Util {
     );
   }
 
+  async Interpolate(string, params) {
+    const names = Object.keys(params)
+    const vals = Object.values(params)
+    return new Function(...names, `return \`${string}\`;`)(...vals);
+  }
+
   generateKey() {
     let length = 15,
       charset =
