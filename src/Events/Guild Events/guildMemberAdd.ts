@@ -120,7 +120,18 @@ Time Kicked: <t:${Date.now()}:d>`)
         }
         if (welcomeChannel) {
             if(welcomeChannel instanceof TextChannel && welcomeChannel.permissionsOf(this.client.user.id).has("sendMessages")) {
-              return  welcomeChannel.createMessage(guildData && guildData?.welcomeMessage ? `${member.mention}, ${guildData?.welcomeMessage}` : `${member.mention} has joined the server.`)
+
+                console.log(guildData.welcomeMessage);
+                const message = guildData?.welcomeMessage ? await this.client.utils.Interpolate(guildData.welcomeMessage, {
+                    username: `${member.username}`,
+                    tag: `${member.username}#${member.discriminator}`,
+                    id: `${member.id}`,
+                    guildName: `${member.guild.name}`,
+                    guildID: `${member.guild.id}`,
+                    mention: `${member.mention}`
+                }) : `${member.mention} has joined the server.`;
+
+              return  welcomeChannel.createMessage(message);
             }
         }
 
