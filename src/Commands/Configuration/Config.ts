@@ -84,7 +84,12 @@ export default class RoleConfigCommand extends Command {
 
             case "welcome-message": {
 
-                const msg = subOptions.get("message")
+                const msg = subOptions.get("message");
+                console.log(msg)
+                await guildData.updateOne({
+                    welcomeMessage: msg,
+                });
+                interaction.createFollowup(`Successfully set your welcome message.`);
 
 
                 break;
@@ -114,7 +119,8 @@ export default class RoleConfigCommand extends Command {
                 tag: `${member.username}#${member.discriminator}`,
                 id: `${member.id}`,
                 guildName: `${member.guild.name}`,
-                guildID: `${member.guild.id}`
+                guildID: `${member.guild.id}`,
+                mention: `${member.mention}`
             }).catch((e) => {
                 if(e) {
                     return;
@@ -130,9 +136,7 @@ export default class RoleConfigCommand extends Command {
                 value: focused.options[0].value
             })
         }
-        console.log(result)
         if(!result[0]) return
-
         return interaction.result(result);
 
     }
