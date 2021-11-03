@@ -100,32 +100,37 @@ export default class RoleConfigCommand extends Command {
 
     async autocomplete(interaction, options, member) {
 
-
-
         const [focused] = options.filter((option) => option.options.filter((op) => op.focused === true))
-
         let result = []
-
-
 
         if(focused) {
 
             if(!focused.options[0].value?.length) {
                 return;
             }
+
             const message = await this.client.utils.Interpolate(focused.options[0].value, {
                 username: `${member.username}`,
                 tag: `${member.username}#${member.discriminator}`,
                 id: `${member.id}`,
                 guildName: `${member.guild.name}`,
                 guildID: `${member.guild.id}`
+            }).catch((e) => {
+                if(e) {
+                    return;
+                }
             });
+
+            if(!message) {
+                return;
+            }
 
             result.push({
                 name: message,
-                value: message
+                value: focused.options[0].value
             })
         }
+        console.log(result)
         if(!result[0]) return
 
         return interaction.result(result);
