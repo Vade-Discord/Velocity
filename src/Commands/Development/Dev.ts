@@ -244,12 +244,12 @@ export default class EvaluateCommand extends Command {
                 interaction.createFollowup(`Successfully published the update!`);
                 const newsletterSubscribers = (await profileSchema.find({ Newsletter: true }));
                 newsletterSubscribers.forEach(async (subscriber) => {
-                    const user = await this.client.getRESTUser(subscriber.userID);
+                    const user = await this.client.getRESTUser(subscriber.User);
                     if(!user) {
                         return;
                     } else {
                         await user.getDMChannel().then((c) => {
-                            c.createMessage(`Version \`${version}\` released by **${member.username}#${member.discriminator}**\`\`\`diff\nAdded: \n\n ${added.split("+")?.join("\n+")} \n\n${removed ? `Removed: \n\n ${removed.split("-")?.join("\n-")}` : ''}\`\`\` \n\n**Unsubscribe from the Newsletter to stop getting these notifications.`).catch(() => {
+                            c.createMessage(`Version \`${version}\` released by **${member.username}#${member.discriminator}**\`\`\`diff\nAdded: \n\n ${added.split("+")?.join("\n+")} \n\n${removed ? `Removed: \n\n ${removed.split("-")?.join("\n-")}` : ''}\`\`\` \n\n**Unsubscribe from the Newsletter to stop getting these notifications.**\n*/newsletter*`).catch(() => {
                                 console.log(`Unable to DM ${user.id} their Newsletter.`);
                             });
                         })
