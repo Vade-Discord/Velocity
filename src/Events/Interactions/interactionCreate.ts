@@ -1,6 +1,7 @@
 import { Event } from '../../Interfaces/Event';
 import {CommandInteraction, ComponentInteraction, PingInteraction, AutocompleteInteraction} from "eris";
 import {main} from "../../api/routers/main";
+import generateTip from '../../Classes/Tips';
 
 export default class InteractionCreateEvent extends Event {
     constructor(client) {
@@ -23,11 +24,15 @@ export default class InteractionCreateEvent extends Event {
          })
      }
 
+
         const member = guild ? await guild.getRESTMember(interaction.member.id) : interaction.member;
         if (interaction instanceof PingInteraction) {
             return interaction.acknowledge();
         } else if (interaction instanceof CommandInteraction) {
-            await interaction.acknowledge();
+            const tip = (await generateTip(this.client, interaction));
+            if(!tip) {
+                await interaction.acknowledge();
+            }
             if (!interaction.data) return;
             const cmd = interaction.data?.name?.toLowerCase();
 
