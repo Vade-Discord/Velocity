@@ -6,7 +6,8 @@ import { inspect } from "util";
 import { Types } from 'mongoose';
 import ms from 'ms';
 import humanize from 'humanize-duration';
-import profileSchema from '../../Schemas/User Schemas/Profile';
+import {Paginate} from "@the-nerd-cave/paginate";
+import {createPaginationEmbed} from "../../Classes/Pagination";
 
 export default class EvaluateCommand extends Command {
     constructor(client) {
@@ -28,6 +29,11 @@ export default class EvaluateCommand extends Command {
                             required: true,
                         }
                     ],
+                },
+                {
+                    type: 1,
+                    name: "guilds",
+                    description: "Returns a guild list"
                 },
                 {
                     type: 1,
@@ -111,6 +117,26 @@ export default class EvaluateCommand extends Command {
     async run(interaction, member, options, subOptions) {
 
         switch (interaction.data.options[0].name) {
+
+            case "guilds": {
+                const toPaginate = this.client.guilds.map(x => {
+                    const { id, name, ownerID } = x;
+                    return `${name} (${id})\n${this.client.getRESTUser(ownerID).then(usr => usr.username + "#" + usr.discriminator)} (${ownerID})`
+                });
+                const pages = new Paginate(toPaginate, 8).getPaginatedArray()
+
+                const embeds = pages.map((page, index) => {
+                    return new this.client.embed()
+                        .setTitle('Guild List')
+                        .setDescription(
+                            page.join("\n") ??
+                            `No more Guilds to be listed on page ${index + 1}`
+                        )
+                        .setTimestamp();
+                });
+
+                return await createPaginationEmbed(this.client, interaction, embeds, {});
+            }
 
             case "eval": {
                 const embed = new this.client.embed();
@@ -242,20 +268,7 @@ export default class EvaluateCommand extends Command {
                 updateChannel ? updateChannel.createMessage(text) : null;
 
                 interaction.createFollowup(`Successfully published the update!`);
-                const newsletterSubscribers = (await profileSchema.find({ Newsletter: true }));
-                newsletterSubscribers.forEach(async (subscriber) => {
-                    const user = await this.client.getRESTUser(subscriber.User);
-                    if(!user) {
-                        return;
-                    } else {
-                        await user.getDMChannel().then((c) => {
-                            c.createMessage(`Version \`${version}\` released by **${member.username}#${member.discriminator}**\`\`\`diff\nAdded: \n\n ${added.split("+")?.join("\n+")} \n\n${removed ? `Removed: \n\n ${removed.split("-")?.join("\n-")}` : ''}\`\`\` \n\n**Unsubscribe from the Newsletter to stop getting these notifications.**\n*/newsletter*`).catch(() => {
-                                console.log(`Unable to DM ${user.id} their Newsletter.`);
-                            });
-                        })
-                    }
 
-                });
 
                 break;
             }
