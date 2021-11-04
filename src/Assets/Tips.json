@@ -1,0 +1,6 @@
+{
+  "tips": [
+    "You can disable/enable different notifications via the `/notifications` command!",
+    "You can customize different messages using different preset templates! For more information run the `/templates` command!"
+  ]
+}
