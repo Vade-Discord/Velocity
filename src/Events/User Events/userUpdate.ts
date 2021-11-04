@@ -12,6 +12,10 @@ import guildSchema from '../../Schemas/Main-Guilds/GuildSchema';
 
               if (!oldUser) return;
 
+if(user.bot) {
+return;
+}
+
               try {
 
 
