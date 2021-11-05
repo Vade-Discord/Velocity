@@ -129,6 +129,8 @@ export default class EvaluateCommand extends Command {
                 for (const [key, value] of Object.entries(total)) {
                     if (!differentOwners.has(value)) {
                         e.push(value);
+                    } else {
+                        differentOwners.delete(value);
                     }
                 }
 
