@@ -6,7 +6,41 @@ const items = [
     id: "padlock",
     emoji: "🔐",
   },
-
+  {
+    name: "Rod",
+    description: "Purchase a fishing rod to be able to fish!",
+    price: 200,
+    id: "rod",
+    emoji: "🎣",
+  },
+  {
+    name: "Shark",
+    description: "A giant shark.",
+    price: 500,
+    id: "shark",
+    emoji: "🦈",
+  },
+  {
+    name: "Goldfish",
+    description: "A nice little goldfish.",
+    price: 350,
+    id: "goldfish",
+    emoji: "🐠",
+  },
+  {
+    name: "Whale",
+    description: "A big fat whale!",
+    price: 800,
+    id: "whale",
+    emoji: "🐳",
+  },
+  {
+    name: "Fish",
+    description: "A tiny fish!",
+    price: 25,
+    id: "fish",
+    emoji: "🐟",
+  },
   {
     name: "Trophy",
     description: "Only for the richest of the Rich!",
