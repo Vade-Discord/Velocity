@@ -52,6 +52,31 @@ export default class Util {
     return new Function(...names, `return \`${string}\`;`)(...vals);
   }
 
+  async changeInventoryItem(profile, itemName, amount = 1, remove = false) {
+    const itemInfo = profile.Inventory.filter((i) => i.name === itemName)[0];
+    if(itemInfo) {
+      if(remove && itemInfo.amount - amount <= 0) {
+        await profile.updateOne({
+          $pull: { Inventory: itemInfo }
+        });
+      }
+      const newAmount = {
+        name: itemName,
+        amount: !remove ? itemInfo.amount + amount : itemInfo.amount - amount
+      }
+      await profile.updateOne({
+        $pull: { Inventory: itemInfo }
+      });
+      await profile.updateOne({
+        $push: { Inventory: newAmount }
+      });
+    } else {
+      await profile.updateOne({
+        $push: {Inventory: {name: itemName, amount: amount }}
+      });
+    }
+  }
+
   generateKey() {
     let length = 15,
       charset =
