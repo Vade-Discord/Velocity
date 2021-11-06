@@ -28,7 +28,7 @@ export default class SellCommand extends Command {
     async run(interaction, member, options, subOptions) {
 
         const item = options.get("item");
-        const amount = options.get("amount");
+        const amount = options.get("amount") ?? 1;
         const profile = (await this.client.utils.getProfileSchema(member.id))!!;
         // @ts-ignore
         if((profile.Inventory.filter((i) => i.name?.toLowerCase() === item?.toLowerCase())[0].amount <= amount)) {
