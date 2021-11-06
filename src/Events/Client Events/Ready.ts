@@ -18,7 +18,6 @@ export default class ReadyEvent extends Event {
         await Lavalink(this.client);
         this.client.redis = await redisConnect(this.client);
         this.client.logger.info(`${this.client.user.username}#${this.client.user.discriminator} has successfully logged in!`);
-        const guild = await this.client.getRESTGuild(this.client.config.GUILDS.testing);
 
         const nf = new Intl.NumberFormat();
 
@@ -57,6 +56,7 @@ export default class ReadyEvent extends Event {
             });
         });
         if(this.client.user.id === this.client.config.CLIENTS.beta) {
+            const guild = await this.client.getRESTGuild(this.client.config.GUILDS.testing);
             guild.bulkEditCommands(commands);
         } else if(this.client.user.id === this.client.config.CLIENTS.main){
             this.client.bulkEditCommands(commands);
