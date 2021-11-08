@@ -55,13 +55,13 @@ export default class BuyCommand extends Command {
         const alreadyHas = profile?.Inventory.findIndex((x => x.name === located.id));
         if(alreadyHas !== -1) {
 
+            await this.client.utils.changeCash(profile, itemPrice, 'wallet', true);
             await profile.updateOne({
-                $inc: { Wallet: -itemPrice },
                 $set: { [`Inventory.${alreadyHas}.amount`] : check + amount }
             });
         } else {
+            await this.client.utils.changeCash(profile, itemPrice, 'wallet', true);
             await profile.updateOne({
-                $inc: { Wallet: -itemPrice },
                 $push: { Inventory: object }
             });
         }
@@ -69,19 +69,20 @@ const nf = new Intl.NumberFormat();
         interaction.createFollowup(`You have successfully purchased **${amount} ${located.name}${amount > 1 ? 's' : ''}** for a total of **$${nf.format(itemPrice)}**.`);
 
 
+
     }
 
-    async autocomplete(interaction, options) {
+    async autocomplete(interaction, options, member) {
         const [focused] = options.filter((option) => option.focused === true)
         const result = []
 
         if(focused) {
-            let items = await allItems
+            let items = allItems
                 .filter((item) => item.name.toLowerCase().startsWith(focused.value.toLowerCase()))
                 .sort(
-                    (a, b) => 
+                    (a, b) =>
                         (a.name > b.name) ? 1 :
-                                -1
+                            -1
                 )
 
                 items.forEach((item) => {
