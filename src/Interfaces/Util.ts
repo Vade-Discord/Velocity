@@ -57,7 +57,7 @@ export default class Util {
     let amount;
     amount = providedAmount;
 
-    switch(type) {
+    switch(type?.toLowerCase()) {
       case "bank": {
         if(remove) {
           if(profile?.Bank > amount) {
