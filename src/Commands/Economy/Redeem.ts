@@ -39,15 +39,17 @@ export default class RedeemCommand extends Command {
                     !(Profile as any)?.HourlyTime ||
                     Date.now() > (Profile as any).HourlyTime
                 ) {
-                    if (Profile)
+                    if (Profile) {
+                        await this.client.utils.changeCash(Profile, 1000);
                         await Profile.updateOne({
-                            $inc: { Wallet: 1000 },
                             HourlyTime: Date.now() + ms("1h"),
                         });
+                    }
+
 
                     const hourlyEmbed = new this.client.embed()
                         .setTitle("Success!")
-                        .setDescription(`I have given you your 1,000 Hourly Coins!`)
+                        .setDescription(`I have given you your Hourly **$1,000**!`)
 
                     return interaction.createFollowup({ embeds: [hourlyEmbed] });
                 } else {
@@ -68,15 +70,17 @@ export default class RedeemCommand extends Command {
                     !(Profile as any)?.DailyTime ||
                     Date.now() > (Profile as any).DailyTime
                 ) {
-                    if (Profile)
+                    if (Profile) {
+                        await this.client.utils.changeCash(Profile, 2500);
                         await Profile.updateOne({
-                            $inc: { Wallet: 2500 },
                             DailyTime: Date.now() + ms("1d"),
                         });
+                    }
+
 
                     const dailyEmbed = new this.client.embed()
                         .setTitle("Success!")
-                        .setDescription(`I have given you your 2,500 Daily Coins!`)
+                        .setDescription(`I have given you your Daily **$2,500**!`)
 
                     return interaction.createFollowup({ embeds: [dailyEmbed] });
                 } else {
@@ -97,15 +101,17 @@ export default class RedeemCommand extends Command {
                     !(Profile as any)?.WeeklyTime ||
                     Date.now() > (Profile as any).WeeklyTime
                 ) {
-                    if (Profile)
+                    if (Profile) {
+                        await this.client.utils.changeCash(Profile, 25000);
                         await Profile.updateOne({
-                            $inc: { Wallet: 25000 },
                             WeeklyTime: Date.now() + ms("7d"),
                         });
+                    }
+
 
                     const weeklyEmbed = new this.client.embed()
                         .setTitle("Success!")
-                        .setDescription(`I have given you your 25,000 Weekly Coins!`)
+                        .setDescription(`I have given you your Weekly **$25,000**!`)
 
                     return interaction.createFollowup({ embeds: [weeklyEmbed] });
                 } else {
