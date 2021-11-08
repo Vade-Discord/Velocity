@@ -17,9 +17,8 @@ export default class DehoistCommand extends Command {
         if(!guild) {
             return interaction.createFollowup(`Looks like there was an error when fetching your guilds members. Please try again later.`);
         }
-        const guildMembers = (await guild.getRESTMembers({
-            limit: 1000
-        }));
+        ((await guild.fetchAllMembers()));
+        const guildMembers = guild.members;
 
         const characters = ['!', '@', '#', '~', '?', ';', '£', '$', '%', '^', '&', '*', '=', ';', ':', '>', '<'];
         const filter = guildMembers.filter(u => u.nick && characters.some((char) => u.nick?.trim().startsWith(char)) || u.username && u.nick !== "No Hoisting" && characters.some((char) => u.username?.trim().startsWith(char)));
