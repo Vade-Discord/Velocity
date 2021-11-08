@@ -52,6 +52,56 @@ export default class Util {
     return new Function(...names, `return \`${string}\`;`)(...vals);
   }
 
+  async changeCash(profile, providedAmount, type, remove) {
+
+    let amount;
+    amount = providedAmount;
+
+    switch(type) {
+      case "bank": {
+        if(remove) {
+          if(profile?.Bank > amount) {
+            await profile.updateOne({
+              $inc: { Bank: -amount }
+            });
+          } else {
+            await profile.updateOne({
+              Bank: 0,
+            });
+          }
+
+        } else {
+          await profile.updateOne({
+            $inc: { Bank: amount }
+          });
+        }
+
+        break;
+      }
+
+      default: {
+
+        if(remove) {
+          if(profile?.Wallet > amount) {
+            await profile.updateOne({
+              $inc: { Wallet: -amount }
+            });
+          } else {
+            await profile.updateOne({
+              Wallet: 0,
+            });
+          }
+
+        } else {
+          await profile.updateOne({
+            $inc: { Wallet: amount }
+          });
+        }
+        break;
+      }
+    }
+  }
+
   async changeInventoryItem(profile, itemName, amount = 1, remove = false) {
     const itemInfo = profile.Inventory.filter((i) => i.name === itemName)[0];
     if(itemInfo) {
