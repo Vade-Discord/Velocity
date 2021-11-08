@@ -5,6 +5,8 @@ export default class RoleConfigCommand extends Command {
         super(client, 'config', {
             description: "Explore all of the configuration commands available!",
             category: "Configuration",
+            userPerms: ["manageGuild"],
+            botPerms: ["manageMessages"],
             options: [
                 {
                     type: 1,
