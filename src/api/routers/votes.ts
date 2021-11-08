@@ -65,6 +65,17 @@ export function votes(api: API): Router {
                     .setFooter(`Velocity | Vote Logging`)
 
                 channel ? channel.createMessage({embeds: [embed]}) : null;
+                const profile = (await api.bot.utils.getProfileSchema(user.id))!!;
+                await api.bot.utils.changeCash(profile, 1000);
+                await user.getDMChannel().then((c) => {
+                    let thanksEmbed = new api.bot.embed()
+                        .setDescription(`Thanks for voting on **top.gg**, take **$1,000** as a reward! Check your balanace via \`/bank balance\`! Also vote **[HERE](https://discord.boats/bot/850723996513075200/vote)** for more rewards!`)
+                        .setColor(api.bot.constants.colours.green)
+                        .setTimestamp()
+                        .setFooter(`Velocity | Vote Logging`)
+
+                    c.createMessage({ embeds: [thanksEmbed] }).catch(() => null);
+                });
             }
         } catch (e) {
             api.bot.logger.error('API ERROR: ', e);
@@ -101,6 +112,17 @@ export function votes(api: API): Router {
                     .setFooter(`Velocity | Vote Logging`)
 
                 channel ? channel.createMessage({embeds: [embed]}) : null;
+                const profile = (await api.bot.utils.getProfileSchema(user.id))!!;
+                await api.bot.utils.changeCash(profile, 1000);
+                await user.getDMChannel().then((c) => {
+                    let thanksEmbed = new api.bot.embed()
+                        .setDescription(`Thanks for voting on **Discord Boats**, take **$1,000** as a reward! Check your balanace via \`/bank balance\`! Also vote **[HERE](https://top.gg/bot/850723996513075200/vote)** for more rewards!`)
+                        .setColor(api.bot.constants.colours.green)
+                        .setTimestamp()
+                        .setFooter(`Velocity | Vote Logging`)
+
+                    c.createMessage({ embeds: [thanksEmbed] }).catch(() => null);
+                });
             }
         } catch (e) {
             api.bot.logger.error('API ERROR: ', e);
