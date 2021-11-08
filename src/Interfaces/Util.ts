@@ -52,7 +52,7 @@ export default class Util {
     return new Function(...names, `return \`${string}\`;`)(...vals);
   }
 
-  async changeCash(profile, providedAmount, type, remove) {
+  async changeCash(profile, providedAmount, type = 'wallet', remove = false) {
 
     let amount;
     amount = providedAmount;
