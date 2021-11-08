@@ -19,9 +19,10 @@ export default class DehoistCommand extends Command {
         }
         ((await guild.fetchAllMembers()));
         const guildMembers = guild.members;
-
+            // create a regex that checks for special characters at the beginning of a string
+            const regex = /^[^a-zA-Z0-9_]+/;
         const characters = ['!', '@', '#', '~', '?', ';', '£', '$', '%', '^', '&', '*', '=', ';', ':', '>', '<'];
-        const filter = guildMembers.filter(u => u.nick && characters.some((char) => u.nick?.trim().startsWith(char)) || u.username && u.nick !== "No Hoisting" && characters.some((char) => u.username?.trim().startsWith(char)));
+        const filter = guildMembers.filter(u => u.nick && regex.test(u.nick) || u.username && u.nick !== "No Hoisting" && regex.test(u.username));
         try {
             if(filter.length) {
                 filter.forEach((memb) => {
