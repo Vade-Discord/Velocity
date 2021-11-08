@@ -36,13 +36,8 @@ export default class PayCommand extends Command {
             return interaction.createFollowup(`You cannot send money to yourself.`);
         }
 
-        await authorData.updateOne({
-            $inc: { Wallet: -amount }
-        });
-
-        await toPay.updateOne({
-            $inc: { Wallet: amount }
-        });
+        await this.client.utils.changeCash(authorData, amount, 'wallet', true);
+        await this.client.utils.changeCash(toPay, amount);
 
         const nf = new Intl.NumberFormat();
 
@@ -59,6 +54,7 @@ export default class PayCommand extends Command {
                 embeds: [paidEmbed]
             }).catch(() => null)
         }
+
     }
 
 }
