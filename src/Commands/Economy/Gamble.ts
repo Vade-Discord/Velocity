@@ -101,13 +101,9 @@ export default class GambleCommand extends Command {
                 }
 
                 if (profit === 0) {
-                    await Profile.updateOne({
-                        $inc: { Wallet: -bet },
-                    });
+                    await this.client.utils.changeCash(Profile, bet, 'wallet', true);
                 } else {
-                    await Profile.updateOne({
-                        $inc: { Wallet: profit },
-                    });
+                    await this.client.utils.changeCash(Profile, profit);
                 }
 
                 let amount = checkPremium ? profit * 1.35 : profit;
