@@ -66,9 +66,7 @@ export default class FishCommand extends Command {
             }
             case(randomNumber > 195): {
                 interaction.createFollowup('You managed to find a dufflebag containing around **$10,000** in cash! The money has been added to your Wallet!');
-                await profile.updateOne({
-                    $inc: { Wallet: 10000 }
-                });
+               await this.client.utils.changeCash(profile, 10000);
                 break;
             }
 

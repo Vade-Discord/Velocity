@@ -68,12 +68,8 @@ export default class RobCommand extends Command {
                     );
                     a = stealAmount;
                     b = true;
-                    await Res.updateOne({
-                        $inc: { Wallet: -stealAmount },
-                    });
-                    await authorRes.updateOne({
-                        $inc: { Wallet: stealAmount },
-                    });
+                    await this.client.utils.changeCash(Res, stealAmount, 'wallet', true);
+                    await this.client.utils.changeCash(authorRes, stealAmount);
                     return `Rob successful! You stole a grand total of **$${nf.format(
                         stealAmount
                     )}**`;
@@ -81,9 +77,7 @@ export default class RobCommand extends Command {
                 : async () => {
                     const available = Math.ceil(robberBal / 3);
                     const fine = Math.floor(Math.random() * (available - 2000) + 2000);
-                    await authorRes.updateOne({
-                        $inc: { Wallet: -fine },
-                    });
+                    await this.client.utils.changeCash(authorRes, fine, 'wallet', true);
                     return `Rob failed! You were caught by the police and fined **$${nf.format(
                         fine
                     )}**`;
