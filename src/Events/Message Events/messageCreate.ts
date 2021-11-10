@@ -54,7 +54,8 @@ Time: <t:${Math.floor((Date.now()) / 1000)}:R>`)
 
         if (guildData?.Moderation?.antiProfanity) {
             const ignore = ['ok', 'alr'];
-            const profanity = message.content?.split(" ").filter((word) => word.length >= 4 && profanityArray.some((letter) => distance(letter, word?.toLowerCase()) < 0.8));
+            const clean = (str) => str.replace(/[^\w\s]/gi, '');
+            const profanity = message.content?.split(" ").map((word) => clean(word)).filter((word) => word.length >= 4 && profanityArray.some((letter) => distance(letter, word?.toLowerCase()) < 0.8));
             if (profanity.length) {
                 message.delete().then(() => {
                     message.channel.createMessage(`${message.author.mention}, watch your language!`).then(async (msg) => {
