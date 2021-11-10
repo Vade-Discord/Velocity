@@ -17,23 +17,19 @@ export default class DehoistCommand extends Command {
         if(!guild) {
             return interaction.createFollowup(`Looks like there was an error when fetching your guilds members. Please try again later.`);
         }
-        ((await guild.fetchAllMembers()));
-        const guildMembers = guild.members;
+        await guild.fetchAllMembers(10000);
             // create a regex that checks for special characters at the beginning of a string
             const regex = /^[^a-zA-Z0-9_]+/;
-        const characters = ['!', '@', '#', '~', '?', ';', '£', '$', '%', '^', '&', '*', '=', ';', ':', '>', '<'];
-        const filter = guildMembers.filter(u => u.nick && regex.test(u.nick) || u.username && u.nick !== "No Hoisting" && regex.test(u.username));
+        const count = [];
         try {
-            if(filter.length) {
-                filter.forEach((memb) => {
-                    memb.edit({
-                        nick: `No Hoisting`
-                    });
-                });
-                return interaction.createFollowup(`Successfully dehoisted **${filter.length}** members usernames.`);
-            } else {
-                return interaction.createFollowup(`No members need dehoisting.`);
-            }
+            await member.guild.members.forEach(async (member) => {
+                if(member?.nick && regex.test(member.nick) || member.username && member.nick !== "No Hoisting" && member.username.match(regex)) {
+                    count.push(member.id)
+                   await member.edit({ nick: 'No Hoisting' });
+                }
+            });
+            console.log(count);
+            interaction.createFollowup(count?.length ? `Successfully dehoisted **${count.length}** members username${count.length === 1 ? '' : 's'}.` : `No members usernames were dehoisted.`);
         } catch (e) {
             return interaction.createFollowup(`Looks like there was an error when attempting to change the member(s) nicknames. Please try again later.`);
         }
