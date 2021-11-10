@@ -3,6 +3,7 @@ import { Manager } from 'erela.js';
 import Spotify from "erela.js-spotify";
 import Deezer from "erela.js-deezer";
 import Facebook from "erela.js-facebook";
+import AppleMusic from "erela.js-apple";
 import { Guild } from "eris";
 import Filter from "erela.js-filters";
 import playerSchema from '../Schemas/Backend/Players';
@@ -31,7 +32,12 @@ export async function Lavalink(client: Bot) {
             }),
             new Deezer({}),
             new Facebook(),
-            new Filter()
+            new Filter(),
+            new AppleMusic({
+                // @ts-ignore
+                getAlbumTracks: true, getArtistTopAlbums: true,
+                getArtistRelatedArtists: true, getArtist: true, getAlbum: true, getTrack: true, getPlaylist: true,
+            })
         ],
         autoPlay: true,
         send: (id, payload) => {
