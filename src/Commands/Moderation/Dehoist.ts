@@ -28,7 +28,7 @@ export default class DehoistCommand extends Command {
                    await member.edit({ nick: 'No Hoisting' });
                 }
             });
-            console.log(count);
+
             interaction.createFollowup(count?.length ? `Successfully dehoisted **${count.length}** members username${count.length === 1 ? '' : 's'}.` : `No members usernames were dehoisted.`);
         } catch (e) {
             return interaction.createFollowup(`Looks like there was an error when attempting to change the member(s) nicknames. Please try again later.`);
