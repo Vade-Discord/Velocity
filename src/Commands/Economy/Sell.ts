@@ -31,7 +31,7 @@ export default class SellCommand extends Command {
         const amount = options.get("amount") ?? 1;
         const profile = (await this.client.utils.getProfileSchema(member.id))!!;
         // @ts-ignore
-        if((profile.Inventory.filter((i) => i.name?.toLowerCase() === item?.toLowerCase())[0].amount <= amount)) {
+        if((profile.Inventory.filter((i) => i.name?.toLowerCase() === item?.toLowerCase())[0].amount < amount)) {
             return interaction.createFollowup(`You do not have enough of that item to sell!`);
         }
         const itemInfo = (profile.Inventory.filter((i) => i.name === item))[0];
