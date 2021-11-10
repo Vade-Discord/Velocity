@@ -23,7 +23,7 @@ export default class DehoistCommand extends Command {
         const count = [];
         try {
             await member.guild.members.forEach(async (member) => {
-                if(member?.nick && regex.test(member.nick) || member.username && member.nick !== "No Hoisting" && member.username.match(regex)) {
+                if(member?.nick && regex.test(member.nick) || member.username && !member?.nick && member.username.match(regex)) {
                     count.push(member.id)
                    await member.edit({ nick: 'No Hoisting' });
                 }
