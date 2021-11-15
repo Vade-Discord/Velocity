@@ -496,7 +496,9 @@ export default class Util {
         ]
       }
       ]
-    })
+    });
+    const channel = (await this.client.getRESTChannel(giveaway.channelID))!!;
+    channel ? channel.createMessage({ content: `${winner.map((u) => u.mention)?.join(", ")}, ${winners.size > 1 ? 'have won the giveaway!' : 'has won the giveaway!'}`, messageReference: { messageID: giveaway.messageID} }) : null;
     await giveaway.delete();
 
   }
