@@ -54,7 +54,7 @@ export default class FilterCommand extends Command {
         const player = this.client.manager.players.get(interaction.guildID);
         const voiceState = member.voiceState;
 
-        const me = (await member.guild.members.getRESTMember(this.client.user.id));
+        const me = (await member.guild.getRESTMember(this.client.user.id));
         if(!me.voiceState || !me.voiceState.channelID) return interaction.createFollowup(`I am not connected to a Voice Channnel!`);
         if(!voiceState || voiceState.channelID !== me.voiceState.channelID) return interaction.createFollowup(`You must be in the same Voice Channel as me to use this Command!`);
         if(!player) return interaction.createFollowup(`Nothing seems to be playing.`);
