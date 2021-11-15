@@ -23,18 +23,8 @@ export default class FilterCommand extends Command {
                 },
                 {
                     type: 1,
-                    name: 'pop',
-                    description: 'Apply a pop effect to the music!'
-                },
-                {
-                    type: 1,
                     name: 'soft',
                     description: 'Apply a soft effect to the music!'
-                },
-                {
-                    type: 1,
-                    name: 'vaporwave',
-                    description: 'Apply a vaporwave effect to the music!'
                 },
                 {
                     type: 1,
