@@ -13,12 +13,10 @@ export default class CommandName extends Command {
     async run(interaction, member, options, subOptions) {
 
        const messages = (await this.client.getMessages(interaction.channel.id));
-       console.log(messages)
        const msg = (messages.filter((msg) => msg.id === interaction.data.target_id))[0];
        if(!msg || !msg?.content) {
            return interaction.createFollowup('Somethig went wrong when checking the message content, please try again later.');
        }
-       console.log(msg)
        const playCommand = this.client.commands.get('play');
        const o = new Map();
        o.set("input", msg.content);
