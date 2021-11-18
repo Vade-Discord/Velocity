@@ -39,12 +39,14 @@ export default class ReadyEvent extends Event {
         const commands = [];
         const contextCommands = [];
         await this.client.commands.forEach((command) => {
-           commands.push({
-               options: command.options,
-               name: command.name,
-               description: command.description,
-               defaultPermission: command.devOnly,
-           });
+            if(!command.contextOnly) {
+                commands.push({
+                    options: command.options,
+                    name: command.name,
+                    description: command.description,
+                    defaultPermission: command.devOnly,
+                });
+            }
         });
 
         const contextFiltered = this.client.commands.filter(m => m.contextUserMenu);
@@ -52,7 +54,7 @@ export default class ReadyEvent extends Event {
             commands.push({
                 name: this.client.utils.capitalise(command.name),
                 defaultPermission: command.devOnly,
-                type: 2,
+                type: command.contextType,
             });
         });
         if(this.client.user.id === this.client.config.CLIENTS.beta) {
