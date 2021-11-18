@@ -20,6 +20,8 @@ interface CommandOptions {
     disabled?: boolean;
     adminCommand?: boolean;
     contextUserMenu?: boolean;
+    contextOnly?: boolean;
+    contextType?: number;
 }
 
 
@@ -43,6 +45,8 @@ export default class Command {
     public disabled?: boolean;
     public adminCommand?: boolean;
     public contextUserMenu?: boolean;
+    public contextOnly?: boolean;
+    public contextType?: number;
     public options?: SlashCommandOptions[];
     public client: Bot;
 
@@ -67,6 +71,8 @@ export default class Command {
         this.adminCommand = options.adminCommand || false;
         this.args = options.args || false;
         this.contextUserMenu = options.contextUserMenu || false;
+        this.contextOnly = options.contextOnly || false;
+        this.contextType = options.contextType || 2;
     }
 
     async run(interaction, member, options: Map<string, string>, subOptions: Map<string, string>) {
