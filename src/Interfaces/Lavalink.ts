@@ -1,9 +1,9 @@
 import { Bot } from '../client/Client';
 import { Manager } from 'erela.js';
-import Spotify from "erela.js-spotify";
+import Spotify from 'better-erela.js-spotify';
 import Deezer from "erela.js-deezer";
 import Facebook from "erela.js-facebook";
-import AppleMusic from "erela.js-apple";
+import AppleMusic from 'better-erela.js-apple';
 import { Guild } from "eris";
 import Filter from "erela.js-filters";
 import playerSchema from '../Schemas/Backend/Players';
@@ -20,24 +20,21 @@ export async function Lavalink(client: Bot) {
         },
     ];
 
-    const clientID: string = client.config.lavalink.SPOTIFY_CLIENT_ID;
+    const clientId: string = client.config.lavalink.SPOTIFY_CLIENT_ID;
     const clientSecret: string = client.config.lavalink.SPOTIFY_SECRET_ID;
 
     client.manager = new Manager({
         nodes,
         plugins: [
             new Spotify({
-                clientID,
+                strategy: 'API',
+                clientId,
                 clientSecret,
             }),
             new Deezer({}),
             new Facebook(),
             new Filter(),
-            new AppleMusic({
-                // @ts-ignore
-                getAlbumTracks: true, getArtistTopAlbums: true,
-                getArtistRelatedArtists: true, getArtist: true, getAlbum: true, getTrack: true, getPlaylist: true,
-            })
+            new AppleMusic()
         ],
         autoPlay: true,
         send: (id, payload) => {
