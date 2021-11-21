@@ -58,6 +58,7 @@ export interface IGuild extends mongoose.Document {
         user?: string;
         channel?: string;
         giveaway?: string;
+        thread?: string;
     }
 }
 
@@ -118,6 +119,7 @@ const guildSchema = new mongoose.Schema({
         user: String,
         channel: String,
         giveaway: String,
+        thread: String,
     }
 });
 
