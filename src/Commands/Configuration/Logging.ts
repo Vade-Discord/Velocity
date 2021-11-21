@@ -35,6 +35,10 @@ export default class LoggingCommand extends Command {
                                     value: 'voice',
                                 },
                                 {
+                                    name: 'thread activities',
+                                    value: 'thread',
+                                },
+                                {
                                     name: 'moderation actions',
                                     value: 'moderation',
                                 },
@@ -77,7 +81,7 @@ export default class LoggingCommand extends Command {
 
         const type = subOptions.get(`type`);
         if(type) {
-            const validTypes: string[] = ['message', 'voice', 'role', 'moderation', 'channel', 'user', 'welcome', 'invites', 'suggestion'];
+            const validTypes: string[] = ['message', 'voice', 'role', 'moderation', 'channel', 'user', 'welcome', 'invites', 'suggestion', 'thread'];
             if(!validTypes.includes(type?.toLowerCase())) {
                 const invalidEmbed = new this.client.embed()
                     .setAuthor(`Invalid Option!`, this.client.user.avatarURL)
@@ -95,6 +99,17 @@ export default class LoggingCommand extends Command {
         switch(type?.toLowerCase()) {
             case "message": {
                 object.message = channel.id;
+                await guildData.updateOne({
+                    Logging: {
+                        object
+                    }
+                });
+                interaction.createFollowup(`Successfully updated the **${type?.toLowerCase()}** logging channel.`);
+                break;
+            }
+
+            case "thread": {
+                object.thread = channel.id;
                 await guildData.updateOne({
                     Logging: {
                         object
