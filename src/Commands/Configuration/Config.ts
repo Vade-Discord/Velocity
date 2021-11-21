@@ -50,7 +50,22 @@ export default class RoleConfigCommand extends Command {
                             required: true,
                         }
                     ]
-                }
+                },
+                {
+                    type: 1,
+                    name: 'nickname-format',
+                    description: 'Customise how your members nicknames must be formatted.',
+                    options: [
+                        {
+                            type: 3,
+                            name: 'format',
+                            description: 'The nicknames they should have.',
+                            autocomplete: true,
+                            required: true,
+                        }
+                    ]
+                },
+
             ]
         });
     }
@@ -116,30 +131,70 @@ export default class RoleConfigCommand extends Command {
                 return;
             }
 
-            const message = await this.client.utils.Interpolate(focused.options[0].value, {
-                username: `${member.username}`,
-                tag: `${member.username}#${member.discriminator}`,
-                id: `${member.id}`,
-                guildName: `${member.guild.name}`,
-                guildID: `${member.guild.id}`,
-                mention: `${member.mention}`
-            }).catch((e) => {
-                if(e) {
+        switch (interaction.data.options[0].name) {
+
+            case "welcome-message": {
+
+                    const message = await this.client.utils.Interpolate(focused.options[0].value, {
+                        username: `${member.username}`,
+                        tag: `${member.username}#${member.discriminator}`,
+                        id: `${member.id}`,
+                        guildName: `${member.guild.name}`,
+                        guildID: `${member.guild.id}`,
+                        mention: `${member.mention}`
+                    }).catch((e) => {
+                        if(e) {
+                            return;
+                        }
+                    });
+
+                    if(!message) {
+                        return;
+                    }
+
+                    result.push({
+                        name: message,
+                        value: focused.options[0].value
+                    })
+
+                if(!result[0]) return
+                return interaction.result(result);
+
+                }
+
+            case "nickname-format": {
+
+                const message = await this.client.utils.Interpolate(focused.options[0].value, {
+                    username: `${member.username}`,
+                    tag: `${member.username}#${member.discriminator}`,
+                    id: `${member.id}`,
+                    guildName: `${member.guild.name}`,
+                    guildID: `${member.guild.id}`,
+                }).catch((e) => {
+                    if(e) {
+                        return;
+                    }
+                });
+
+                if(!message) {
                     return;
                 }
-            });
 
-            if(!message) {
-                return;
+                result.push({
+                    name: message,
+                    value: focused.options[0].value
+                })
+
+                if(!result[0]) return
+                return interaction.result(result);
+
             }
 
-            result.push({
-                name: message,
-                value: focused.options[0].value
-            })
+            }
+
         }
-        if(!result[0]) return
-        return interaction.result(result);
+
+
 
     }
 
