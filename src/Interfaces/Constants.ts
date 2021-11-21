@@ -56,6 +56,11 @@ export default {
             id: "858884746516234240",
             mention: "<:arrow_left_white:858884746516234240>",
         },
+      threadChannel: {
+            name: "ThreadChannel",
+            id: "911048935693496331",
+            mention: "<:ThreadChannel:911048935693496331>",
+      },
         arrow_right: {
             name: "arrow_right_white",
             id: "858884727725490206",
