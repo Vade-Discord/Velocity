@@ -12,7 +12,10 @@ export default class GuildMemberRemoveEvent extends Event {
 
     async run(guild, member) {
 
-        const user = (await this.client.getRESTUser(member.id))!!;
+        let user = (await this.client.getRESTUser(member.id));
+        if(!user) {
+            user = member;
+        }
         const me = await guild.getRESTMember(this.client.user.id);
         const guildData = (await this.client.utils.getGuildSchema(guild))!!;
 
