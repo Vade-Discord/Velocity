@@ -42,7 +42,7 @@ export default class MuteCommand extends Command {
     }
     async run(interaction, member, options, subOptions) {
 
-        const member1 = (await member.guild.getRESTMember(options.get("member")))!!;
+        const member1 = (await member.guild.getMember(options.get("member")))!!;
         const silent = options.get("silent") ? 64 : 0;
         const reason = options.get("reason") ?? 'No reason provided.';
         console.log(silent)
