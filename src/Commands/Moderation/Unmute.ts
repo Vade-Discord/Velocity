@@ -24,7 +24,7 @@ export default class UnmuteCommand extends Command {
 
 
 
-        const member1 = (await member.guild.getRESTMember(options.get("member")))!!;
+        const member1 = (await member.guild.getMember(options.get("member")))!!;
         if(!(await this.client.redis.get(`mute.${member1.id}.${interaction.guildID}`))) {
             return interaction.createFollowup(`That member doesn't seem to be muted.`);
         }
