@@ -117,6 +117,7 @@ Time Kicked: <t:${Date.now()}:d>`)
             }
 
 
+
         }
         if (welcomeChannel) {
             if(welcomeChannel instanceof TextChannel && welcomeChannel.permissionsOf(this.client.user.id).has("sendMessages")) {
