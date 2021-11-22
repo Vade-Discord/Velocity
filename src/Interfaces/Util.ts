@@ -223,8 +223,8 @@ export default class Util {
     if(guild.ownerID === memberID) {
       return true;
     }
-    const member = (await guild.getRESTMember(memberID));
-    const target = (await guild.getRESTMember(targetID));
+    const member = (await guild.getMember(memberID));
+    const target = (await guild.getMember(targetID));
     const memberRole = this.getHighestRole(member, guild);
     const targetRole = this.getHighestRole(target, guild);
     if(!memberRole && targetRole) {
