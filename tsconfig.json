@@ -15,6 +15,7 @@
     "allowJs": true,
     "rootDir": "./src",
     "outDir": "./dist",
+    "typeRoots": ["d.ts", "node_modules/@types"],
 
     /* Strict Options */
     "pretty": true,
