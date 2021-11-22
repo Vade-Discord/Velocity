@@ -2,7 +2,7 @@ import type { Bot } from "../client/Client";
 import Command from "./Command";
 
 // Package imports
-import { Client, RichEmbed } from "eris";
+import { Client, RichEmbed, Guild } from "eris";
 import { Types } from "mongoose";
 
 // File imports
@@ -30,6 +30,16 @@ Client.prototype.getUser = async function (id) {
   const u = await this.getRESTUser(id).catch(() => null);
   if (u !== null) {
     this.users.add(u);
+    return u;
+  } else return null;
+}
+
+Guild.prototype.getMember = async function (id) {
+  const cur = this.members.get(id);
+  if (cur) return cur;
+  const u = await this.getRESTMember(id).catch(() => null);
+  if (u !== null) {
+    this.members.add(u);
     return u;
   } else return null;
 }
