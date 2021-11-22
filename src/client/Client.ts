@@ -1,6 +1,5 @@
 import { Logger } from "@dimensional-fun/logger";
 import Eris from "eris";
-import pluris from "pluris";
 import Collection from "@discordjs/collection";
 import glob from "glob";
 import { promisify } from "util";
@@ -42,7 +41,7 @@ export class Bot extends Eris.Client {
         "directMessages",
         "guildMembers",
         "guildBans",
-          "guildInvites"
+          "guildInvites",
       ],
         seedVoiceConnections: true,
         restMode: true,
@@ -54,7 +53,6 @@ export class Bot extends Eris.Client {
   public async start(config: typeof Config): Promise<void> {
     this.logger.info("hi");
     this.config = config;
-    await pluris(Eris);
     await this.connect();
     const api = new API(this);
     api.start(); // Start the API.
