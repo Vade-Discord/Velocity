@@ -2,9 +2,8 @@ import type { Bot } from "../client/Client";
 import Command from "./Command";
 
 // Package imports
-import {RichEmbed, TextChannel} from "eris";
+import { Client, RichEmbed } from "eris";
 import { Types } from "mongoose";
-
 
 // File imports
 import guild_schema from "../Schemas/Main-Guilds/GuildSchema";
@@ -22,6 +21,17 @@ interface SelectionObject {
     name: string;
     id: string;
   },
+}
+
+
+Client.prototype.getUser = async function (id) {
+  const cur = this.users.get(id);
+  if (cur) return cur;
+  const u = await this.getRESTUser(id).catch(() => null);
+  if (u !== null) {
+    this.users.add(u);
+    return u;
+  } else return null;
 }
 
 export default class Util {
