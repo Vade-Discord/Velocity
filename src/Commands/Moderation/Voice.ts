@@ -51,7 +51,7 @@ export default class VoicekickCommand extends Command {
 
             case "disconnect": {
                 const ID = subOptions.get(`member`);
-                const member1 = (await member.guild.getRESTMember(ID));
+                const member1 = (await member.guild.getMember(ID));
                 if(!member1) {
                     return interaction.createFollowup(`Something seems to have gone wrong.. please try again.`);
                 }
@@ -71,7 +71,7 @@ export default class VoicekickCommand extends Command {
 
             case "move": {
                 const ID = subOptions.get(`member`);
-                const member1 = (await member.guild.getRESTMember(ID));
+                const member1 = (await member.guild.getMember(ID));
                 if(!member1.voiceState?.channelID) {
                     return interaction.createFollowup(`The member doesn't seem to be in a Voice Channel.`);
                 }
