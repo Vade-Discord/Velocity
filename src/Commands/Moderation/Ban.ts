@@ -80,7 +80,7 @@ export default class BanCommand extends Command {
             //flags.map(({ flag }) => options[`--${flag}`]?.alias || `-${flag}`)
         //);
 
-        const banMember = (await member.guild.getRESTMember(options.get("user")))!!;
+        const banMember = (await member.guild.getMember(options.get("user")))!!;
         if (banMember &&
             banMember.id !== this.client.user?.id &&
             banMember.id !== member.id) {
