@@ -67,7 +67,7 @@ export default class KickCommand extends Command {
 
         let dmed = false;
 
-        const kickMember = (await member.guild.getRESTMember(options.get("user")))!!;
+        const kickMember = (await member.guild.getMember(options.get("user")))!!;
         if (kickMember &&
             kickMember.id !== this.client.user?.id &&
             kickMember.id !== member.id) {
