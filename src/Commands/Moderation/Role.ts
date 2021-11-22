@@ -101,7 +101,7 @@ export default class RoleCommand extends Command {
             case "member": {
 
                 const memberID = subOptions.get("member");
-                const member1 = (await member.guild.getRESTMember(memberID))!!;
+                const member1 = (await member.guild.getMember(memberID))!!;
                 if(!member1) {
                     return interaction.createFollowup(`Unable to locate that member. Please try again later.`);
                 }
