@@ -1,6 +1,5 @@
 import { Logger } from "@dimensional-fun/logger";
-import Eris from "eris";
-import pluris from "pluris";
+import Eris, {Guild} from "eris";
 import Collection from "@discordjs/collection";
 import glob from "glob";
 import { promisify } from "util";
@@ -11,8 +10,26 @@ import Util from "../Interfaces/Util";
 import MessageEmbed = require("../Classes/Embeds");
 import Constants from '../Interfaces/Constants';
 import { API } from '../api/API';
+import Spotify from 'better-erela.js-spotify';
+
 
 import { RedisClient } from 'ioredis';
+import {Manager} from "erela.js";
+import Deezer from "erela.js-deezer";
+import Facebook from "erela.js-facebook";
+import Filter from "erela.js-filters";
+import AppleMusic from 'better-erela.js-apple';
+
+const nodes: any = [
+  {
+    host: Config.lavalink.host,
+    password: Config.lavalink.password,
+    port: Config.lavalink.port,
+  },
+];
+
+const clientId: string = Config.lavalink.SPOTIFY_CLIENT_ID;
+const clientSecret: string = Config.lavalink.SPOTIFY_SECRET_ID;
 
 const globPromise = promisify(glob);
 
@@ -31,7 +48,25 @@ export class Bot extends Eris.Client {
   public utils: Util = new Util(this);
   public constants: typeof Constants = Constants;
   public embed: typeof MessageEmbed | typeof Eris.RichEmbed = MessageEmbed;
-  public manager = undefined;
+  public manager = new Manager({
+    nodes,
+    plugins: [
+      new Spotify({
+        strategy: 'API',
+        clientId,
+        clientSecret,
+      }),
+      new Deezer({}),
+      new Facebook(),
+      new Filter(),
+      new AppleMusic()
+    ],
+    autoPlay: true,
+    send: (id, payload) => {
+      const guild = this.guilds.get(id) as Guild;
+      if(guild)  guild.shard.sendWS(payload.op, payload.d)
+    },
+  });
  public redis: RedisClient = undefined;
   public constructor(_options: Eris.ClientOptions = { intents: undefined}) {
     super(Config.token, {
@@ -42,7 +77,7 @@ export class Bot extends Eris.Client {
         "directMessages",
         "guildMembers",
         "guildBans",
-          "guildInvites"
+          "guildInvites",
       ],
         seedVoiceConnections: true,
         restMode: true,
@@ -54,7 +89,6 @@ export class Bot extends Eris.Client {
   public async start(config: typeof Config): Promise<void> {
     this.logger.info("hi");
     this.config = config;
-    await pluris(Eris);
     await this.connect();
     const api = new API(this);
     api.start(); // Start the API.
