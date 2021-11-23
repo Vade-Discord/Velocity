@@ -1,8 +1,7 @@
 import { Event } from '../../Interfaces/Event';
 import mongo from '../../Interfaces/Database';
 import redisConnect from "../../Interfaces/Redis";
-import { Lavalink } from "../../Interfaces/Lavalink";
-
+import {Lavalink} from "../../Interfaces/Lavalink";
 let e;
 
 export default class ReadyEvent extends Event {
@@ -13,9 +12,9 @@ export default class ReadyEvent extends Event {
     }
 
     async run() {
+        await this.client.manager.init(this.client.user.id);
         e = this.client;
         await mongo();
-        await Lavalink(this.client);
         this.client.redis = await redisConnect(this.client);
         this.client.logger.info(`${this.client.user.username}#${this.client.user.discriminator} has successfully logged in!`);
 
