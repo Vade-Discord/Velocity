@@ -112,6 +112,14 @@ export default class RoleConfigCommand extends Command {
                 break;
             }
 
+            case "nickname-format": {
+
+                interaction.createFollowup(`${subOptions.get("format")}`);
+
+
+                break;
+            }
+
 
             default: {
                 return;
@@ -170,6 +178,9 @@ export default class RoleConfigCommand extends Command {
                     id: `${member.id}`,
                     guildName: `${member.guild.name}`,
                     guildID: `${member.guild.id}`,
+                    highestRole: `${this.client.utils.getHighestRole(member, member.guild)?.name ?? 'No Role'}`,
+                    wallet: `$${(await this.client.utils.getProfileSchema(member.id))?.Wallet ?? 0}`,
+                    bank: `$${(await this.client.utils.getProfileSchema(member.id))?.Bank ?? 0}`,
                 }).catch((e) => {
                     if(e) {
                         return;
