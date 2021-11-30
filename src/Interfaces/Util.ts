@@ -2,7 +2,7 @@ import type { Bot } from "../client/Client";
 import Command from "./Command";
 
 // Package imports
-import { Client, RichEmbed, Guild } from "eris";
+import {Client, RichEmbed, Guild, TextChannel} from "eris";
 import { Types } from "mongoose";
 
 // File imports
@@ -291,7 +291,7 @@ export default class Util {
   async runPreconditions(interaction, member, g, command: Command) {
     if (command.guildOnly) {
       if (!interaction.guildID) {
-        let noGuild = new RichEmbed()
+        let noGuild = new this.client.embed()
             .setTitle(`Guild Only!`)
             .setDescription(`This Command can only be ran in a Guild!`)
             .setColor(`#F00000`)
@@ -308,7 +308,7 @@ export default class Util {
     const guild = await this.client.guilds.get(g.id);
     if (command.devOnly) {
       if (!this.client.owners.includes(interaction.user ? interaction.user.id : interaction.member.id)) {
-        let notOwnerEmbed = new RichEmbed()
+        let notOwnerEmbed = new this.client.embed()
           .setTitle(`Developer Only Command!`)
           .setDescription(`Only a Bot Developer can run this Command!`)
           .setColor(`#F00000`)
@@ -325,7 +325,7 @@ export default class Util {
 
     if (command.modCommand) {
       if (!(await this.checkModerator(member, guild))) {
-        let noMod = new RichEmbed()
+        let noMod = new this.client.embed()
           .setTitle(`Moderator Only!`)
           .setDescription(`This Command requires you to be a Moderator!`)
           .setColor(`#F00000`)
@@ -346,7 +346,7 @@ export default class Util {
 
       const checkBotPerms = command.botPerms.some((perm) => !getMember.permissions.has(perm));
       if (checkBotPerms) {
-        let noPermEmbed = new RichEmbed()
+        let noPermEmbed = new this.client.embed()
           .setTitle(`Missing Permissions!`)
           .setDescription(
             `I am missing one of the required permissions for this Command. Required Permissions: ${command.botPerms.map((m) => this.cleanPerms(m)).join(", ")}`
@@ -363,7 +363,7 @@ export default class Util {
     if (command.userPerms.length && !(await this.checkModerator(member, guild))) {
       const userPermCheck = command.userPerms.some((perm) => !member.permissions.has(perm));
       if (userPermCheck) {
-        let noPermEmbed = new RichEmbed()
+        let noPermEmbed = new this.client.embed()
           .setTitle(`Missing Permissions!`)
           .setDescription(
             `You are missing one of the required permissions for this Command. Required Permissions: ${command.userPerms.map((m) => this.cleanPerms(m)).join(", ")}`
