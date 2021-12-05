@@ -114,8 +114,13 @@ export default class RoleConfigCommand extends Command {
 
             case "nickname-format": {
 
-                interaction.createFollowup(`${subOptions.get("format")}`);
 
+                await guildData.updateOne({
+                    nicknameFormat: subOptions.get("format"),
+                });
+
+
+                interaction.createFollowup(`Successfully set your new nickname format to: \`${subOptions.get("format")}\``);
 
                 break;
             }
