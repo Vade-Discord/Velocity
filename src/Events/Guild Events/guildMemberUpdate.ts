@@ -11,12 +11,11 @@ export default class GuildMemberEvent extends Event {
 
     async run(guild, member, oldMember) {
         if (!oldMember) return
-            if (!this.client.users.get(member.id)) {
-                member = await guild.getRESTMember(member.id);
-            }
+            member  =(await guild.getMember(member.id))!!;
 
             const logChannel = await this.client.utils.loggingChannel(guild, 'user');
             if (!logChannel) return;
+        const guildData = (await this.client.utils.getGuildSchema(guild))!!;
             const tag = `${member.user.username}#${member.user.discriminator}`;
             const logEmbed = new this.client.embed()
                 .setAuthor(tag, member.user.avatarURL)
@@ -30,6 +29,23 @@ export default class GuildMemberEvent extends Event {
                     .setDescription(`**From:** ${oldMember?.nick ?? 'No Nickname.'}\n**To:** ${member?.nick ?? 'No Nickname.'}`)
 
                 logChannel.createMessage({ embeds: [logEmbed] });
+
+                if(guildData?.nicknameFormat && !member.id !== guild.ownerID) {
+                    const formatted = await this.client.utils.Interpolate(guildData.nicknameFormat, {
+                        username: `${member.username}`,
+                        tag: `${member.username}#${member.discriminator}`,
+                        id: `${member.id}`,
+                        guildName: `${member.guild.name}`,
+                        guildID: `${member.guild.id}`,
+                        highestRole: `${this.client.utils.getHighestRole(member, member.guild)?.name ?? 'No Role'}`,
+                        wallet: `$${(await this.client.utils.getProfileSchema(member.id))?.Wallet ?? 0}`,
+                        bank: `$${(await this.client.utils.getProfileSchema(member.id))?.Bank ?? 0}`,
+                    }).catch(() => null);
+                    if(formatted && formatted.length > 32) {
+                        member.edit({nick: formatted.slice(0, 31) }).catch(() => null);
+                    }
+                    formatted ? member.edit({ nick: formatted }) : null;
+                }
 
             }
 
