@@ -31,6 +31,7 @@ export interface IGuild extends mongoose.Document {
     StarAmount: number;
     Automod: boolean;
     MessageCounter: boolean;
+    nicknameFormat: string;
     Moderation?: {
         autoMod?: boolean;
         antiLink?: boolean;
@@ -93,6 +94,7 @@ const guildSchema = new mongoose.Schema({
     footer: String,
     Automod: Boolean,
     MessageCounter: Boolean,
+    nicknameFormat: String,
     Moderation: {
         autoMod: Boolean,
         antiLink: Boolean,
