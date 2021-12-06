@@ -41,10 +41,16 @@ export default class GuildMemberEvent extends Event {
                         wallet: `$${(await this.client.utils.getProfileSchema(member.id))?.Wallet ?? 0}`,
                         bank: `$${(await this.client.utils.getProfileSchema(member.id))?.Bank ?? 0}`,
                     }).catch(() => null);
-                    if(formatted && formatted.length > 32) {
-                        member.edit({nick: formatted.slice(0, 31) }).catch(() => null);
+                    let result;
+                    if(formatted?.length > 32) {
+                        result = formatted.slice(0, 31);
+                    } else {
+                        result = formatted;
                     }
-                    formatted ? member.edit({ nick: formatted }) : null;
+
+                    if(member?.nick ? member.nick !== result : member.username !== result) {
+                        member.edit({ nick: result }).catch(() => null);
+                    }
                 }
 
             }
