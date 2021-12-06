@@ -28,20 +28,26 @@ export default class UpdateCommand extends Command {
         if(guildData?.nicknameFormat && user.id !== member.guild.ownerID) {
 
             const formatted = await this.client.utils.Interpolate(guildData.nicknameFormat, {
-                username: `${member.username}`,
-                tag: `${member.username}#${member.discriminator}`,
-                id: `${member.id}`,
-                guildName: `${member.guild.name}`,
-                guildID: `${member.guild.id}`,
-                highestRole: `${this.client.utils.getHighestRole(member, member.guild)?.name ?? 'No Role'}`,
-                wallet: `$${(await this.client.utils.getProfileSchema(member.id))?.Wallet ?? 0}`,
-                bank: `$${(await this.client.utils.getProfileSchema(member.id))?.Bank ?? 0}`,
+                username: `${user.username}`,
+                tag: `${user.username}#${user.discriminator}`,
+                id: `${user.id}`,
+                guildName: `${user.guild.name}`,
+                guildID: `${user.guild.id}`,
+                highestRole: `${this.client.utils.getHighestRole(user, member.guild)?.name ?? 'No Role'}`,
+                wallet: `$${(await this.client.utils.getProfileSchema(user.id))?.Wallet ?? 0}`,
+                bank: `$${(await this.client.utils.getProfileSchema(user.id))?.Bank ?? 0}`,
             }).catch(() => null);
 
+            let result;
+
             if(formatted?.length > 32) {
-                user.edit({ nick: formatted.slice(0, 31) });
+                result = formatted.slice(0, 31);
             } else {
-                formatted ? user.edit({ nick: formatted }) : null;
+                result = formatted;
+            }
+
+            if(user?.nick ? user.nick !== result : user.username !== result) {
+                user.edit({ nick: result }).catch(() => null);
             }
 
         }
