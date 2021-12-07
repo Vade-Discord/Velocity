@@ -11,39 +11,53 @@ export default class SuggestCommand extends Command {
                     name: 'suggestion',
                     description: 'What is your suggestion?',
                     required: true,
+                },
+                {
+                    type: 5,
+                    name: 'anomynous',
+                    description: 'Select true if you would like to send this anomynously.',
+                    required: false,
                 }
-            ]
+            ],
+            ephemeral: true,
         });
     }
     async run(interaction, member, options, subOptions) {
 
+        let anom;
+      if(!options.get("anomynous")) {
+          await interaction.acknowledge();
+      } else {
+          anom = true;
+      }
 
         const suggestion = options.get("suggestion");
         const guildData = (await this.client.utils.getGuildSchema(member.guild))!!;
-        const logging = guildData?.Suggestion;
-        if(!logging) {
-            return interaction.createFollowup('This server does not currently have a suggestion channel setup.');
+        if(!guildData?.Suggestion) {
+            return interaction.createMessage({ content: 'This server does not currently have a suggestion channel setup.', flags: 64 });
         }
-
-
-        const channel = (await this.client.getRESTChannel(logging))!!;
+        const channel = (await this.client.getRESTChannel(guildData.Suggestion));
+        if(!channel) {
+            return interaction.createMessage({ content: `This server does not currently have a suggestion channel setup.`, flags: 64 });
+        }
         if(channel.type !== 0) {
-            return interaction.createFollowup('The guilds suggestion channel is not set to a text channel. Please get this fixed.');
+            return interaction.createMessage({ content: 'The guilds suggestion channel is not set to a text channel. Please get this fixed.', flags: 64 });
         }
 
         const embed = new this.client.embed()
-            .setAuthor(`${member.username}#${member.discriminator}`, member.avatarURL)
             .setDescription(`${suggestion}\n\n:bar_chart: Use the reactions below to vote!`)
             .setFooter('Want to suggest something? Use /suggest!')
             .setTimestamp()
 
-        channel.createMessage({ embeds: [embed] }).then(async (e) => {
+        !anom ? embed.setAuthor(`${member.username}#${member.discriminator}`, member.avatarURL) : embed.setAuthor('Anomynous Suggestion', this.client.user.avatarURL)
+        const content = guildData?.SuggestionPing ? (member.guild.roles.get(guildData.SuggestionPing) ? member.guild.roles.get(guildData.SuggestionPing).mention : '') : '';
+        channel.createMessage({  content, embeds: [embed] }).then(async (e) => {
             await e.addReaction('👍');
             await e.addReaction('👎');
         }).catch(() => {
-           return interaction.createFollowup('Something went wrong when posting your suggestion..');
+           return interaction.createMessage({ content: 'Something went wrong when posting your suggestion..', flags: 64 });
         });
-        interaction.createFollowup('Successfully posted that suggestion!');
+        interaction.createMessage({ content: 'Successfully posted that suggestion!', flags: 64 });
 
 
 
