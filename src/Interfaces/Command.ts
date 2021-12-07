@@ -22,6 +22,7 @@ interface CommandOptions {
     contextUserMenu?: boolean;
     contextOnly?: boolean;
     contextType?: number;
+    ephemeral: boolean;
 }
 
 
@@ -47,6 +48,7 @@ export default class Command {
     public contextUserMenu?: boolean;
     public contextOnly?: boolean;
     public contextType?: number;
+    public ephemeral: boolean;
     public options?: SlashCommandOptions[];
     public client: Bot;
 
@@ -73,6 +75,7 @@ export default class Command {
         this.contextUserMenu = options.contextUserMenu || false;
         this.contextOnly = options.contextOnly || false;
         this.contextType = options.contextType || 2;
+        this.ephemeral = options.ephemeral || false;
     }
 
     async run(interaction, member, options: Map<string, string>, subOptions: Map<string, string>) {

@@ -29,9 +29,14 @@ export default class InteractionCreateEvent extends Event {
         if (interaction instanceof PingInteraction) {
             return interaction.acknowledge();
         } else if (interaction instanceof CommandInteraction) {
-            const tip = (await generateTip(this.client, interaction));
-            if(!tip) {
-                await interaction.acknowledge();
+            const c = interaction.data?.name?.toLowerCase() ? (this.client.commands.get(interaction.data?.name?.toLowerCase())).ephemeral : false;
+            console.log(c)
+            if(!c) {
+                const tip = (await generateTip(this.client, interaction));
+                if(!tip) {
+                    await interaction.acknowledge();
+                }
+
             }
             if (!interaction.data) return;
             const cmd = interaction.data?.name?.toLowerCase();
