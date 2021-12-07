@@ -42,6 +42,7 @@ export default class MuteCommand extends Command {
     }
     async run(interaction, member, options, subOptions) {
 
+        const guildData = (await this.client.utils.getGuildSchema(member.guild))!!;
         const member1 = (await member.guild.getMember(options.get("member")))!!;
         const silent = options.get("silent") ? 64 : 0;
         const reason = options.get("reason") ?? 'No reason provided.';
@@ -61,8 +62,14 @@ export default class MuteCommand extends Command {
         }
 
         let muteRole;
-        const mutedRole = member.guild.roles.find((m) => m.name.toLowerCase() === 'muted');
-        if(!mutedRole) {
+        let mutedRole;
+        if(guildData?.Muterole) {
+            let role = (await member.guild.roles.get(guildData.Muterole))!!;
+            if(role) mutedRole = role;
+        } else {
+            mutedRole = member.guild.roles.find((m) => m.name.toLowerCase() === 'muted');
+        }
+        if(!mutedRole && !muteRole) {
             muteRole = (await member.guild.createRole({
                 name: 'Muted',
                 permissions: 0,
