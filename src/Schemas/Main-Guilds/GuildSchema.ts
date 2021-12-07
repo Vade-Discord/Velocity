@@ -25,6 +25,7 @@ export interface IGuild extends mongoose.Document {
     ignoreCommands: Array<string>;
     ignoreAntiad: Array<string>;
     ignoreAutomod: Array<string>;
+    SuggestionPing: string;
     description: string;
     colour: string;
     footer: string;
@@ -96,6 +97,7 @@ const guildSchema = new mongoose.Schema({
     footer: String,
     Automod: Boolean,
     MessageCounter: Boolean,
+    SuggestionPing: String,
     nicknameFormat: String,
     Moderation: {
         autoMod: Boolean,
