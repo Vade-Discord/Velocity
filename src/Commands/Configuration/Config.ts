@@ -53,6 +53,19 @@ export default class RoleConfigCommand extends Command {
                 },
                 {
                     type: 1,
+                    name: 'mute-role',
+                    description: 'Configure the servers muted role.',
+                    options: [
+                        {
+                            type: 8,
+                            name: 'role',
+                            description: 'The role you would like to set it to.',
+                            required: true,
+                        }
+                    ]
+                },
+                {
+                    type: 1,
                     name: 'nickname-format',
                     description: 'Customise how your members nicknames must be formatted.',
                     options: [
@@ -95,6 +108,28 @@ export default class RoleConfigCommand extends Command {
                 }
 
                 interaction.createFollowup(`Successfully ${type === 'add' ? 'added' : 'removed'} **${role.name}** as a Moderator role.`);
+
+                break;
+            }
+
+            case "mute-role": {
+
+                const roleID = subOptions.get("role");
+
+                if(guildData?.Muterole && guildData.Muterole === roleID) {
+                    return interaction.createFollowup(`That role is already set as the servers Muted role.`);
+                }
+
+                await guildData.updateOne({
+                    Muterole: roleID
+                });
+
+                const role = (await member.guild.roles.get(roleID))!!;
+
+                interaction.createFollowup(`Successfully set **${role.name}** (**${role.id}**) as the servers Muted role.`);
+
+
+
 
                 break;
             }
