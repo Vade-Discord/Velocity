@@ -3,6 +3,13 @@
     "You can disable/enable different notifications via the `/notifications` command!",
     "You can customize different messages using different preset templates! For more information run the `/templates` command!",
     "Did you know that anything you catch whilst fishing can be sold!? Great way to earn some extra cash!",
-    "I heard there is a dufflebag full of cash somewhere in the ocean! Reckon it's worth catching?"
+    "I heard there is a dufflebag full of cash somewhere in the ocean! Reckon it's worth catching?",
+    "You can use the `/fish` command to test your luck in the ocean!",
+    "The `/newslestter` command can be used to subscribe to our Newsletter! Every update would be sent directly to your DM!",
+    "You can use the `/shop` command to buy items from our shop! You can also use the `/inventory` command to see what you have!",
+    "You can attempt to steal some cash from another user by using the `/rob` command!",
+    "We have a variety of gambling options for your cash, check them out by using the `/gamble` command!",
+    "Did you know you can set a custom muted role for your server? Check it out by using the `/config mute-role` command!",
+    "Fun fact: You can receive a notification every time a certain event happens! Check out all the available options via the `/notifications` command!"
   ]
 }
