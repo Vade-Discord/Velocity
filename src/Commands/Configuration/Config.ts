@@ -66,6 +66,19 @@ export default class RoleConfigCommand extends Command {
                 },
                 {
                     type: 1,
+                    name: 'suggestion-ping',
+                    description: 'Configure the role that should be pinged when a suggestion is posted.',
+                    options: [
+                        {
+                            type: 8,
+                            name: 'role',
+                            description: 'The role to be pinged when a suggestion is posted.',
+                            required: true,
+                        }
+                    ]
+                },
+                {
+                    type: 1,
                     name: 'nickname-format',
                     description: 'Customise how your members nicknames must be formatted.',
                     options: [
@@ -130,6 +143,24 @@ export default class RoleConfigCommand extends Command {
 
 
 
+
+                break;
+            }
+
+            case "suggestion-ping": {
+                const roleID = subOptions.get("role");
+
+                if(guildData?.SuggestionPing && guildData.SuggestionPing === roleID) {
+                    return interaction.createFollowup(`That role is already set as the servers suggestion-ping role.`);
+                }
+
+                await guildData.updateOne({
+                    SuggestionPing: roleID
+                });
+
+                const role = (await member.guild.roles.get(roleID))!!;
+
+                interaction.createFollowup(`Successfully set **${role.name}** (**${role.id}**) as the servers suggestion-ping role.`);
 
                 break;
             }
