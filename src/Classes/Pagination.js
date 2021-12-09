@@ -7,6 +7,7 @@ import config from 'src/config.json';
  * @typedef {import('eris').Message} Message
  * @typedef {Object} PaginationOptions An optional options object for overwriting defaults
  * @property {Boolean} [showPageNumbers] Whether or not to show the current page index over the embed. Defaults to: true
+ * @property {Boolean} [ephemeral] Whether to display all the pagination inside an ephermeral message. Defaults to: false
  * @property {Boolean} [extendedButtons] Whether or not to show extended control buttons besides standard pagination (First & Last page, deleting)
  * @property {Boolean} [cycling] Cycle through all embeds jumping from the first page to the last page on going back and from the last page to the first page going forth. Defaults to: false
  * @property {Number} [maxMatches] How often the reaction handler should listen for a reaction (How often the paginator can be used). Defaults to: 50. Maximum: 100
@@ -44,6 +45,7 @@ class PaginationEmbed {
         this.forth       = options.forthButton   || constants.emojis.arrow_right.id;
         this.page        = options.startPage     || 1;
         this.cycling     = options.cycling       || true
+        this.ephemeral = options.ephemeral || false;
         this.showPages   = (typeof options.showPageNumbers !== 'undefined') ? options.showPageNumbers : true;
         this.advanced    = (typeof options.extendedButtons !== 'undefined') ? options.extendedButtons : false;
         this.components = undefined;
@@ -116,17 +118,22 @@ class PaginationEmbed {
         }
 
         const messageContent = {
-            content: (this.showPages) ? `Page **${this.page}** of **${this.pages.length}**` : undefined,
             embeds: [this.pages[this.page - 1]],
-            components: this.components
+            components: this.components,
+            flags: this.ephemeral ? 64 : 0,
+            content: !this.ephemeral ? (this.showPages) ? `Page **${this.page}** of **${this.pages.length}**` : undefined : undefined,
         }
 
-        const CLIENTS = ['850723996513075200', '782309258620305438'];
+        console.log(messageContent);
+
+        const CLIENTS = ['850723996513075200', '782309258620305438', '863550257790582846'];
         if (CLIENTS.includes(this.invoker.member.id)) {
-            this.message = await this.invoker.edit(messageContent);
+            this.message = !this.ephemeral ? await this.invoker.edit(messageContent) : await this.invoker.editOriginalMessage(messageContent);
         } else {
-            this.message = await this.invoker.createFollowup(messageContent)
+            this.message = await this.invoker.createMessage(messageContent);
         }
+
+        console.log(this.message)
 
         return this.message
 
@@ -198,9 +205,10 @@ class PaginationEmbed {
 
         if(!interaction.data) return;
         return interaction.message.edit({
-            content: (this.showPages) ? `Page **${this.page}** of **${this.pages.length}**` : undefined,
+            content: !this.ephemeral ? (this.showPages) ? `Page **${this.page}** of **${this.pages.length}**` : undefined : undefined,
             embeds: [this.pages[this.page - 1]],
-            components: this.components
+            components: this.components,
+            flags: this.ephemeral ? 64 : 0
         });
     }
 }
@@ -215,8 +223,10 @@ class PaginationEmbed {
  */
 export const createPaginationEmbed = async (client, interaction, pages, options) => {
     const paginationEmbed = new PaginationEmbed(interaction, pages, options);
-    const mes = await paginationEmbed.initialize();
-    client.Pagination.set(mes.id, paginationEmbed)
+    const mes = await paginationEmbed.initialize().then((m) => {
+        client.Pagination.set(m?.id, paginationEmbed)
+    });
+
 
     return Promise.resolve(paginationEmbed.message);
 }
