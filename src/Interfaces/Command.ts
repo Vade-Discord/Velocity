@@ -22,7 +22,7 @@ interface CommandOptions {
     contextUserMenu?: boolean;
     contextOnly?: boolean;
     contextType?: number;
-    ephemeral: boolean;
+    ephemeral?: boolean;
 }
 
 
@@ -48,7 +48,7 @@ export default class Command {
     public contextUserMenu?: boolean;
     public contextOnly?: boolean;
     public contextType?: number;
-    public ephemeral: boolean;
+    public ephemeral?: boolean;
     public options?: SlashCommandOptions[];
     public client: Bot;
 
