@@ -11,7 +11,10 @@ export default class VcJoinEvent extends Event {
             async run(member, newChannel) {
                 if(!newChannel) return;
                 if(member.user.id === this.client.user.id && newChannel.type === 13) {
-                        await member.guild.editVoiceState({channelID: newChannel.id, requestToSpeakTimestamp: new Date(Date.now()) });
+                    await member.guild.editVoiceState({channelID: newChannel.id, suppress: false }).catch(async () => {
+                        await member.guild.editVoiceState({channelID: newChannel.id, requestToSpeakTimestamp: new Date(Date.now()) }).catch(() => null);
+                    });
+               //     await member.guild.editVoiceState({channelID: newChannel.id, requestToSpeakTimestamp: new Date(Date.now()), suppress: false }).catch(() => null);
                 }
 
 
