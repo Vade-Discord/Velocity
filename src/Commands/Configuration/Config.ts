@@ -7,6 +7,7 @@ export default class RoleConfigCommand extends Command {
             category: "Configuration",
             userPerms: ["manageGuild"],
             botPerms: ["manageMessages"],
+            ephemeral: true,
             options: [
                 {
                     type: 1,
@@ -17,6 +18,35 @@ export default class RoleConfigCommand extends Command {
                             type: 3,
                             name: 'add-remove',
                             description: 'Would you like to add or remove this role as a moderator role?',
+                            choices: [
+                                {
+                                    name: 'add',
+                                    value: 'add'
+                                },
+                                {
+                                    name: 'remove',
+                                    value: 'remove'
+                                }
+                            ],
+                            required: true,
+                        },
+                        {
+                            type: 8,
+                            name: 'role',
+                            description: 'The role to affect.',
+                            required: true,
+                        }
+                    ]
+                },
+                {
+                    type: 1,
+                    name: 'dj-role',
+                    description: 'Configure the servers DJ role(s).',
+                    options: [
+                        {
+                            type: 3,
+                            name: 'add-remove',
+                            description: 'Would you like to add or remove this role as a DJ role?',
                             choices: [
                                 {
                                     name: 'add',
@@ -105,13 +135,16 @@ export default class RoleConfigCommand extends Command {
             case "mod-role": {
                 const type = subOptions.get("add-remove");
                 if(type === 'add') {
+                    if(guildData?.ModRole.includes(roleID)) {
+                        return interaction.createMessage({ content: `That role is already set as a Moderator role.`, flags: 64 });
+                    }
                     await guildData.updateOne({
                         $push: { ModRole: roleID }
                     });
 
                 } else {
                     if(!guildData?.ModRole.includes(roleID)) {
-                        return interaction.createFollowup(`That role doesn't seem to be one of the servers Moderator roles.`);
+                        return interaction.createMessage({ content: `That role doesn't seem to be one of the servers Moderator roles.`, flags: 64 });
                     }
 
                     await guildData.updateOne({
@@ -120,7 +153,7 @@ export default class RoleConfigCommand extends Command {
 
                 }
 
-                interaction.createFollowup(`Successfully ${type === 'add' ? 'added' : 'removed'} **${role.name}** as a Moderator role.`);
+                interaction.createMessage({ content: `Successfully ${type === 'add' ? 'added' : 'removed'} **${role.name}** (**${roleID}**) as a Moderator role.`, flags: 64 });
 
                 break;
             }
@@ -130,7 +163,7 @@ export default class RoleConfigCommand extends Command {
                 const roleID = subOptions.get("role");
 
                 if(guildData?.Muterole && guildData.Muterole === roleID) {
-                    return interaction.createFollowup(`That role is already set as the servers Muted role.`);
+                    return interaction.createMessage({ content: `That role is already set as the servers Muted role.`, flags: 64 });
                 }
 
                 await guildData.updateOne({
@@ -139,10 +172,47 @@ export default class RoleConfigCommand extends Command {
 
                 const role = (await member.guild.roles.get(roleID))!!;
 
-                interaction.createFollowup(`Successfully set **${role.name}** (**${role.id}**) as the servers Muted role.`);
+                interaction.createMessage({ content: `Successfully set **${role.name}** (**${role.id}**) as the servers Muted role.`, flags: 64 });
 
 
 
+
+                break;
+            }
+
+            case "dj-role": {
+                const add_remove = subOptions.get("add-remove") || "add";
+                const roleID = subOptions.get("role");
+                const role = (await member.guild.getRESTRoles()).filter((role) => role.id === roleID)[0];
+                const premium = (await this.client.utils.checkPremium(interaction.guildID));
+                if (add_remove === 'add') {
+                    if(!premium && guildData?.DJRole?.length >= 1) {
+                        return interaction.createMessage({ content: `You can only have one DJ role set in a non-premium server.`, flags: 64 });
+                    }
+                    if(premium && guildData?.DJRole?.length >= 5) {
+                        return interaction.createMessage({ content: `You can only have 5 DJ roles set in a premium server.`, flags: 64 });
+                    }
+                    if(guildData?.DJRole.includes(roleID)) {
+                        return interaction.createMessage({ content: `That role is already set as a DJ role.`, flags: 64 });
+                    }
+                    await guildData.updateOne({
+                        $push: {DJRole: roleID}
+                    });
+
+                } else {
+                    if (!guildData?.DJRole.includes(roleID)) {
+                        return interaction.createMessage({
+                            content: `That role doesn't seem to be one of the servers DJ roles.`,
+                            flags: 64
+                        });
+                    }
+
+                    await guildData.updateOne({
+                        $pull: {DJRole: roleID}
+                    });
+
+                }
+                interaction.createMessage({ content: `Successfully ${add_remove === 'add' ? 'added' : 'removed'} **${role.name}** (**${roleID}**) as a DJ role.`, flags: 64 });
 
                 break;
             }
@@ -151,7 +221,7 @@ export default class RoleConfigCommand extends Command {
                 const roleID = subOptions.get("role");
 
                 if(guildData?.SuggestionPing && guildData.SuggestionPing === roleID) {
-                    return interaction.createFollowup(`That role is already set as the servers suggestion-ping role.`);
+                    return interaction.createMessage({ content: `That role is already set as the servers suggestion-ping role.`, flags: 64 });
                 }
 
                 await guildData.updateOne({
@@ -172,7 +242,7 @@ export default class RoleConfigCommand extends Command {
                 await guildData.updateOne({
                     welcomeMessage: msg,
                 });
-                interaction.createFollowup(`Successfully set your welcome message.`);
+                interaction.createMessage({ content: `Successfully set your welcome message.`, flags: 64 });
 
 
                 break;
@@ -186,7 +256,7 @@ export default class RoleConfigCommand extends Command {
                 });
 
 
-                interaction.createFollowup(`Successfully set your new nickname format to: \`${subOptions.get("format")}\``);
+                interaction.createMessage({ content: `Successfully set your new nickname format to: \`${subOptions.get("format")}\``, flags: 64 });
 
                 break;
             }
