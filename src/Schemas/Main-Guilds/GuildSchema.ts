@@ -15,6 +15,7 @@ export interface IGuild extends mongoose.Document {
     logChannelID: string;
     Suggestion: string;
     ModRole: Array<string>;
+    DJRole: Array<string>;
     Muterole: string;
     AdminRole: Array<string>;
     AntiAlt: boolean;
@@ -82,6 +83,7 @@ const guildSchema = new mongoose.Schema({
     logChannelID: String,
     Suggestion: String,
     ModRole: Array,
+    DJRole: Array,
     Muterole: String,
     AdminRole: Array,
     AntiAlt: Boolean,
