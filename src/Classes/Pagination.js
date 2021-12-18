@@ -133,8 +133,6 @@ class PaginationEmbed {
             this.message = await this.invoker.createMessage(messageContent);
         }
 
-        console.log(this.message)
-
         return this.message
 
     }
