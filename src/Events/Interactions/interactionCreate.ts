@@ -57,6 +57,7 @@ export default class InteractionCreateEvent extends Event {
             const data = interaction.data.custom_id;
             const cmd = data.split("#")[0];
             if (cmd == 'pagination') {
+                console.log(interaction)
                 const pages = await this.client.Pagination.get(interaction.message.id)
                 //@ts-ignore
                 pages.update(interaction)
