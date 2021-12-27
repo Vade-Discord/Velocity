@@ -25,7 +25,7 @@ export default class ReadyEvent extends Event {
                 return `Powering ${nf.format(e.guilds.size)} servers!`;
             },
             get "1"() {
-                return `discord.gg/vade | vade-bot.com`;
+                return `discord.gg/AznMQg5cSA | vade-bot.com`;
             },
             get "2"() {
                 return `${nf.format(
