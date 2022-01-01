@@ -97,6 +97,11 @@ Time Kicked: <t:${Date.now()}:d>`)
                             inviteChannel.createMessage(
                                 `${member.mention} joined our server. Was invited by ${invite.inviter.username}#${invite.inviter.discriminator} (**${total}** Invites)`
                             );
+                            await this.client.redis.set(`invites.${member.guild.id}.${invite.code}`, JSON.stringify({
+                                uses: invite.uses + 1,
+                                inviter: invite.inviter,
+                                code: invite.code
+                            }));
                         } else {
                             await inviterSchema.findOneAndUpdate(
                                 {guildID: guild.id, userID: invite.inviter.id},
