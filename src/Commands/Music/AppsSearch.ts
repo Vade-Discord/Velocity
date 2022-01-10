@@ -8,6 +8,7 @@ export default class CommandName extends Command {
             contextUserMenu: true,
             contextOnly: true,
             contextType: 3,
+            ephemeral: true
         });
     }
     async run(interaction, member, options, subOptions) {
@@ -15,7 +16,7 @@ export default class CommandName extends Command {
        const messages = (await this.client.getMessages(interaction.channel.id));
        const msg = (messages.filter((msg) => msg.id === interaction.data.target_id))[0];
        if(!msg || !msg?.content) {
-           return interaction.createFollowup('Somethig went wrong when checking the message content, please try again later.');
+           return interaction.createMessage({ content: 'Something went wrong when checking the message content, please try again later.', flags: 64 });
        }
        const playCommand = this.client.commands.get('play');
        const o = new Map();
