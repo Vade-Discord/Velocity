@@ -124,8 +124,6 @@ class PaginationEmbed {
             content: !this.ephemeral ? (this.showPages) ? `Page **${this.page}** of **${this.pages.length}**` : undefined : undefined,
         }
 
-        console.log(messageContent);
-
         const CLIENTS = ['850723996513075200', '782309258620305438', '863550257790582846'];
         if (CLIENTS.includes(this.invoker.member.id)) {
             this.message = !this.ephemeral ? await this.invoker.edit(messageContent) : await this.invoker.editOriginalMessage(messageContent);
