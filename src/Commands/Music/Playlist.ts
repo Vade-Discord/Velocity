@@ -248,18 +248,20 @@ export default class PlaylistCommand extends Command {
                     if (!player.playing && !player.paused) {
                         player.play();
                     }
+
+                    let embed = new this.client.embed()
+                        .setDescription(`✅ The playlist \`${name}\` has been added to the queue by ${member.mention}`)
+                        .setColor(this.client.constants.colours.green)
+                        .setTimestamp()
+                        .setFooter(`Velocity Music`, this.client.user.avatarURL);
+
+                    interaction.createMessage({ embeds: [embed] });
                 } catch (error) {
                     this.client.logger.error(error);
                    return interaction.createMessage({ content: "An error occurred while loading the playlist!", flags: 64 });
                 }
 
-                let embed = new this.client.embed()
-                    .setDescription(`✅ The playlist \`${name}\` has been added to the queue by ${member.mention}`)
-                    .setColor(this.client.constants.colours.green)
-                    .setTimestamp()
-                    .setFooter(`Velocity Music`, this.client.user.avatarURL);
 
-                interaction.createMessage({ embeds: [embed] });
 
                 break;
             }
