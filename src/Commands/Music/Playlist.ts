@@ -59,7 +59,21 @@ export default class PlaylistCommand extends Command {
                             required: false
                         }
                     ]
+                },
+                {
+                    type: 1,
+                    name: "delete",
+                    description: "Delete one of your playlists.",
+                    options: [
+                        {
+                            type: 3,
+                            name: "playlist-name",
+                            description: "The name of the playlist to delete!",
+                            required: true,
+                        }
+                    ]
                 }
+
             ],
             ephemeral: true
         });
@@ -154,7 +168,7 @@ export default class PlaylistCommand extends Command {
                 }
 
                 const playlist = new playlistSchema({
-                    name: name,
+                    name: name?.toLowerCase(),
                     description: description,
                     ownerID: member.id,
                     public: p,
@@ -248,6 +262,20 @@ export default class PlaylistCommand extends Command {
                 interaction.createMessage({ embeds: [embed] });
 
                 break;
+            }
+
+            case "delete": {
+                const id = subOptions.get("playlist-name")?.toLowerCase();
+                if(id.length > 32) {
+                    return interaction.createMessage({ content: "The name of the playlist can only be up to 32 characters long!", flags: 64 } );
+                }
+                const playlist = await playlistSchema.findOne({ ownerID: member.id, name: id })
+                if(!playlist) {
+                    return interaction.createMessage({ content: "A playlist with that name does not exist! Please ensure you did not misspell!", flags: 64 });
+                }
+              await playlist.delete();
+              return interaction.createMessage({ content: "Successfully deleted the playlist!", flags: 64 });
+
             }
         }
 
