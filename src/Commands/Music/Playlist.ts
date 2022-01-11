@@ -277,6 +277,14 @@ export default class PlaylistCommand extends Command {
               return interaction.createMessage({ content: "Successfully deleted the playlist!", flags: 64 });
 
             }
+
+            case "export": {
+
+                const name = subOptions.get("playlist-name")?.toLowerCase();
+                const user = subOptions.get("user") ?? member.id;
+
+
+            }
         }
 
 
