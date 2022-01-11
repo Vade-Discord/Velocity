@@ -12,6 +12,7 @@ import { scamLinks } from "../Assets/Scam.json";
 import GiveawaySchema from "../Schemas/Backend/Giveaways";
 import ReminderSchema from "../Schemas/Backend/Reminders";
 import phin from "phin";
+import {TrackData} from "erela.js/structures/Utils";
 
 interface SelectionObject {
   label: string;
@@ -277,6 +278,25 @@ export default class Util {
       kickMembers: "Kick Members",
     };
     return perms[perm] ?? perm;
+  }
+
+  async decodeTracks(tracks: string[]): Promise<TrackData[]> {
+    return new Promise(async (resolve, reject) => {
+      const node = this.client.manager.nodes.first();
+      if (!node) throw new Error('No available nodes.');
+
+      const res = await node
+          .makeRequest<TrackData[]>(`/decodetracks`, (r) =>
+              r.method('POST').body(tracks, 'json')
+          )
+          .catch((err) => reject(err));
+
+      if (!res) {
+        return reject(new Error('No data returned from query.'));
+      }
+
+      return resolve(res);
+    });
   }
 
   async loggingChannel(guild, type: string) {
