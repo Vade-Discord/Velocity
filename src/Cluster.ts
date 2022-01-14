@@ -1,9 +1,10 @@
 import { ClusterManager } from "@nedbot/sharder";
 import { Bot } from "./Client/Client";
+import config from "./config.json";
 import launch from "./Launch";
 import {resolve} from "path"
 
-const manager = new ClusterManager("ODYzNTUwMjU3NzkwNTgyODQ2.YOoh2Q.iYmPzpd1khX1iW5N1MvgLoi9dCg", "dist/Launch", {
+const manager = new ClusterManager(config.token, "dist/Launch", {
     client: Bot,
     shardCount: 1,
     clusterCount: 1,
