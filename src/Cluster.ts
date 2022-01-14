@@ -4,7 +4,7 @@ import config from "./config.json";
 import launch from "./Launch";
 import {resolve} from "path"
 
-const manager = new ClusterManager(config.token, "dist/Launch", {
+const manager = new ClusterManager(config.token, "src/Launch", {
     client: Bot,
     shardCount: 1,
     clusterCount: 1,
