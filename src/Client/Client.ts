@@ -49,6 +49,7 @@ export class Bot extends Eris.Client {
   public owners: string[] = ["492017874290868227", "502553365595684884", "473858248353513472"];
   public utils: Util = new Util(this);
   public constants: typeof Constants = Constants;
+  // @ts-ignore
   public embed: typeof MessageEmbed | typeof Eris.RichEmbed = MessageEmbed;
   public config: typeof Config = Config;
   public manager = new Manager({
