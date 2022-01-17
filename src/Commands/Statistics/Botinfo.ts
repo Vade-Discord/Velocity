@@ -43,7 +43,8 @@ export default class BotinfoCommand extends Command {
                     "Do MMMM YYYY HH:mm:ss"
                 )}**
                 **❯** Node.js: **${process.version}**
-                **❯** Eris: **${VERSION}**`
+                **❯** Eris: **${VERSION}**
+                **❯** Cluster ID: **${this.client.cluster.id}**`
             )
             .addField("__System__",
                 `**❯** Platform: **${process.platform}**
