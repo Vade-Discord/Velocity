@@ -22,15 +22,15 @@ export default class ReadyEvent extends Event {
 
         const activities = {
             get "0"() {
-                return `Powering ${nf.format(e.guilds.size)} servers! |  Cluster ${this.client.cluster.id}`;
+                return `Powering ${nf.format(e.guilds.size)} servers!`;
             },
             get "1"() {
-                return `discord.gg/AznMQg5cSA | vade-bot.com | Cluster ${this.client.cluster.id}`;
+                return `discord.gg/AznMQg5cSA | vade-bot.com`;
             },
             get "2"() {
                 return `${nf.format(
                     e.users.size
-                )} users! | Cluster ${this.client.cluster.id}`;
+                )} users!`;
             },
         };
 
