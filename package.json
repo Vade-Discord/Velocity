@@ -6,7 +6,8 @@
   "scripts": {
     "start": "ts-node-dev --respawn --transpile-only --poll ./src/index.ts",
     "shard": "ts-node-dev --respawn --transpile-only --poll ./src/Cluster.ts",
-    "prod": "tsc && node ./dist/Cluster.js",
+    "build": "tsc",
+    "prod": "node ./dist/Cluster.js"
   },
   "dependencies": {
     "@dimensional-fun/logger": "^1.0.1",
