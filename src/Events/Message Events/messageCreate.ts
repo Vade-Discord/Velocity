@@ -1,5 +1,6 @@
 import { Event } from '../../Interfaces/Event';
 import { profanityArray } from '../../Assets/Profanity.json';
+import AntiPhishing from "../../Classes/AntiPhishing";
 import {promisify} from "util";
 import messageSchema from "../../Schemas/Backend/Messages";
 import {distance} from "fastest-levenshtein";
@@ -45,7 +46,7 @@ export default class MessagecreateEvent extends Event {
         const logEmbed = new this.client.embed()
             .setAuthor(tag, user.avatarURL)
             .setDescription(`**User:** ${tag} (${message.author.id}) 
-Time: <t:${Math.floor((Date.now()) / 1000)}:R>`)
+**Time:** <t:${Math.floor((Date.now()) / 1000)}:R>`)
             .setThumbnail(user.avatarURL)
             .setFooter(`Velocity Logging System`)
             .setColor(`#F00000`)
@@ -66,6 +67,9 @@ Time: <t:${Math.floor((Date.now()) / 1000)}:R>`)
                     });
                     logEmbed
                         .setTitle(`Profanity Filter triggered!`)
+                    logEmbed.setDescription(`**User:** ${tag} (${message.author.id}) 
+**Time:** <t:${Math.floor((Date.now()) / 1000)}:R>
+**Word:** ||${profanity[0]}||`)
 
                     logChannel ? logChannel.createMessage({embeds: [logEmbed]}) : null;
                     return;
@@ -73,9 +77,13 @@ Time: <t:${Math.floor((Date.now()) / 1000)}:R>`)
             }
         }
         if(guildData?.Moderation?.antiScam) {
-            const test = (await this.client.utils.antiScam(message));
-            if(test) {
-                logEmbed.setTitle(`Phishing link detected!`)
+            const result = (await AntiPhishing(this.client, message));
+            if(result.status) {
+                logEmbed.setTitle(`Phishing link detected!`);
+            logEmbed.setDescription(`**User:** ${tag} (${message.author.id}) 
+**Time:** <t:${Math.floor((Date.now()) / 1000)}:R>
+**Link:** ||${result.link}||`)
+                logChannel ? logChannel.createMessage({embeds: [logEmbed]}) : null;
             }
         }
         if (guildData?.Moderation?.antiLink) {
