@@ -24,7 +24,7 @@ export default class InteractionCreateEvent extends Event {
          })
      }
 
-
+// @ts-ignore
         const member = guild ? await guild.getMember(interaction.member.id) : interaction.member;
         if (interaction instanceof PingInteraction) {
             return interaction.acknowledge();

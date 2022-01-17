@@ -100,9 +100,7 @@ export default class LoggingCommand extends Command {
             case "message": {
                 object.message = channel.id;
                 await guildData.updateOne({
-                    Logging: {
-                        object
-                    }
+                    Logging: object
                 });
                 interaction.createFollowup(`Successfully updated the **${type?.toLowerCase()}** logging channel.`);
                 break;
@@ -111,9 +109,7 @@ export default class LoggingCommand extends Command {
             case "thread": {
                 object.thread = channel.id;
                 await guildData.updateOne({
-                    Logging: {
-                        object
-                    }
+                    Logging: object
                 });
                 interaction.createFollowup(`Successfully updated the **${type?.toLowerCase()}** logging channel.`);
                 break;

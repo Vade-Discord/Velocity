@@ -131,7 +131,7 @@ export default class FactionCommand extends Command {
                 if(notification) {
                     const u = (await this.client.getRESTUser(user));
                     if(!u) return;
-                    u.getDMChannel((c) => {
+                     u.getDMChannel().then((c) => {
                         const invitedEmbed = new this.client.embed()
                             .setAuthor('Faction Invite!')
                             .setDescription(`You have been invited to join ${member.username}#${member.discriminator}'s faction!\nTo accept this invite simply use command below! \n\n \`/faction accept ${factionData.ID}\``)

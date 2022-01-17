@@ -38,3 +38,33 @@
 {"source":"Cluster Manager","meta":[],"level":"info","message":"All shards spread","timestamp":"08/06/2021|16:54:57"}
 {"source":"Cluster 0","meta":[],"level":"info","message":"Connecting with 1 shards","timestamp":"08/06/2021|16:54:58"}
 {"source":"Cluster 0","stack":"RangeError: Maximum call stack size exceeded\n    at Logger.info (D:\\Main Files\\Eris-Discord-bot\\node_modules\\@dimensional-fun\\logger\\src\\Logger.ts:52:14)\n    at Bot.start (D:\\Main Files\\Eris-Discord-bot\\src\\client\\Client.ts:41:21)\n    at Bot.connect (D:\\Main Files\\Eris-Discord-bot\\src\\client\\Client.ts:35:20)\n    at Bot.start (D:\\Main Files\\Eris-Discord-bot\\src\\client\\Client.ts:43:20)\n    at Bot.connect (D:\\Main Files\\Eris-Discord-bot\\src\\client\\Client.ts:35:20)\n    at Bot.start (D:\\Main Files\\Eris-Discord-bot\\src\\client\\Client.ts:43:20)\n    at Bot.connect (D:\\Main Files\\Eris-Discord-bot\\src\\client\\Client.ts:35:20)\n    at Bot.start (D:\\Main Files\\Eris-Discord-bot\\src\\client\\Client.ts:43:20)\n    at Bot.connect (D:\\Main Files\\Eris-Discord-bot\\src\\client\\Client.ts:35:20)\n    at Bot.start (D:\\Main Files\\Eris-Discord-bot\\src\\client\\Client.ts:43:20)","meta":[],"level":"error","message":"Maximum call stack size exceeded","timestamp":"08/06/2021|16:54:58"}
+{"level":"info","message":"Initialising clusters...","meta":[],"source":"Cluster Manager","timestamp":"17/01/2022|14:29:08"}
+{"level":"info","message":"Starting 1 clusters with 1 shards","meta":[],"source":"Cluster Manager","timestamp":"17/01/2022|14:29:09"}
+{"level":"info","message":"Started cluster 0","meta":[],"source":"Cluster Manager","timestamp":"17/01/2022|14:29:09"}
+{"level":"info","message":"Started all clusters, connecting shards...","meta":[],"source":"Cluster Manager","timestamp":"17/01/2022|14:29:09"}
+{"level":"info","message":"All shards spread","meta":[],"source":"Cluster Manager","timestamp":"17/01/2022|14:29:09"}
+{"level":"info","message":"Connecting with 1 shards","meta":[],"source":"Cluster 0","timestamp":"17/01/2022|14:29:10"}
+{"level":"info","message":"Initialising clusters...","meta":[],"source":"Cluster Manager","timestamp":"17/01/2022|14:30:02"}
+{"level":"info","message":"Starting 1 clusters with 1 shards","meta":[],"source":"Cluster Manager","timestamp":"17/01/2022|14:30:02"}
+{"level":"info","message":"Started cluster 0","meta":[],"source":"Cluster Manager","timestamp":"17/01/2022|14:30:02"}
+{"level":"info","message":"Started all clusters, connecting shards...","meta":[],"source":"Cluster Manager","timestamp":"17/01/2022|14:30:02"}
+{"level":"info","message":"All shards spread","meta":[],"source":"Cluster Manager","timestamp":"17/01/2022|14:30:02"}
+{"level":"info","message":"Connecting with 1 shards","meta":[],"source":"Cluster 0","timestamp":"17/01/2022|14:30:03"}
+{"level":"info","message":"Initialising clusters...","meta":[],"source":"Cluster Manager","timestamp":"17/01/2022|14:31:59"}
+{"level":"info","message":"Starting 1 clusters with 1 shards","meta":[],"source":"Cluster Manager","timestamp":"17/01/2022|14:31:59"}
+{"level":"info","message":"Started cluster 0","meta":[],"source":"Cluster Manager","timestamp":"17/01/2022|14:31:59"}
+{"level":"info","message":"Started all clusters, connecting shards...","meta":[],"source":"Cluster Manager","timestamp":"17/01/2022|14:31:59"}
+{"level":"info","message":"All shards spread","meta":[],"source":"Cluster Manager","timestamp":"17/01/2022|14:31:59"}
+{"level":"info","message":"Connecting with 1 shards","meta":[],"source":"Cluster 0","timestamp":"17/01/2022|14:32:00"}
+{"level":"info","message":"Initialising clusters...","meta":[],"source":"Cluster Manager","timestamp":"17/01/2022|14:36:54"}
+{"level":"info","message":"Starting 1 clusters with 1 shards","meta":[],"source":"Cluster Manager","timestamp":"17/01/2022|14:36:54"}
+{"level":"info","message":"Started cluster 0","meta":[],"source":"Cluster Manager","timestamp":"17/01/2022|14:36:54"}
+{"level":"info","message":"Started all clusters, connecting shards...","meta":[],"source":"Cluster Manager","timestamp":"17/01/2022|14:36:54"}
+{"level":"info","message":"All shards spread","meta":[],"source":"Cluster Manager","timestamp":"17/01/2022|14:36:54"}
+{"level":"info","message":"Connecting with 1 shards","meta":[],"source":"Cluster 0","timestamp":"17/01/2022|14:36:55"}
+{"level":"info","message":"Initialising clusters...","meta":[],"source":"Cluster Manager","timestamp":"17/01/2022|14:45:26"}
+{"level":"info","message":"Starting 1 clusters with 1 shards","meta":[],"source":"Cluster Manager","timestamp":"17/01/2022|14:45:26"}
+{"level":"info","message":"Started cluster 0","meta":[],"source":"Cluster Manager","timestamp":"17/01/2022|14:45:26"}
+{"level":"info","message":"Started all clusters, connecting shards...","meta":[],"source":"Cluster Manager","timestamp":"17/01/2022|14:45:26"}
+{"level":"info","message":"All shards spread","meta":[],"source":"Cluster Manager","timestamp":"17/01/2022|14:45:26"}
+{"level":"info","message":"Connecting with 1 shards","meta":[],"source":"Cluster 0","timestamp":"17/01/2022|14:45:27"}

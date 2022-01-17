@@ -8,6 +8,7 @@ export default class PlayerMoveEvent extends Event {
         });
     }
 
+    // @ts-ignore
     async run(player, currentChannel, newChannel) {
 
         if(!newChannel) {

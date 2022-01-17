@@ -30,7 +30,7 @@ export default class UnmuteCommand extends Command {
         }
         const botHierarchy = (await this.client.utils.roleHierarchy(interaction.guildID, this.client.user.id, member1.id));
         if(!botHierarchy) {
-            return interaction.createFollowup({ content: `I am unable to removed the mute for that member, my highest role is lower than their highest role.`, flags: silent });
+            return interaction.createFollowup({ content: `I am unable to removed the mute for that member, my highest role is lower than their highest role.`, flags: 64 });
         }
         const hierarchy = (await this.client.utils.roleHierarchy(interaction.guildID, member.id, member1.id));
         if(!hierarchy) {

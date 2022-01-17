@@ -122,6 +122,7 @@ export default class MuteCommand extends Command {
             .setFooter(`Velocity Logging System`)
             .setTimestamp()
 
+        // @ts-ignore
         logChannel?.createMessage({embeds: [embed], components });
 
 

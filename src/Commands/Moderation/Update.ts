@@ -6,7 +6,7 @@ export default class UpdateCommand extends Command {
             description: "Update a member to match the guilds configuration.",
             category: "Moderation",
             modCommand: true,
-            userPerms: ['manageMembers'],
+            userPerms: ['manageNicknames', 'manageRoles'],
             botPerms: ['manageNicknames', 'manageRoles'],
             contextUserMenu: true,
             options: [

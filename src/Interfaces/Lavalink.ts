@@ -55,6 +55,7 @@ export async function Lavalink(client: Bot) {
         );
     });
 
+    // @ts-ignore
     client.on("rawWS", (d) => client.manager.updateVoiceState(d));
 
     client.manager.on("trackStart", async (player, track, payload) => {

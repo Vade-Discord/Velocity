@@ -1,14 +1,15 @@
 import { Bot } from "../client/Client";
-import { Constants, SlashCommandOptions } from 'eris';
+import { Constants } from 'eris';
+
 
 interface CommandOptions {
     aliases?: string[];
     description?: string;
     category: string;
     usage?: string;
-    options?: SlashCommandOptions[];
-    userPerms?: string[];
-    botPerms?: string[];
+    options?: Array<any>;
+    userPerms?: (keyof Constants["Permissions"])[];
+    botPerms?: (keyof Constants["Permissions"])[];
     guildOnly?: boolean;
     devOnly?: boolean;
     nsfw?: boolean;
@@ -33,8 +34,8 @@ export default class Command {
     public description?: string;
     public category: string;
     public usage?: string;
-    public userPerms?: string[];
-    public botPerms?: string[];
+    public userPerms?: (keyof Constants["Permissions"])[];
+    public botPerms?: (keyof Constants["Permissions"])[];
     public guildOnly?: boolean;
     public devOnly?: boolean = false;
     public nsfw?: boolean;
@@ -49,7 +50,7 @@ export default class Command {
     public contextOnly?: boolean;
     public contextType?: number;
     public ephemeral?: boolean;
-    public options?: SlashCommandOptions[];
+    public options?: Array<any>;
     public client: Bot;
 
     constructor(client: Bot, name, options: CommandOptions) {

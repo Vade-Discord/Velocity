@@ -30,6 +30,7 @@ interface IBank extends Document {
         robbery?: boolean;
         giveaway?: boolean;
         economy?: boolean;
+        faction?: boolean;
     },
     Inventory: shopItem[];
 }

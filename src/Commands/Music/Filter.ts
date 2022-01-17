@@ -73,6 +73,7 @@ export default class FilterCommand extends Command {
         if (!choice) {
             embed.setDescription(`${member.mention} 🎵 You must specify a valid effect!`);
         } else if (choice === 'reset') {
+            // @ts-ignore
             player.reset();
             embed.setDescription(`${member.mention} 🎵 **Reset** the filter effect!`);
         } else {

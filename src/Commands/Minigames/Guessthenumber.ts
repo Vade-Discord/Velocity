@@ -1,4 +1,5 @@
 import Command from "../../Interfaces/Command";
+// @ts-ignore
 import { MessageCollector, TextChannel } from "eris";
 
 export default class GuessthenumberCommand extends Command {
@@ -53,6 +54,7 @@ export default class GuessthenumberCommand extends Command {
               e.getDMChannel().then((c) => {
                   c.createMessage({ content: `The number you chose is: **${number}**`})
               })
+               // @ts-ignore
                channel.awaitMessages({ timeout: 600000, count: 1, filter: (msg => msg.content == number.toString())}).then((c) => {
 
                   const e =  c.collected.find(m => m.content == number.toString())

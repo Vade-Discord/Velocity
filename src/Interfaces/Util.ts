@@ -1,8 +1,9 @@
 import type { Bot } from "../client/Client";
 import Command from "./Command";
+/// <reference path="../../d.ts">
 
 // Package imports
-import {Client, RichEmbed, Guild, TextChannel} from "eris";
+import {Client, Guild, TextChannel, Constants } from "eris";
 import { Types } from "mongoose";
 
 // File imports
@@ -24,7 +25,7 @@ interface SelectionObject {
   },
 }
 
-
+// @ts-ignore
 Client.prototype.getUser = async function (id) {
   const cur = this.users.get(id);
   if (cur) return cur;
@@ -35,6 +36,7 @@ Client.prototype.getUser = async function (id) {
   } else return null;
 }
 
+// @ts-ignore
 Guild.prototype.getMember = async function (id) {
   const cur = this.members.get(id);
   if (cur) return cur;
@@ -224,7 +226,9 @@ export default class Util {
     if(guild.ownerID === memberID) {
       return true;
     }
+    // @ts-ignore
     const member = (await guild.getMember(memberID));
+    // @ts-ignore
     const target = (await guild.getMember(targetID));
     const memberRole = this.getHighestRole(member, guild);
     const targetRole = this.getHighestRole(target, guild);
@@ -538,7 +542,11 @@ export default class Util {
       ]
     });
     const channel = (await this.client.getRESTChannel(giveaway.channelID))!!;
-    channel ? channel.createMessage({ content: `${winner.map((u) => u.mention)?.join(", ")}, ${winners.size > 1 ? 'have won the giveaway!' : 'has won the giveaway!'}`, messageReference: { messageID: giveaway.messageID} }) : null;
+    if(channel.type !== 0) {
+      await giveaway.delete();
+      return;
+    }
+    channel ? channel.createMessage({ content: `${winner.map((u) => u.mention)?.join(", ")}, ${winner.length > 1 ? 'have won the giveaway!' : 'has won the giveaway!'}`, messageReference: { messageID: giveaway.messageID} }) : null;
     await giveaway.delete();
 
   }

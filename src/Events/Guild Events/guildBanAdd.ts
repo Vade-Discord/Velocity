@@ -12,7 +12,8 @@
               console.log('Ban fired')
 
               if(!user) {
-                  user = (await this.client.getRESTUser(user.id))!!;
+                  // @ts-ignore
+                  user = (await this.client.getUser(user.id))!!;
               }
               console.log('Past member check')
             let moderationEmoji = this.client.constants.emojis.moderation.mention;
@@ -40,6 +41,7 @@ Time Banned: <t:${Date.now()}:d>`)
               }]
 
               const logChannel = await this.client.utils.loggingChannel(guild, 'moderation');
+              // @ts-ignore
               logChannel ? logChannel.createMessage({ embeds: [embed], components }) : null;
           }
 

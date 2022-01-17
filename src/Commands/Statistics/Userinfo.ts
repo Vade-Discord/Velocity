@@ -82,13 +82,40 @@ export default class UserinfoCommand extends Command {
                         memberRoles?.length < 10
                             ? memberRoles.map((m => m.mention))?.join(", ")
                             : memberRoles.length > 10
+                                // @ts-ignore
                                 ? (this.client.utils.trimArray(memberRoles)).map((r) => r.mention)
                                 : "None"
                     }
                 `
                 );
 
-            interaction.createFollowup({ embeds: [embed]});
+            const muted = (await this.client.redis.get(`mute.${u}.${interaction.guildID}`));
+
+            const components =  [{
+                type: 1,
+                components: [
+                    {
+                        type: 2,
+                        style: 1,
+                        label: muted ? "Unmute" : "Mute",
+                        custom_id: `userinfo#${muted ? "unmute" : "mute"}#${user.id}`
+                    },
+                    {
+                        type: 2,
+                        style: 4,
+                        label: "Kick",
+                        custom_id: `userinfo#kick#${user.id}`
+                    },
+                    {
+                        type: 2,
+                        style: 4,
+                        label: "Ban",
+                        custom_id: `userinfo#ban#${user.id}`
+                    },
+                ]
+            }]
+
+            interaction.createFollowup({ embeds: [embed], components });
 
         } catch (e) {
             console.log(e)

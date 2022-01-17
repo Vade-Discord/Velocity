@@ -77,6 +77,53 @@ export default class InteractionCreateEvent extends Event {
 
                         }
 
+                        case "userinfo": {
+
+                            if(!isModerator) {
+                                return interaction.createMessage({ content: 'You must be a server moderator to use this!', flags: 64 });
+                            }
+                            const MemberID = args[2];
+                            switch (args[1]) {
+
+                                case "mute": {
+
+                                    break;
+                                }
+
+                                case "unmute": {
+                                    const timerCheck = (await this.client.redis.get(`mute.${MemberID}.${interaction.guildID}`));
+                                    if(!timerCheck) {
+                                        return interaction.createMessage({ content: 'There was no mute data found, that member must already be unmuted.', flags: 64 });
+                                    }
+                                    await this.client.redis.del(`mute.${MemberID}.${interaction.guildID}`);
+                                    const muteData = (await muteSchema.findOne({ userID: MemberID, guildID: interaction.guildID }));
+                                    if(muteData) {
+                                        await this.client.utils.muteEnded(muteData);
+                                        interaction.createMessage({ content: 'Successfully removed that mute!', flags: 64 });
+                                    } else {
+                                        interaction.createMessage({ content: 'There was no mute data found, that member must already be unmuted.', flags: 64 });
+                                    }
+
+                                    break;
+                                }
+
+                                case "kick": {
+
+                                    break;
+                                }
+
+                                case "ban": {
+
+                                    break;
+                                }
+
+                            }
+
+
+
+                            break;
+                        }
+
 
                         default: {
                             await interaction.acknowledge();

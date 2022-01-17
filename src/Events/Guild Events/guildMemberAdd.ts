@@ -15,7 +15,7 @@ export default class GuildMemberAddEvent extends Event {
 
         });
     }
-
+// @ts-ignore
     async run(guild, member) {
 
         e = this.client;
