@@ -114,6 +114,7 @@ export default class PlaylistCommand extends Command {
                 let queue: Queue | UnresolvedTrack[] | Track[] = player.queue;
                 let current = player.queue.current;
 
+                // @ts-ignore
                 const promises = queue.map(async (t: UnresolvedTrack) => {
                     if (t.resolve) {
                         try {
