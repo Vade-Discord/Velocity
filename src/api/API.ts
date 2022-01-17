@@ -5,7 +5,7 @@ import { Logger } from "@dimensional-fun/logger";
 import { votes } from "./routers/votes";
 import { main } from "./routers/main";
 
-import type { Bot } from "../client/Client";
+import type { Bot } from "../Client/Client";
 
 export class API {
     static PORT = 3003;

@@ -1,5 +1,5 @@
 import Config from "./config.json";
-import { Bot } from "./client/Client";
+import { Bot } from "./Client/Client";
 
 process.on("unhandledRejection", (err) => {
     console.log(err)

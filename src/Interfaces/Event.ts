@@ -1,4 +1,4 @@
-import type { Bot } from "../client/Client";
+import type { Bot } from "../Client/Client";
 
 interface EventOptions {
     once?: boolean;

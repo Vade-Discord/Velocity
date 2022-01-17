@@ -1,4 +1,4 @@
-import { Bot } from "../client/Client";
+import { Bot } from "../Client/Client";
 import { Constants } from 'eris';
 
 
