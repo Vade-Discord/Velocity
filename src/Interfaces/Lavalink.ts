@@ -1,4 +1,4 @@
-import { Bot } from '../client/Client';
+import { Bot } from '../Client/Client';
 import { Manager } from 'erela.js';
 import Spotify from 'better-erela.js-spotify';
 import Deezer from "erela.js-deezer";
