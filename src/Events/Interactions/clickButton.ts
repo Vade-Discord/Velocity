@@ -112,6 +112,9 @@ export default class InteractionCreateEvent extends Event {
                                 case "kick": {
 
                                     const m = (await member.guild.getMember(MemberID));
+                                    if(!m) {
+                                        return interaction.createMessage({ content: 'That user is not in this server!', flags: 64 });
+                                    }
                                     const hierarchy = await this.client.utils.roleHierarchy(interaction.guildID, member.id, m.id)
                                     const botHierarchy = await this.client.utils.roleHierarchy(interaction.guildID, this.client.user.id, m.id)
                                     if (!hierarchy) {
@@ -138,16 +141,18 @@ export default class InteractionCreateEvent extends Event {
                                             flags: 64
                                         });
                                     }
-                                    m.kick(`${m.username} was kicked by ${interaction.author.username}.`).catch(() => {
+                                    m.kick(`${m.username} was kicked by ${member.username}.`).catch(() => {
                                         return interaction.createMessage({
                                             content: 'I was unable to kick that user.',
                                             flags: 64
                                         });
                                     });
-                                    interaction.createMessage({
+                                    await interaction.createMessage({
                                         content: `Successfully kicked ${m.username}#${m.discriminator}`,
                                         flags: 64
                                     });
+
+                                   await interaction.editOriginalMessage({ components: [] });
 
                                     break;
 
@@ -155,6 +160,9 @@ export default class InteractionCreateEvent extends Event {
 
                                 case "ban": {
                                     const m = (await member.guild.getMember(MemberID));
+                                    if(!m) {
+                                        return interaction.createMessage({ content: 'That user is not in this server!', flags: 64 });
+                                    }
                                     const hierarchy = await this.client.utils.roleHierarchy(interaction.guildID, member.id, m.id)
                                     const botHierarchy = await this.client.utils.roleHierarchy(interaction.guildID, this.client.user.id, m.id)
                                     if (!hierarchy) {
