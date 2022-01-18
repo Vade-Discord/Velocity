@@ -87,6 +87,8 @@ export default class InteractionCreateEvent extends Event {
 
                                 case "mute": {
 
+                                    interaction.createMessage({ content: `This feature is still being worked on, feel free to follow the progress @ discord.gg/DFa5wNFWgP.`, flags: 64 })
+
                                     break;
                                 }
 
@@ -109,10 +111,88 @@ export default class InteractionCreateEvent extends Event {
 
                                 case "kick": {
 
+                                    const m = (await member.guild.getMember(MemberID));
+                                    const hierarchy = await this.client.utils.roleHierarchy(interaction.guildID, member.id, m.id)
+                                    const botHierarchy = await this.client.utils.roleHierarchy(interaction.guildID, this.client.user.id, m.id)
+                                    if (!hierarchy) {
+                                        return interaction.createMessage({
+                                            content: `Could not kick ${m.username}#${m.discriminator} due to them having a higher role than you.`,
+                                            flags: 64
+                                        });
+                                    }
+                                    if (m.id === member.id) {
+                                        return interaction.createMessage({
+                                            content: `You cannot kick yourself.`,
+                                            flags: 64
+                                        });
+                                    }
+                                    if (m.id === this.client.user.id) {
+                                        return interaction.createMessage({
+                                            content: `You cannot kick the bot with the bot.`,
+                                            flags: 64
+                                        });
+                                    }
+                                    if (!botHierarchy) {
+                                        return interaction.createMessage({
+                                            content: `Could not kick ${m.username}#${m.discriminator} due to them having a higher role then me.`,
+                                            flags: 64
+                                        });
+                                    }
+                                    m.kick(`${m.username} was kicked by ${interaction.author.username}.`).catch(() => {
+                                        return interaction.createMessage({
+                                            content: 'I was unable to kick that user.',
+                                            flags: 64
+                                        });
+                                    });
+                                    interaction.createMessage({
+                                        content: `Successfully kicked ${m.username}#${m.discriminator}`,
+                                        flags: 64
+                                    });
+
                                     break;
+
                                 }
 
                                 case "ban": {
+                                    const m = (await member.guild.getMember(MemberID));
+                                    const hierarchy = await this.client.utils.roleHierarchy(interaction.guildID, member.id, m.id)
+                                    const botHierarchy = await this.client.utils.roleHierarchy(interaction.guildID, this.client.user.id, m.id)
+                                    if (!hierarchy) {
+                                        return interaction.createMessage({
+                                            content: `Could not ban ${m.username}#${m.discriminator} due to them having a higher role than you.`,
+                                            flags: 64
+                                        });
+                                    }
+                                    if (m.id === member.id) {
+                                        return interaction.createMessage({
+                                            content: `You cannot ban yourself.`,
+                                            flags: 64
+                                        });
+                                    }
+                                    if (m.id === this.client.user.id) {
+                                        return interaction.createMessage({
+                                            content: `You cannot ban the bot with the bot.`,
+                                            flags: 64
+                                        });
+                                    }
+                                    if (!botHierarchy) {
+                                        return interaction.createMessage({
+                                            content: `Could not ban ${m.username}#${m.discriminator} due to them having a higher role then me.`,
+                                            flags: 64
+                                        });
+                                    }
+                                    m.ban(`${m.username} was banned by ${interaction.author.username}.`).catch(() => {
+                                        return interaction.createMessage({
+                                            content: 'I was unable to ban that user.',
+                                            flags: 64
+                                        });
+                                    });
+                                    interaction.createMessage({
+                                        content: `Successfully banned ${m.username}#${m.discriminator}`,
+                                        flags: 64
+                                    });
+
+
 
                                     break;
                                 }
