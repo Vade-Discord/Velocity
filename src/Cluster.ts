@@ -6,9 +6,9 @@ import {resolve} from "path"
 
 const manager = new ClusterManager(config.token, "dist/Launch", {
     client: Bot,
-    shardCount: 1,
-    clusterCount: 1,
-    guildsPerShard: 1200,
+    shardCount: config.ClusterConfig.shardCount,
+    clusterCount: config.ClusterConfig.clusterCount,
+    guildsPerShard: config.ClusterConfig.guildsPerShard,
     shardsPerCluster: 1,
     clusterTimeout: 5000,
     statsUpdateInterval: 2000,
