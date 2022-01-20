@@ -1,6 +1,7 @@
 import Command from "../../Interfaces/Command";
 import giveawaySchema from "../../Schemas/Backend/Giveaways";
 import voiceSchema from "../../Schemas/User Schemas/Voice";
+import messageSchema from "../../Schemas/Backend/Messages";
 import ms from 'ms';
 import humanize from 'humanize-duration';
 import {NewsChannel, TextChannel} from "eris";
@@ -23,6 +24,7 @@ export default class GiveawayCommand extends Command {
                             name: 'channel',
                             description: `The channel the giveaway should be hosted in.`,
                             required: true,
+                            channel_types: [0, 5],
                         },
                         {
                             type: 3,
@@ -66,6 +68,13 @@ export default class GiveawayCommand extends Command {
                             description: `Should the member have to use Velocity in one of their servers?`,
                             required: false,
                         },
+                        {
+                            type: 10,
+                            name: 'message-requirement',
+                            description: 'Should the members require a certain amount of messages?',
+                            min_value: 1,
+                            max_value: 2000
+                        }
                     ]
                 },
                 {
@@ -128,6 +137,13 @@ export default class GiveawayCommand extends Command {
                             description: `Should the member have to use Velocity in one of their servers?`,
                             required: false,
                         },
+                        {
+                            type: 10,
+                            name: 'message-requirement',
+                            description: 'Should the members require a certain amount of messages?',
+                            min_value: 1,
+                            max_value: 2000
+                        }
                     ]
                 },
             ],
@@ -192,6 +208,18 @@ export default class GiveawayCommand extends Command {
                         return;
                     }
                 }
+
+                if(giveawayData?.messageRequirement) {
+                    const userMessages = await messageSchema.findOne({ guild: interaction.guildID, user: member.id });
+                    if(!userMessages || userMessages.amount < giveawayData.messageRequirement) {
+                        member.user.getDMChannel().then((c) => {
+                            c.createMessage(`You are unable to enter this giveaway due to you not having enough messages. You can check how many messages you have sent via the \`/message-counter check\` command.`).catch((e) => {
+                                interaction.createFollowup({ content: `You are unable to enter this giveaway due to you not having enough messages sent within the server. You can check how many messages you have sent via the \`/message-counter check\` command.`, flags: 64 });
+                            });
+                        });
+                        return;
+                    }
+                }
             // Button pressed
                 member.user.getDMChannel().then((c) => {
                     c.createMessage(`You have successfully entered the giveaway!`).catch((e) => {
@@ -230,10 +258,12 @@ export default class GiveawayCommand extends Command {
 
 
 
-                const roleRequirement = subOptions.has("role-required") ? member.guild.roles.get(subOptions.get("role-required")).mention : 'No Role Required.';
-                const voiceRequirement = subOptions.has("voice-time") ? humanize(ms(subOptions.get("voice-time"))) : 'No VC time required.';
-                const guildRequirement = subOptions.has("guild-time") ? humanize(ms(subOptions.get("guild-time"))) : 'No server time required.';
+                const roleRequirement = subOptions.has("role-required") ? member.guild.roles.get(subOptions.get("role-required")).mention : null;
+                const voiceRequirement = subOptions.has("voice-time") ? humanize(ms(subOptions.get("voice-time"))) : null;
+                const guildRequirement = subOptions.has("guild-time") ? humanize(ms(subOptions.get("guild-time"))) : null;
+                const messageRequirement = subOptions.has("message-requirement") ? subOptions.get("message-requirement") : null;
                 let count = [];
+                const guildData = (await this.client.utils.getGuildSchema(member.guild))!!;
                 if(subOptions.has("role-required")) {
                     count.push(1);
                 }
@@ -246,8 +276,14 @@ export default class GiveawayCommand extends Command {
                 if(subOptions.has("guild-time")) {
                     count.push(4);
                 }
+                if(subOptions.has("message-requirement")) {
+                    if(!guildData?.MessageCounter) {
+                        return interaction.createFollowup(`You cannot require messages if the message counter is not enabled. You can enable it via the \`/message-counter configure\` command.`);
+                    }
+                    count.push(5);
+                }
                 if(count.length > 1 && !(await this.client.utils.checkPremium(interaction.guildID))) {
-                    return interaction.createFollowup(`Only vade premium members can have multiple requirements set.`);
+                    return interaction.createFollowup(`Only vade premium servers can have multiple requirements set.`);
                 }
 
                 if(subOptions.has("voice-time") && ms(subOptions.get("voice-time")) > ms("1d") && !(await this.client.utils.checkPremium(interaction.guildID))) {
@@ -263,10 +299,13 @@ export default class GiveawayCommand extends Command {
                     .setTitle('🎉 Giveaway! 🎉')
                     .setDescription(`Click the button to enter!\nEnds: <t:${Math.floor((actualTime + Date.now()) / 1000)}:R>\nGiveaway Host: ${member.mention}`)
                     .addField(`Prize`, `${prize}`)
-                    .addField(`Requirements`, `Role Requirement: ${roleRequirement} \nVoice Requirement: ${voiceRequirement} \nServer Time: ${guildRequirement} \n\n`)
                     .setTimestamp()
                     .setFooter(`Velocity Giveaways @ https://vade-bot.com`)
                     .setThumbnail(this.client.user.avatarURL)
+
+                count.length ? giveawayEmbed.addField(`Requirements`,
+                    `${roleRequirement ? `Role Requirement: ${roleRequirement}\n` : ''} ${voiceRequirement ? `Voice Requirement: ${voiceRequirement}\n` : ''} ${guildRequirement ? `Server Time: ${guildRequirement}\n` : ''} ${messageRequirement ? `Messages required: ${messageRequirement}` : ''}\n\n`)
+                    : null;
 
                 if(channel instanceof TextChannel || channel instanceof NewsChannel) {
 
@@ -303,7 +342,7 @@ export default class GiveawayCommand extends Command {
                         });
                         await newSchema.save();
                         await this.client.redis.set(`giveaway.${interaction.guildID}.${m.id}`, true, 'EX', actualTime / 1000);
-                        interaction.createFollowup(`Successfully started the giveaway.`);
+                        interaction.createFollowup(`Successfully started the giveaway in ${channel.mention}.`);
                     });
                     //
                 } else {
