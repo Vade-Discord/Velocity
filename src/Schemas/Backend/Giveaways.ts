@@ -13,6 +13,7 @@ export interface IGiveaways extends mongoose.Document {
     invitesRequired?: string;
     entrants: string[];
     velocityRequired: boolean;
+    messageRequirement?: number;
     giveawayHost: string;
 
 }
@@ -29,6 +30,7 @@ const giveawaySchema = new mongoose.Schema({
     voiceRequired: Number,
     invitesRequired: String,
     velocityRequired: Boolean,
+    messageRequirement: Number,
     entrants: Array,
     giveawayHost: String,
 });
