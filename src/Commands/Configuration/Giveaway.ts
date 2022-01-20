@@ -222,8 +222,8 @@ export default class GiveawayCommand extends Command {
                 }
             // Button pressed
                 member.user.getDMChannel().then((c) => {
-                    c.createMessage(`You have successfully entered the giveaway!`).catch((e) => {
-                        interaction.createFollowup({ content: `You have successfully entered the giveaway!`, flags: 64 });
+                    c.createMessage(`You have successfully entered the giveaway! Did you know that if you vote for the bot, it counts as an additonal entry? Vote below!\n\nhttps://top.gg/bot/850723996513075200/vote`).catch((e) => {
+                        interaction.createFollowup({ content: `You have successfully entered the giveaway! Did you know that if you vote for the bot, it counts as an additonal entry? Vote below!\n\nhttps://top.gg/bot/850723996513075200/vote`, flags: 64 });
                     });
                 });
 
