@@ -10,6 +10,16 @@
     "You can attempt to steal some cash from another user by using the `/rob` command!",
     "We have a variety of gambling options for your cash, check them out by using the `/gamble` command!",
     "Did you know you can set a custom muted role for your server? Check it out by using the `/config mute-role` command!",
-    "Fun fact: You can receive a notification every time a certain event happens! Check out all the available options via the `/notifications` command!"
+    "Fun fact: You can receive a notification every time a certain event happens! Check out all the available options via the `/notifications` command!",
+    "Did you know that we offer a bunch of automated moderation features? Check them out via the `/automod` command!",
+    "Voting for the bot grants an extra entry to every giveaway you enter! Check it out by using the `/vote` command!",
+    "Did you know that you can use the `/giveaway start` command to create a giveaway? You can set all sorts of different requirements for the giveaway!",
+    "Were you aware that you can set MULTIPLE moderator/administrator roles for the bot! It's perfect for easy server management!",
+    "Fun fact: You can save up to 5 FREE playlists for your own use! Check it out by using the `/playlist` command!",
+    "Did you know that you could apply different effects to music when it is playing? Check it out by using the `/filter` command!",
+    "Looking to play a song suggested by another user? Simply right click on their message, click `add to queue` and you're good to go!",
+    "The `/playlist` command can store up to 500 songs! Try it out!",
+    "Did you know that we regularly host giveaways in our community server? Join here! discord.gg/DFa5wNFWgP",
+    "We offer numerous different action logs, check them out by using the `/logging` command!"
   ]
 }
