@@ -122,6 +122,8 @@ export default class MessagecreateEvent extends Event {
                         .setTitle(`Anti-Invite triggered!`)
 
                     logChannel ? logChannel.createMessage({embeds: [logEmbed]}) : null;
+                    await this.client.automod.AutoAction(message.member.guild.id, message.member, "advertising");
+
                     return;
                 });
             }
