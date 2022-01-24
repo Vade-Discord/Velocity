@@ -35,9 +35,9 @@ export default class MessagecreateEvent extends Event {
             }
         }
 
-        if (message.member?.permissions.has("manageMessages") || (await this.client.utils.checkModerator(message.member, message.channel.guild))) {
-            return;
-        }
+        // if (message.member?.permissions.has("manageMessages") || (await this.client.utils.checkModerator(message.member, message.channel.guild))) {
+        //     return;
+        // }
 
 
         const logChannel = (await this.client.utils.loggingChannel(message.channel.guild, 'moderation'));
@@ -84,6 +84,7 @@ export default class MessagecreateEvent extends Event {
 **Time:** <t:${Math.floor((Date.now()) / 1000)}:R>
 **Link:** ||${result.link}||`)
                 logChannel ? logChannel.createMessage({embeds: [logEmbed]}) : null;
+                await this.client.automod.AutoAction(message.member.guild.id, message.member, "phishing");
             }
         }
         if (guildData?.Moderation?.antiLink) {
