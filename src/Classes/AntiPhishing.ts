@@ -1,6 +1,7 @@
 import { Message } from "eris";
 import { Bot } from "../Client/Client";
 import phin from "phin";
+import AutoModFile from "./AutoMod";
 
 interface result {
     link: string;
@@ -15,7 +16,6 @@ interface match {
 }
 
 export default async function AntiPhishing(client: Bot, message: Message,): Promise<result> {
-
 const API_KEY = client.config.API.PHISHING;
 const content = message?.content;
 const regex = /(?:[a-z0-9](?:[a-z0-9-]{0,61}[a-z0-9])?\.)+[a-z0-9][a-z0-9-]{0,61}[a-z0-9]/;
