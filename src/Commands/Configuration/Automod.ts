@@ -13,6 +13,28 @@ export default class AutomodCommand extends Command {
                     type: 1,
                     name: 'anti-link',
                     description: 'Auto delete any links, including discord invites.',
+                    options: [
+                        {
+                            type: 3,
+                            name: 'automated-action',
+                            description: "Would you like any of these to automatically happen when triggered?",
+                            choices: [
+                                {
+                                    name: 'mute-user',
+                                    value: 'mute'
+                                },
+                                {
+                                    name: 'kick-user',
+                                    value: 'kick'
+                                },
+                                {
+                                    name: 'ban-user',
+                                    value: 'ban'
+                                },
+                            ],
+                            required: false
+                        }
+                    ]
                 },
                 {
                     type: 1,
@@ -23,20 +45,65 @@ export default class AutomodCommand extends Command {
                     type: 1,
                     name: 'anti-invite',
                     description: 'Auto delete any discord invites.',
+                    options: [
+                        {
+                            type: 3,
+                            name: 'automated-action',
+                            description: "Would you like any of these to automatically happen when triggered?",
+                            choices: [
+                                {
+                                    name: 'mute-user',
+                                    value: 'mute'
+                                },
+                                {
+                                    name: 'kick-user',
+                                    value: 'kick'
+                                },
+                                {
+                                    name: 'ban-user',
+                                    value: 'ban'
+                                },
+                            ],
+                            required: false
+                        }
+                    ]
                 },
                 {
                     type: 1,
                     name: 'anti-scam',
                     description: 'Automaticlaly delete any phishing links.',
+                    options: [
+                        {
+                            type: 3,
+                            name: 'automated-action',
+                            description: "Would you like any of these to automatically happen when triggered?",
+                            choices: [
+                                {
+                                    name: 'mute-user',
+                                    value: 'mute'
+                                },
+                                {
+                                    name: 'kick-user',
+                                    value: 'kick'
+                                },
+                                {
+                                    name: 'ban-user',
+                                    value: 'ban'
+                                },
+                            ],
+                            required: false
+                        }
+                    ]
                 },
             ]
         });
     }
-    async run(interaction, member) {
+    async run(interaction, member, options, subOptions) {
 
         const guildData = (await this.client.utils.getGuildSchema(member.guild))!!;
 
         const object = guildData?.Moderation;
+        const automatedActions = guildData?.Actions;
 
         switch(interaction.data.options[0].name) {
 
@@ -56,9 +123,18 @@ export default class AutomodCommand extends Command {
                         Moderation: object
                     });
 
-                    interaction.createFollowup('Succesfully **enabled** the anti links module.');
-                }
+                    if(subOptions.has("automated-action")) {
+                        const automatedAction = subOptions.get("automated-action");
+                        automatedActions['linkSent'] = automatedAction;
+                        await guildData.updateOne({
+                            Actions: automatedActions
+                        });
+                        return interaction.createFollowup(`Succesfully **enabled** the anti links module and will **${automatedAction}** any user that links to a banned website.`);
+                    } else {
+                        return interaction.createFollowup('Succesfully **enabled** the anti links module.');
+                    }
 
+                }
 
                 break;
             }
@@ -78,7 +154,17 @@ export default class AutomodCommand extends Command {
                         Moderation: object
                     });
 
-                    interaction.createFollowup('Succesfully **enabled** the anti-scam module.');
+                    if(subOptions.has("automated-action")) {
+                        const automatedAction = subOptions.get("automated-action");
+                        automatedActions['phishing'] = automatedAction;
+                        await guildData.updateOne({
+                            Actions: automatedActions
+                        });
+                        return interaction.createFollowup(`Succesfully **enabled** the anti-scam module and will **${automatedAction}** any user that sends a phishing link.`);
+                    } else {
+                        return interaction.createFollowup('Succesfully **enabled** the anti-scam module.');
+                    }
+
                 }
 
 
@@ -100,7 +186,17 @@ export default class AutomodCommand extends Command {
                         Moderation: object
                     });
 
-                    interaction.createFollowup('Succesfully **enabled** the anti invites module.');
+                    if(subOptions.has("automated-action")) {
+                        const automatedAction = subOptions.get("automated-action");
+                        automatedActions['advertising'] = automatedAction;
+                        await guildData.updateOne({
+                            Actions: automatedActions
+                        });
+                        return interaction.createFollowup(`Succesfully **enabled** the anti-invite module and will **${automatedAction}** any user that sends an invite link.`);
+                    } else {
+                        return interaction.createFollowup('Succesfully **enabled** the anti-invite module.');
+                    }
+
                 }
 
 
