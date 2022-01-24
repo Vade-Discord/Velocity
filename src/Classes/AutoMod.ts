@@ -130,14 +130,14 @@ export default class AutoMod {
                 });
 
 
-                await this.moderationLog(guild, "[Automod Anti-Scam] Mute", `**User:** ${member.username}#${member.discriminator} (${member.id})\n**Reason:** ${this.reasons[type]}.`);
+                await this.moderationLog(guild, "[Automod] Mute", `**User:** ${member.username}#${member.discriminator} (${member.id})\n**Reason:** ${this.reasons[type]}.`);
                 break;
             }
             case "kick": {
 
-                await member.kick("[Automod Anti-Scam] Kick").catch(async (e) => {
+                await member.kick("[Automod] Kick").catch(async (e) => {
                     if(e) {
-                        await this.moderationLog(guild, "[Automod Anti-Scam] Attempted-Kick", `**User:** ${member.username}#${member.discriminator} (${member.id})\n**Info:** Unable to be kicked by the automod due to lack of permissions.\n**Reason:** ${this.reasons[type]}`);
+                        await this.moderationLog(guild, "[Automod] Attempted-Kick", `**User:** ${member.username}#${member.discriminator} (${member.id})\n**Info:** Unable to be kicked by the automod due to lack of permissions.\n**Reason:** ${this.reasons[type]}`);
                         success = false;
                     }
 
@@ -145,7 +145,7 @@ export default class AutoMod {
                 if(!success) {
                     return;
                 }
-                await this.moderationLog(guild, "[Automod Anti-Scam] Kick", `**User:** ${member.username}#${member.discriminator} (${member.id})\n**Reason:** ${this.reasons[type]}.`);
+                await this.moderationLog(guild, "[Automod] Kick", `**User:** ${member.username}#${member.discriminator} (${member.id})\n**Reason:** ${this.reasons[type]}.`);
 
 
                 break;
