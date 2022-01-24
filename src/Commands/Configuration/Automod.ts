@@ -20,6 +20,10 @@ export default class AutomodCommand extends Command {
                             description: "Would you like any of these to automatically happen when triggered?",
                             choices: [
                                 {
+                                    name: 'remove-action',
+                                    value: 'none'
+                                },
+                                {
                                     name: 'mute-user',
                                     value: 'mute'
                                 },
@@ -52,6 +56,10 @@ export default class AutomodCommand extends Command {
                             description: "Would you like any of these to automatically happen when triggered?",
                             choices: [
                                 {
+                                    name: 'remove-action',
+                                    value: 'none'
+                                },
+                                {
                                     name: 'mute-user',
                                     value: 'mute'
                                 },
@@ -78,6 +86,10 @@ export default class AutomodCommand extends Command {
                             name: 'automated-action',
                             description: "Would you like any of these to automatically happen when triggered?",
                             choices: [
+                                {
+                                    name: 'remove-action',
+                                    value: 'none'
+                                },
                                 {
                                     name: 'mute-user',
                                     value: 'mute'
@@ -125,11 +137,12 @@ export default class AutomodCommand extends Command {
 
                     if(subOptions.has("automated-action")) {
                         const automatedAction = subOptions.get("automated-action");
-                        automatedActions['linkSent'] = automatedAction;
+                        automatedActions['linkSent'] = automatedAction !== 'none' ? automatedAction : null;
                         await guildData.updateOne({
                             Actions: automatedActions
                         });
-                        return interaction.createFollowup(`Succesfully **enabled** the anti links module and will **${automatedAction}** any user that links to a banned website.`);
+                        automatedAction !== 'none' ? interaction.createFollowup(`Succesfully **enabled** the anti links module and will **${automatedAction}** any user that links to a banned website.`) : interaction.createFollowup('Succesfully **enabled** the anti links module.');
+                        return
                     } else {
                         return interaction.createFollowup('Succesfully **enabled** the anti links module.');
                     }
@@ -156,11 +169,11 @@ export default class AutomodCommand extends Command {
 
                     if(subOptions.has("automated-action")) {
                         const automatedAction = subOptions.get("automated-action");
-                        automatedActions['phishing'] = automatedAction;
+                        automatedActions['phishing'] = automatedAction !== 'none' ? automatedAction : null;
                         await guildData.updateOne({
                             Actions: automatedActions
                         });
-                        return interaction.createFollowup(`Succesfully **enabled** the anti-scam module and will **${automatedAction}** any user that sends a phishing link.`);
+                        automatedAction !== 'none' ? interaction.createFollowup(`Succesfully **enabled** the anti-scam module and will **${automatedAction}** any user that sends a phishing link.`) : interaction.createFollowup('Succesfully **enabled** the anti-scam module.');
                     } else {
                         return interaction.createFollowup('Succesfully **enabled** the anti-scam module.');
                     }
@@ -188,11 +201,11 @@ export default class AutomodCommand extends Command {
 
                     if(subOptions.has("automated-action")) {
                         const automatedAction = subOptions.get("automated-action");
-                        automatedActions['advertising'] = automatedAction;
+                        automatedActions['advertising'] = automatedAction !== 'none' ? automatedAction : null;
                         await guildData.updateOne({
                             Actions: automatedActions
                         });
-                        return interaction.createFollowup(`Succesfully **enabled** the anti-invite module and will **${automatedAction}** any user that sends an invite link.`);
+                        automatedAction !== 'none' ? interaction.createFollowup(`Succesfully **enabled** the anti-invite module and will **${automatedAction}** any user that sends an invite link.`) : interaction.createFollowup('Succesfully **enabled** the anti-invite module.');
                     } else {
                         return interaction.createFollowup('Succesfully **enabled** the anti-invite module.');
                     }
