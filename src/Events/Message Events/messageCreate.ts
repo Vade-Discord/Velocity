@@ -35,9 +35,9 @@ export default class MessagecreateEvent extends Event {
             }
         }
 
-        // if (message.member?.permissions.has("manageMessages") || (await this.client.utils.checkModerator(message.member, message.channel.guild))) {
-        //     return;
-        // }
+        if (message.member?.permissions.has("manageMessages") || (await this.client.utils.checkModerator(message.member, message.channel.guild))) {
+            return;
+        }
 
 
         const logChannel = (await this.client.utils.loggingChannel(message.channel.guild, 'moderation'));
@@ -111,7 +111,7 @@ export default class MessagecreateEvent extends Event {
             const Regex = new RegExp(`(https?:\\/\\/)?(www\\.)?((discordapp\\.com/invite)|(discord\\.gg))\\/(\\w+)`)
 
             if (Regex.test(message.content)) {
-                message.delete().then(() => {
+                message.delete().then(async () => {
                     message.channel.createMessage(`${message.author.mention}, you cannot send invites!`).then(async (msg) => {
                         await wait(5000);
                         if (message && !message.deleted) {
