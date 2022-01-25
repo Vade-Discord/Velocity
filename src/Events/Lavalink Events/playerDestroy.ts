@@ -22,7 +22,7 @@ export default class PlayerDestroyEvent extends Event {
         }
         const logEmbed = new this.client.embed()
             .setTitle("Player Destroyed")
-            .setDescription(`**User:** ${player.user.username}#${player.user.discriminator}\n**Server:** ${guild.name} (${guild.id})\n`)
+            .setDescription(`**Server:** ${guild.name} (${guild.id})\n`)
             .setColor("#F00000")
             .setFooter(`Velocity | Music Logging`)
             .setTimestamp()
