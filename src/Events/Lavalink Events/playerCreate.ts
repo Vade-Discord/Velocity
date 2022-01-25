@@ -23,7 +23,7 @@ export default class PlayerCreateEvent extends Event {
         const logEmbed = new this.client.embed()
             .setTitle("Player Created")
             .setDescription(`**Server:** ${guild.name} (${guild.id})\n`)
-            .setColor(this.client.constants.colours.GREEN)
+            .setColor(this.client.constants.colours.green)
             .setFooter(`Velocity | Music Logging`)
             .setTimestamp()
 
