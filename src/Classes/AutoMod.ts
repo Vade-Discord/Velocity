@@ -152,6 +152,19 @@ export default class AutoMod {
             }
             case "ban": {
 
+                await member.ban(30, "[Automod] Ban").catch(async (e) => {
+                    if(e) {
+                        await this.moderationLog(guild, "[Automod] Attempted-Ban", `**User:** ${member.username}#${member.discriminator} (${member.id})\n**Info:** Unable to be banned by the automod due to lack of permissions.\n**Reason:** ${this.reasons[type]}`);
+                        success = false;
+                    }
+
+                });
+                if(!success) {
+                    return;
+                }
+                await this.moderationLog(guild, "[Automod] Ban", `**User:** ${member.username}#${member.discriminator} (${member.id})\n**Reason:** ${this.reasons[type]}.`);
+
+
                 break;
             }
 
