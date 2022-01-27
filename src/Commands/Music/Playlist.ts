@@ -3,6 +3,7 @@ import playlistSchema from "../../Schemas/Backend/PlaylistsSchemas";
 import { TrackUtils } from "erela.js";
 import {Track, UnresolvedTrack} from "erela.js/structures/Player";
 import {Queue} from "erela.js/structures/Queue";
+import TinyUrl from "tinyurl";
 
 export default class PlaylistCommand extends Command {
     constructor(client) {
@@ -56,6 +57,25 @@ export default class PlaylistCommand extends Command {
                             type: 6,
                             name: "user",
                             description: "The user who's playlist you want to load (If it is not your own).",
+                            required: false
+                        }
+                    ]
+                },
+                {
+                    type: 1,
+                    name: "export",
+                    description: "Export a saved playlist!",
+                    options: [
+                        {
+                            type: 3,
+                            name: "playlist-name",
+                            description: "The name of the playlist to export!",
+                            required: true,
+                        },
+                        {
+                            type: 6,
+                            name: "user",
+                            description: "The user who's playlist you want to export (If it is not your own).",
                             required: false
                         }
                     ]
@@ -286,6 +306,28 @@ export default class PlaylistCommand extends Command {
                 const name = subOptions.get("playlist-name")?.toLowerCase();
                 const user = subOptions.get("user") ?? member.id;
 
+                const playlist = (await playlistSchema.findOne({ ownerID: user, name: name }));
+                if(!playlist) {
+                    return interaction.createMessage({ content: "A playlist with that name does not exist owned by that user! Please ensure you did not misspell!", flags: 64 });
+                }
+                if(!playlist?.public && playlist?.ownerID !== member.id) {
+                    return interaction.createMessage({ content: "You do not have permission to export this playlist, this may be due to the playlist not being set as public and you not owning it.", flags: 64 });
+                }
+
+                const identifiers = playlist.playlistArray.map((track: { uri: any }) => youtube_parser(track.uri));
+
+                const shortUrl = (await TinyUrl.shorten(`https://www.youtube.com/watch_videos?video_ids=${identifiers.join(",")}`));
+                if(!shortUrl) {
+                    return interaction.createMessage({ content: "An error occurred while exporting the playlist!", flags: 64 });
+                }
+
+                let embed = new this.client.embed()
+                    .setDescription(`✅ The playlist \`${name}\` has been exported by ${member.mention}.\n\n[Click here to view the playlist](${shortUrl})`)
+                    .setColor(this.client.constants.colours.green)
+                    .setTimestamp()
+                    .setFooter(`Velocity Music`, this.client.user.avatarURL);
+
+                return interaction.createMessage({ embeds: [embed], flags: 64 });
 
             }
         }
@@ -294,4 +336,10 @@ export default class PlaylistCommand extends Command {
         }
 
 
+    }
+
+    function youtube_parser(url) {
+    const regex = /^.*((youtu.be\/)|(v\/)|(\/u\/\w\/)|(embed\/)|(watch\?))\??v?=?([^#&?]*).*/;
+    let match = url.match(regex);
+    return match && match[7].length == 11 ? match[7] : false;
     }
