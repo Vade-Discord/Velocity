@@ -20,12 +20,12 @@ const manager = new ClusterManager(config.token, "dist/Launch", {
     },
     webhooks: {
         shard: {
-            id: "930904091620700160",
-            token: "qWuK36GpB-ScnKWDCTA_DB3q0LPYIu2yBXiF1U7xdRmQSVclXNlrtMfYOJK3KJQRKunF"
+            id: config.local ? "937824435505864794" : "930904091620700160",
+            token: config.local ? "P1i7WIY0YniYRuGXZipfhp7EQnQpQ28JAXKSGKY_jTPdVlqr_y6NGmVcpocl_2eCX2xv" : "qWuK36GpB-ScnKWDCTA_DB3q0LPYIu2yBXiF1U7xdRmQSVclXNlrtMfYOJK3KJQRKunF"
         },
         cluster: {
-            id: "930904091620700160",
-            token: "qWuK36GpB-ScnKWDCTA_DB3q0LPYIu2yBXiF1U7xdRmQSVclXNlrtMfYOJK3KJQRKunF"
+            id: config.local ? "937824435505864794" : "930904091620700160",
+            token: config.local ? "P1i7WIY0YniYRuGXZipfhp7EQnQpQ28JAXKSGKY_jTPdVlqr_y6NGmVcpocl_2eCX2xv" : "qWuK36GpB-ScnKWDCTA_DB3q0LPYIu2yBXiF1U7xdRmQSVclXNlrtMfYOJK3KJQRKunF"
         }
     }
 });
