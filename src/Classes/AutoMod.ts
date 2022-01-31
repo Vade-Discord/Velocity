@@ -12,7 +12,8 @@ export default class AutoMod {
 
     private reasons = {
         phishing: "sending a malicous link intended to harm/mistreat other members",
-        advertising: "sendning a message or link that is likely being used to advertise"
+        advertising: "sendning a message or link that is likely being used to advertise",
+        massjoin: "large amount of members joining, potential raid."
     }
 
     public async AutoAction(guildId: string, member: Member, type: string) {

@@ -6,6 +6,7 @@ import inviterSchema from "../../Schemas/Invite Schemas/inviter";
 import autoRoles from '../../Schemas/Main-Guilds/GuildAutoRoles';
 import {Invite, TextChannel} from "eris";
 import Collection from "@discordjs/collection";
+import {AntiMassJoin} from "../../Classes/AntiMassJoin";
 
 let e;
 
@@ -115,7 +116,7 @@ Time Kicked: <t:${Date.now()}:d>`)
                             const total = inviterData ? inviterData.total : 0;
                             inviteChannel.createMessage(
                                 `${member.mention} joined our server. They were invited by ${invite.inviter.username}#${invite.inviter.discriminator} (**${total}** Invites)`
-                            );
+                            ).catch(() => null);
                         }
                     }
                 }
@@ -136,9 +137,12 @@ Time Kicked: <t:${Date.now()}:d>`)
                     guildID: `${member.guild.id}`,
                     mention: `${member.mention}`
                 }) : `${member.mention} has joined the server.`;
-
-              return  welcomeChannel.createMessage(message);
+                welcomeChannel.createMessage(message).catch(() => null);
             }
+        }
+
+        if(guildData?.Actions["massJoin"]) {
+            await (new AntiMassJoin(this.client)).run(guild, member);
         }
 
 
