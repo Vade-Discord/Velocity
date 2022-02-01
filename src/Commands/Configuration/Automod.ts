@@ -107,6 +107,44 @@ export default class AutomodCommand extends Command {
                         }
                     ]
                 },
+                {
+                    type: 1,
+                    name: 'mass-mention',
+                    description: 'Automaticlaly delete any message containing multiple member-mentions.',
+                    options: [
+                        {
+                            type: 10,
+                            name: 'mention-amount',
+                            description: 'How many mentions should trigger this?',
+                            required: true
+                        },
+                        {
+                            type: 3,
+                            name: 'automated-action',
+                            description: "Would you like any of these to automatically happen when triggered?",
+                            choices: [
+                                {
+                                    name: 'remove-action',
+                                    value: 'none'
+                                },
+                                {
+                                    name: 'mute-user',
+                                    value: 'mute'
+                                },
+                                {
+                                    name: 'kick-user',
+                                    value: 'kick'
+                                },
+                                {
+                                    name: 'ban-user',
+                                    value: 'ban'
+                                },
+                            ],
+                            required: true
+                        },
+
+                    ]
+                },
             ]
         });
     }
@@ -145,6 +183,44 @@ export default class AutomodCommand extends Command {
                         return
                     } else {
                         return interaction.createFollowup('Succesfully **enabled** the anti links module.');
+                    }
+
+                }
+
+                break;
+            }
+            case 'mass-mention': {
+
+
+                if(guildData?.Moderation?.massMention) {
+                    object['massMention'] = false;
+                    await guildData.updateOne({
+                    Moderation: object
+                    });
+                    interaction.createFollowup('Succesfully **disabled** the mass-mention module.');
+                } else {
+                    object['massMention'] = true;
+                    await guildData.updateOne({
+                        Moderation: object
+                    });
+
+                    if(subOptions.has("automated-action")) {
+                        const automatedAction = subOptions.get("automated-action");
+                        automatedActions['massMention'] = automatedAction !== 'none' ? automatedAction : null;
+                        await guildData.updateOne({
+                            Actions: automatedActions
+                        });
+                        const amount = subOptions.get("mention-amount"); 
+                        object["mentionAmount"] = amount ? amount : object["mentionAmount"];
+                        
+                        await guildData.updateOne({
+                            Moderation: object
+                        })
+                        
+                        automatedAction !== 'none' ? interaction.createFollowup(`Succesfully **enabled** the mass-mention module and will **${automatedAction}** any member thats mentions multiple members.`) : interaction.createFollowup('Succesfully **enabled** the anti links module.');
+                        return
+                    } else {
+                        return interaction.createFollowup('Succesfully **enabled** the mass-mention module.');
                     }
 
                 }

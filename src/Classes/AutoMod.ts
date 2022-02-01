@@ -1,7 +1,6 @@
 import { Bot } from "../Client/Client";
 import {Constants, Guild, Member} from "eris";
 import mutedSchema from "../Schemas/Backend/Muted";
-import {set} from "mongoose";
 
 export default class AutoMod {
 
@@ -12,8 +11,9 @@ export default class AutoMod {
 
     private reasons = {
         phishing: "sending a malicous link intended to harm/mistreat other members",
-        advertising: "sendning a message or link that is likely being used to advertise",
-        massjoin: "large amount of members joining, potential raid."
+        advertising: "sending a message or link that is likely being used to advertise",
+        massjoin: "large amount of members joining, potential raid",
+        massmention: "Mentioning to many members"
     }
 
     public async AutoAction(guildId: string, member: Member, type: string) {
