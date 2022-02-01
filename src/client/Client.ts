@@ -47,7 +47,7 @@ export class Bot extends Eris.Client {
   public events: Collection<string, Event> = new Collection();
   public cooldowns: Collection<string, number> = new Collection();
   public autoplay: string[] = Array();
-  public owners: string[] = ["492017874290868227", "502553365595684884", "473858248353513472"];
+  public owners: string[] = ["492017874290868227", "502553365595684884", "473858248353513472", "312735373769965568"];
   public utils: Util = new Util(this);
   public automod: AutoMod = new AutoMod(this);
   public constants: typeof Constants = Constants;
