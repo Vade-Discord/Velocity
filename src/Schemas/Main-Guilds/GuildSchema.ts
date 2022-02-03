@@ -1,4 +1,5 @@
 import mongoose from "mongoose";
+import { BinaryOperatorToken } from "typescript";
 
 export interface IGuild extends mongoose.Document {
     _id: string;
@@ -8,6 +9,8 @@ export interface IGuild extends mongoose.Document {
     welcomeChannel: string;
     inviteChannel: string;
     levelChannel: string;
+    twitchWatcherChannel: string;
+    twitchWatcherEnabled: boolean;
     welcomeMessage: string;
     bumpChannel: string;
     bumpColour: string;
@@ -35,6 +38,12 @@ export interface IGuild extends mongoose.Document {
     Automod: boolean;
     MessageCounter: boolean;
     nicknameFormat: string;
+    Notifications?: {
+        twitch?: boolean
+        twitchChannelName?: string
+        notificationChannel?: string
+        isLive?: boolean
+    },
     Moderation?: {
         autoMod?: boolean;
         antiLink?: boolean;
@@ -117,6 +126,13 @@ const guildSchema = new mongoose.Schema({
     MessageCounter: Boolean,
     SuggestionPing: String,
     nicknameFormat: String,
+    Notifications: {
+        twitch: Boolean,
+        twitchChannelName: String,
+        notificationChannel: String,
+        isLive: Boolean
+    },
+    
     Moderation: {
         autoMod: Boolean,
         antiLink: Boolean,

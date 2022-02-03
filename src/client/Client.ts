@@ -22,6 +22,7 @@ import Facebook from "erela.js-facebook";
 import Filter from "erela.js-filters";
 import AppleMusic from 'better-erela.js-apple';
 import AutoMod from "../Classes/AutoMod";
+import TwitchWatcher from "../Classes/TwitchWatcher";
 
 const nodes: any = [
   {
@@ -50,6 +51,7 @@ export class Bot extends Eris.Client {
   public owners: string[] = ["492017874290868227", "502553365595684884", "473858248353513472", "312735373769965568"];
   public utils: Util = new Util(this);
   public automod: AutoMod = new AutoMod(this);
+  public twitchWatcher: TwitchWatcher = new TwitchWatcher(this);
   public constants: typeof Constants = Constants;
   // @ts-ignore
   public embed: typeof MessageEmbed | typeof Eris.RichEmbed = MessageEmbed;
