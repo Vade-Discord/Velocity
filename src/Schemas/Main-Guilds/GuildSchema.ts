@@ -43,13 +43,20 @@ export interface IGuild extends mongoose.Document {
         antiScam?: boolean;
         massMention?: boolean;
         mentionAmount?: number;
+        emoteAmount?: number;
+        emoteSpam?: boolean;
+        antiSpam?: boolean;
+        spamMessageAmount?: number;
+        spamMessageInterval?: number;
     },
     Actions: {
         phishing?: string;
         advertising?: string;
         massJoin?: string;
         linkSent?: string;
-        massMention?: string
+        massMention?: string;
+        emoteSpam?: string
+        antiSpam?:string
     },
     Premium?: {
         key?: string;
@@ -117,13 +124,20 @@ const guildSchema = new mongoose.Schema({
         antiProfanity: Boolean,
         antiScam: Boolean,
         mentionAmount: Number,
-        massMention: Boolean
+        massMention: Boolean,
+        emoteAmount: Number,
+        emoteSpam: Boolean,
+        antiSpam: Boolean,
+        spamMessageAmount: Number,
+        spamMessageInterval: Number,
     },
     Actions: {
+        emoteSpam: String,
         massMention: String,
         phishing: String,
         advertising: String,
         massJoin: String,
+        antiSpam: String
     },
     Premium: {
         key: String,

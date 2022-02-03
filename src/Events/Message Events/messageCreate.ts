@@ -5,6 +5,8 @@ import MassMention from '../../Classes/MassMention';
 import { promisify } from 'util';
 import messageSchema from '../../Schemas/Backend/Messages';
 import { distance } from 'fastest-levenshtein';
+import AntiEmoteSpam from '../../Classes/AntiEmoteSpam';
+import AntiSpam from '../../Classes/AntiSpam';
 const wait = promisify(setTimeout);
 
 export default class MessagecreateEvent extends Event {
@@ -40,14 +42,15 @@ export default class MessagecreateEvent extends Event {
     }
 
     if (
-      message.member?.permissions.has('manageMessages') ||
-      (await this.client.utils.checkModerator(
-        message.member,
-        message.channel.guild
-      ))
-    ) {
-      return;
-    } 
+      !this.client.config.local &&
+    message.member?.permissions.has('manageMessages') ||
+    (await this.client.utils.checkModerator(
+      message.member,
+      message.channel.guild
+    ))
+  ) {
+    return;
+  } 
 
     const logChannel = await this.client.utils.loggingChannel(
       message.channel.guild,
@@ -180,6 +183,20 @@ export default class MessagecreateEvent extends Event {
           'massmention'
         );
       }
+
     }
+    if(guildData.Moderation.emoteSpam) {
+      const result = await AntiEmoteSpam(this.client, message)
+      if(result) {
+        logEmbed.setTitle(`Anti-Emote-Spam triggered!`);
+        logEmbed.setDescription(`**Sent By:** ${message.author.mention}`)
+        logChannel ? logChannel.createMessage({ embeds: [logEmbed] }) : null;
+        await this.client.automod.AutoAction(
+          message.member.guild.id,
+          message.member,
+          'emotespam'
+        );
+      }
+  }
   }
 }

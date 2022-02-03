@@ -13,7 +13,8 @@ export default class AutoMod {
         phishing: "sending a malicous link intended to harm/mistreat other members",
         advertising: "sending a message or link that is likely being used to advertise",
         massjoin: "large amount of members joining, potential raid",
-        massmention: "Mentioning to many members"
+        massmention: "Mentioning to many members",
+        emotespam: "sending a message that has to many emotes",
     }
 
     public async AutoAction(guildId: string, member: Member, type: string) {
