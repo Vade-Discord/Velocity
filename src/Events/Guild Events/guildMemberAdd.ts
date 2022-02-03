@@ -6,7 +6,7 @@ import inviterSchema from "../../Schemas/Invite Schemas/inviter";
 import autoRoles from '../../Schemas/Main-Guilds/GuildAutoRoles';
 import {Invite, TextChannel} from "eris";
 import Collection from "@discordjs/collection";
-import {AntiMassJoin} from "../../Classes/AntiMassJoin";
+import { AntiMassJoin } from "../../Classes/AntiMassJoin";
 
 let e;
 

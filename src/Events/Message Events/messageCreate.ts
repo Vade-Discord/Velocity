@@ -1,6 +1,6 @@
 import { Event } from '../../Interfaces/Event';
 import { profanityArray } from '../../Assets/Profanity.json';
-import AntiPhishing from '../../Classes/AntiPhishing';
+import { AntiPhishing } from '../../Classes/AntiPhishing';
 import MassMention from '../../Classes/MassMention';
 import { promisify } from 'util';
 import messageSchema from '../../Schemas/Backend/Messages';
@@ -100,7 +100,7 @@ export default class MessagecreateEvent extends Event {
       }
     }
     if (guildData?.Moderation?.antiScam) {
-      const result = await AntiPhishing(this.client, message);
+      const result = await (new AntiPhishing(this.client)).Run(message);
       if (result.status) {
         logEmbed.setTitle(`Phishing link detected!`);
         logEmbed.setDescription(`**User:** ${tag} (${message.author.id}) 

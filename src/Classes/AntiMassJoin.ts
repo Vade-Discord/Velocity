@@ -1,12 +1,8 @@
 import { Member, User } from 'eris';
 import { Bot } from "../Client/Client";
+import AutoMod from "./AutoMod";
 
-export class AntiMassJoin {
-
-    public readonly client: Bot;
-    constructor(client: Bot) {
-        this.client = client;
-    }
+export class AntiMassJoin extends AutoMod {
 
     public joinBuckets = new Map<string, JoinBucket>();
 
