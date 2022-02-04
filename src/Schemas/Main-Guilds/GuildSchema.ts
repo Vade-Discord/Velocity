@@ -1,4 +1,5 @@
 import mongoose from "mongoose";
+import { BinaryOperatorToken } from "typescript";
 
 export interface IGuild extends mongoose.Document {
     _id: string;
@@ -8,6 +9,8 @@ export interface IGuild extends mongoose.Document {
     welcomeChannel: string;
     inviteChannel: string;
     levelChannel: string;
+    twitchWatcherChannel: string;
+    twitchWatcherEnabled: boolean;
     welcomeMessage: string;
     bumpChannel: string;
     bumpColour: string;
@@ -35,6 +38,12 @@ export interface IGuild extends mongoose.Document {
     Automod: boolean;
     MessageCounter: boolean;
     nicknameFormat: string;
+    Notifications?: {
+        twitch?: boolean
+        twitchChannelName?: string
+        notificationChannel?: string
+        isLive?: boolean
+    },
     Moderation?: {
         autoMod?: boolean;
         antiLink?: boolean;
@@ -43,13 +52,20 @@ export interface IGuild extends mongoose.Document {
         antiScam?: boolean;
         massMention?: boolean;
         mentionAmount?: number;
+        emoteAmount?: number;
+        emoteSpam?: boolean;
+        antiSpam?: boolean;
+        spamMessageAmount?: number;
+        spamMessageInterval?: number;
     },
     Actions: {
         phishing?: string;
         advertising?: string;
         massJoin?: string;
         linkSent?: string;
-        massMention?: string
+        massMention?: string;
+        emoteSpam?: string
+        antiSpam?:string
     },
     Premium?: {
         key?: string;
@@ -110,6 +126,13 @@ const guildSchema = new mongoose.Schema({
     MessageCounter: Boolean,
     SuggestionPing: String,
     nicknameFormat: String,
+    Notifications: {
+        twitch: Boolean,
+        twitchChannelName: String,
+        notificationChannel: String,
+        isLive: Boolean
+    },
+    
     Moderation: {
         autoMod: Boolean,
         antiLink: Boolean,
@@ -117,13 +140,20 @@ const guildSchema = new mongoose.Schema({
         antiProfanity: Boolean,
         antiScam: Boolean,
         mentionAmount: Number,
-        massMention: Boolean
+        massMention: Boolean,
+        emoteAmount: Number,
+        emoteSpam: Boolean,
+        antiSpam: Boolean,
+        spamMessageAmount: Number,
+        spamMessageInterval: Number,
     },
     Actions: {
+        emoteSpam: String,
         massMention: String,
         phishing: String,
         advertising: String,
         massJoin: String,
+        antiSpam: String
     },
     Premium: {
         key: String,
