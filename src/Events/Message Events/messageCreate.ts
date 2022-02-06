@@ -187,7 +187,7 @@ export default class MessagecreateEvent extends Event {
     }
     if(guildData.Moderation.emoteSpam) {
       let result: any;
-      result = await (new AntiEmoteSpam(this.client)()).run(message);
+      result = (await (new AntiEmoteSpam(this.client)).run(message));
       if(result) {
         logEmbed.setTitle(`Anti-Emote-Spam triggered!`);
         logEmbed.setDescription(`**Sent By:** ${message.author.mention}`)
