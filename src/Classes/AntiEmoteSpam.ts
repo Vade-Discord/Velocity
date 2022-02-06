@@ -8,8 +8,8 @@ export default async function AntiEmoteSpam(client: Bot, message: Message,): Pro
     const guildSchema = await client.utils.getGuildSchema(message.guildID)
     const verifyEmoji = emoji => {
         if (emoji.includes(':')) return  /^(?:<a?:\w{2,32}:)?(\d{17,19})>?$/g.test(emoji);
-        if (nodeEmoji.find(emoji)) return true
-        return false;
+        return !!nodeEmoji.find(emoji);
+
     };
     const emojis = args.filter(verifyEmoji);        
         if(emojis.length >= guildSchema.Moderation.emoteAmount) {
