@@ -7,7 +7,7 @@ export default class TwitchSetupCommand extends Command {
         super(client, 'live-notifications', {
             aliases: [""],
             description: "Setup going live notifications for twitch",
-            category: "Twitch",
+            category: "Configuration",
             userPerms: ['manageGuild', 'administrator'],
             guildOnly: true,
             options: [
@@ -25,7 +25,7 @@ export default class TwitchSetupCommand extends Command {
                          {
                              type: 7,
                              name: 'notification-channel',
-                             description: 'The channel you want the notification to send too',
+                             description: 'The channel you want the notification to send to.',
                              required: true
                          }
                     ]
@@ -36,7 +36,7 @@ export default class TwitchSetupCommand extends Command {
     }
     async run(interaction, member, options, subOptions) {
 
-        const guildData = await this.client.utils.getGuildSchema(member.guild)!!
+        const guildData = (await this.client.utils.getGuildSchema(interaction.guildID))!!
         const object = guildData?.Notifications
         switch(interaction.data.options[0].name) {
             case 'twitch' : {
