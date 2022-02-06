@@ -38,8 +38,8 @@ export default class TwitchWatcher {
 
    public get twitchClient() {
        return {
-           id: this.client.config.TWITCH.Client_ID,
-           secret: this.client.config.TWITCH.Client_Secret
+           id: this.client.config.PRIVATE.TWITCH.Client_ID,
+           secret: this.client.config.PRIVATE.TWITCH.Client_Secret
        }
    }
 }
