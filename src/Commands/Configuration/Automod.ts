@@ -142,11 +142,47 @@ export default class AutomodCommand extends Command {
                             ],
                             required: true
                         },
-
+                    ],
+                },
+                {
+                    type: 1,
+                    name: 'anti-emote-spam',
+                    description: 'Automaticlaly delete any message containing multiple emotes.',
+                    options: [
+                                {
+                                    type: 10,
+                                    name: 'emote-amount',
+                                    description: 'How many emotes should trigger this?',
+                                    required: true
+                                },
+                                {
+                                    type: 3,
+                                    name: 'automated-action',
+                                    description: "Would you like any of these to automatically happen when triggered?",
+                                    choices: [
+                                        {
+                                            name: 'remove-action',
+                                            value: 'none'
+                                        },
+                                        {
+                                            name: 'mute-user',
+                                            value: 'mute'
+                                        },
+                                        {
+                                            name: 'kick-user',
+                                            value: 'kick'
+                                        },
+                                        {
+                                            name: 'ban-user',
+                                            value: 'ban'
+                                        },
+                                    ],
+                                    required: true
+                                },       
                     ]
                 },
             ]
-        });
+        })
     }
     async run(interaction, member, options, subOptions) {
 
@@ -221,6 +257,44 @@ export default class AutomodCommand extends Command {
                         return
                     } else {
                         return interaction.createFollowup('Succesfully **enabled** the mass-mention module.');
+                    }
+
+                }
+
+                break;
+            }
+            case 'anti-emote-spam': {
+
+
+                if(guildData?.Moderation?.emoteSpam) {
+                    object['emoteSpam'] = false;
+                    await guildData.updateOne({
+                    Moderation: object
+                    });
+                    interaction.createFollowup('Succesfully **disabled** the anti-emote-spam module.');
+                } else {
+                    object['emoteSpam'] = true;
+                    await guildData.updateOne({
+                        Moderation: object
+                    });
+
+                    if(subOptions.has("automated-action")) {
+                        const automatedAction = subOptions.get("automated-action");
+                        automatedActions['emoteSpam'] = automatedAction !== 'none' ? automatedAction : null;
+                        await guildData.updateOne({
+                            Actions: automatedActions
+                        });
+                        const amount = subOptions.get("emote-amount"); 
+                        object["emoteAmount"] = amount ? amount : object["emoteAmount"];
+                        
+                        await guildData.updateOne({
+                            Moderation: object
+                        })
+                        
+                        automatedAction !== 'none' ? interaction.createFollowup(`Succesfully **enabled** the anti-emote-spam module and will **${automatedAction}** any member that has multiple emotes in a message.`) : interaction.createFollowup('Succesfully **enabled** the anti links module.');
+                        return
+                    } else {
+                        return interaction.createFollowup('Succesfully **enabled** the anti-emote-spam module.');
                     }
 
                 }
