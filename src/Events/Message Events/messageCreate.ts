@@ -68,7 +68,7 @@ export default class MessagecreateEvent extends Event {
       .setColor(`#F00000`)
       .setTimestamp();
 
-    if (guildData?.Moderation?.antiProfanity) {
+    if (guildData?.Moderation["antiProfanity"]) {
       const ignore = ['ok', 'alr'];
       const clean = (str) => str.replace(/[^\w\s]/gi, '');
       const profanity = message.content
@@ -101,7 +101,7 @@ export default class MessagecreateEvent extends Event {
         });
       }
     }
-    if (guildData?.Moderation?.antiScam) {
+    if (guildData?.Moderation["antiScam"]) {
       const result = await (new AntiPhishing(this.client)).Run(message);
       if (result.status) {
         logEmbed.setTitle(`Phishing link detected!`);
@@ -116,7 +116,7 @@ export default class MessagecreateEvent extends Event {
         );
       }
     }
-    if (guildData?.Moderation?.antiLink) {
+    if (guildData?.Moderation["antiLink"]) {
       if (
         /(?:(?:https?|ftp|file):\/\/|www\.|ftp\.)(?:\([-A-Z0-9+&@#\/%=~_|$?!:,.]*\)|[-A-Z0-9+&@#\/%=~_|$?!:,.])*(?:\([-A-Z0-9+&@#\/%=~_|$?!:,.]*\)|[A-Z0-9+&@#\/%=~_|$])/gim.test(
           message.content
@@ -139,7 +139,7 @@ export default class MessagecreateEvent extends Event {
       }
     }
 
-    if (guildData?.Moderation?.antiInvite) {
+    if (guildData?.Moderation["antiInvite"]) {
       const Regex = new RegExp(
         `(https?:\\/\\/)?(www\\.)?((discordapp\\.com/invite)|(discord\\.gg))\\/(\\w+)`
       );
@@ -169,8 +169,9 @@ export default class MessagecreateEvent extends Event {
         });
       }
     }
-    if (guildData?.Moderation?.massMention) {
-      let result = await MassMention(this.client, message);
+    if (guildData?.Moderation["massMention"]) {
+      let result: Boolean;
+      result = (await (new MassMention(this.client)).run(message));
       if (result) {
         
         logEmbed.setTitle(`Mass-Mention triggered!`);
@@ -185,7 +186,8 @@ export default class MessagecreateEvent extends Event {
 
     }
     if(guildData.Moderation.emoteSpam) {
-      const result = await AntiEmoteSpam(this.client, message)
+      let result: any;
+      result = await (new AntiEmoteSpam(this.client)()).run(message);
       if(result) {
         logEmbed.setTitle(`Anti-Emote-Spam triggered!`);
         logEmbed.setDescription(`**Sent By:** ${message.author.mention}`)
