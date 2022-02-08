@@ -88,27 +88,41 @@ export default class ReadyEvent extends Event {
     );
 
     const guilds = this.client.guilds.map((x) => x.id);
-    const guildData = (await this.client.utils.getGuildSchema(guilds));
-    guildData.forEach(async (g) => {
+    const data = [];
+    guilds.forEach(async (g) => {
+      await this.client.utils.getGuildSchema(g).then((schema) => {
+        if(schema) {
+          data.push(schema);
+        }
+      });
+    });
+    // @ts-ignore
+    data.forEach(async (g) => {
       const object = g?.Notifications;
+      // @ts-ignore
       if(guildData?.Notifications["twitchChannelName"]) {
         setInterval(async () => {
+          // @ts-ignore
           const user = guildData.Notifications["twitchChannelName"];
+          // @ts-ignore
           if (!user.isLive && guildData.Notifications.isLive) {
             object['isLive'] = false;
+            // @ts-ignore
             await guildData.updateOne({
               Notifications: object,
             });
             return;
           }
+          // @ts-ignore
           if (user?.isLive && !guildData.Notifications['isLive']) {
             object['isLive'] = true;
+            // @ts-ignore
             await guildData.updateOne({
               Notifications: object,
             });
             const embed = new this.client.embed();
-            const notificationChannelId =
-                guildData.Notifications.notificationChannel;
+            // @ts-ignore
+            const notificationChannelId = guildData.Notifications.notificationChannel;
             const channel = (await this.client.getRESTChannel(notificationChannelId)) as TextChannel;
             embed.setTitle(`${user.username} is live!`);
             embed.setDescription(
