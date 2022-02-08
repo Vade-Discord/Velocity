@@ -25,10 +25,6 @@ export default class ReadyEvent extends Event {
     await this.client.manager.init(this.client.user.id);
     e = this.client;
     await mongo();
-
-    let guildId = this.client.guilds.map((x) => x.id).join(' ');
-    let guildData = await this.client.utils.getGuildSchema(guildId);
-    const object = guildData.Notifications;
     this.client.redis = await redisConnect(this.client);
     this.client.logger.info(
       `${this.client.user.username}#${this.client.user.discriminator} has successfully logged in!`
@@ -91,46 +87,41 @@ export default class ReadyEvent extends Event {
       15000
     );
 
-    setInterval(async () => {
-      const user = await this.client.twitchWatcher.getTwitchUser(
-        guildData.Notifications.twitchChannelName
-      );
-      if (!user.isLive && guildData.Notifications.isLive) {
-        object['isLive'] = false;
-        await guildData.updateOne({
-          Notifications: object,
+    const guilds = this.client.guilds.map((x) => x.id);
+    const guildData = (await this.client.utils.getGuildSchema(guilds));
+    guildData.forEach(async (g) => {
+      const object = g?.Notifications;
+      if(guildData?.Notifications["twitchChannelName"]) {
+        setInterval(async () => {
+          const user = guildData.Notifications["twitchChannelName"];
+          if (!user.isLive && guildData.Notifications.isLive) {
+            object['isLive'] = false;
+            await guildData.updateOne({
+              Notifications: object,
+            });
+            return;
+          }
+          if (user?.isLive && !guildData.Notifications['isLive']) {
+            object['isLive'] = true;
+            await guildData.updateOne({
+              Notifications: object,
+            });
+            const embed = new this.client.embed();
+            const notificationChannelId =
+                guildData.Notifications.notificationChannel;
+            const channel = (await this.client.getRESTChannel(notificationChannelId)) as TextChannel;
+            embed.setTitle(`${user.username} is live!`);
+            embed.setDescription(
+                `[${user.username} is currently live playing ${user.game.name}](https://twitch.tv/${user.username})`
+            );
+            embed.setImage(user.avatar);
+            channel.createMessage({
+              embeds: [embed],
+            });
+          }
         });
-        return;
-        }
-
-        if (user.isLive && !guildData.Notifications.isLive){
-
-        
-        
-        object['isLive'] = true;
-        await guildData.updateOne({
-          Notifications: object,
-        });
-        const embed = new this.client.embed();
-        console.log('work');
-        const notificationChannelId =
-          guildData.Notifications.notificationChannel;
-        const channel = this.client.guilds
-          .get(guildId)
-          .channels.find((x) => x.id === notificationChannelId);
-        embed.setTitle(`${user.username} is live!`);
-        embed.setDescription(
-          `[${user.username}is currently live playing ${user.game.name}](https://twitch.tv/${user.username})`
-        );
-        embed.setImage(user.avatar);
-        if (channel instanceof TextChannel) {
-          channel.createMessage({
-            embeds: [embed],
-          });
-        }
-      } else {
-        return;
       }
-    }, 240000);
+    });
+
   }
 }
