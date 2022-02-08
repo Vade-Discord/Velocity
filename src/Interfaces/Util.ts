@@ -249,6 +249,18 @@ export default class Util {
 
   async getGuildSchema(guild) {
 
+    if(typeof guild === Array) {
+      const toReturn = [];
+      await guild.forEach(async (g) => {
+       const e = await guild_schema.findOne({ guildID: g ?? g.id });
+       if(e) {
+         toReturn.push(e);
+       }
+      });
+
+      return toReturn;
+    }
+
     const check = await guild_schema.findOne({ guildID: guild.id ?? guild });
     if (check) return check;
     const newSchema = new guild_schema({
