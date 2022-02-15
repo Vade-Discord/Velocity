@@ -6,7 +6,7 @@ export default class TwitchSetupCommand extends Command {
   constructor(client) {
     super(client, 'tickets', {
       aliases: [''],
-      description: 'Manage Ticket',
+      description: 'Add, remove and manage the access to each ticket',
       category: 'Tickets',
       guildOnly: true,
       modCommand: true,
