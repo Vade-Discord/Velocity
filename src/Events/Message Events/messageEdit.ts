@@ -17,7 +17,7 @@ export default class MessageEditEvent extends Event {
         }
         const guild = (await this.client.getRESTGuild(newMessage.guildID));
         const member = newMessage.member;
-        if(guild.id === this.client.config.GUILDS.testing) {
+
             const newContent = oldMessage?.content !== newMessage?.content ? newMessage?.content ?? "No Content" : oldMessage?.content;
             if(newContent === oldMessage?.content) {
                 return;
@@ -34,7 +34,7 @@ export default class MessageEditEvent extends Event {
 
             const logChannel = (await this.client.utils.loggingChannel(guild, "message"));
             logChannel?.createMessage({ embeds: [embed] });
-        }
+        
 
     }
 
