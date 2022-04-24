@@ -15,6 +15,9 @@ export default class MessageDeleteEvent extends Event {
         const guild = (await this.client.getRESTGuild(message.guildID))!!;
         const member = (await guild.getRESTMember(message.author.id));
 
+        if(member.bot) {
+            return;
+        }
 
 
 
