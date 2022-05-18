@@ -6,7 +6,7 @@ import { promisify } from 'util';
 import messageSchema from '../../Schemas/Backend/Messages';
 import { distance } from 'fastest-levenshtein';
 import AntiEmoteSpam from '../../Classes/AntiEmoteSpam';
-import tagSchema from '../../Schemas/Backend/Tags';
+import tagSchema from '../../Schemas/Main-Guilds/TagSchema';
 const wait = promisify(setTimeout);
 
 export default class MessagecreateEvent extends Event {
