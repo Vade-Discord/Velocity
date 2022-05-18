@@ -41,7 +41,7 @@ export default class MessagecreateEvent extends Event {
       }
     }
 
-    const tagFound =  message?.content ? (await tagSchema.findOne({ guildID: interaction.guildID, tagName: message?.content })) : null;
+    const tagFound =  message?.content ? (await tagSchema.findOne({ guildID: message.guildID, tagName: message?.content?.toLowerCase() })) : null;
     if(tagFound) {
       message.channel.createMessage({ content: tagFound.tagValue, messageReference: { messageID: message.id, failIfNotExists: false } });
     }
