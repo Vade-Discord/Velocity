@@ -6,6 +6,7 @@ import { promisify } from 'util';
 import messageSchema from '../../Schemas/Backend/Messages';
 import { distance } from 'fastest-levenshtein';
 import AntiEmoteSpam from '../../Classes/AntiEmoteSpam';
+import tagSchema from '../../Schemas/Backend/Tags';
 const wait = promisify(setTimeout);
 
 export default class MessagecreateEvent extends Event {
@@ -38,6 +39,11 @@ export default class MessagecreateEvent extends Event {
           $inc: { amount: 1 },
         });
       }
+    }
+
+    const tagFound =  message?.content ? (await tagSchema.findOne({ guildID: interaction.guildID, tagName: message?.content })) : null;
+    if(tagFound) {
+      message.channel.createMessage({ content: tagFound.tagValue, messageReference: { messageID: message.id, failIfNotExists: false } });
     }
 
     if (
