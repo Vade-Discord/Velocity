@@ -311,6 +311,7 @@ export default class Util {
     let locatedType = locatedGuild.Logging[type];
     if (!locatedType) return null;
     if(channelID) {
+      // @ts-ignore
       if(locatedGuild?.Moderation?.loggingIgnore?.includes(channelID)) {
         return null;
       }
