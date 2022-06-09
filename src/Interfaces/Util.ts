@@ -304,12 +304,17 @@ export default class Util {
     });
   }
 
-  async loggingChannel(guild, type: string) {
+  async loggingChannel(guild, type: string, channelID = null) {
     if (!type) throw new TypeError(`No type provided.`);
     const locatedGuild = await guild_schema.findOne({ guildID: guild.id });
     if (!locatedGuild) return null;
     let locatedType = locatedGuild.Logging[type];
     if (!locatedType) return null;
+    if(channelID) {
+      if(locatedGuild?.Moderation?.loggingIgnore?.includes(channelID)) {
+        return null;
+      }
+    }
     return locatedType ? this.client.getRESTChannel(locatedType) as Promise<TextChannel> : null;
   }
 
