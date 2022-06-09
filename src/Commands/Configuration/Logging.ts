@@ -66,14 +66,58 @@ export default class LoggingCommand extends Command {
                         },
                     ]
                 },
+                {
+                    type: 1,
+                    name: 'ignore',
+                    description: "Ignore/Un-ignore a channel from logging.",
+                    options: [
+                        {
+                            type: 7,
+                            name: 'channel',
+                            description: `The channel to ignore/un-ignore.`,
+                            required: true,
+                        },
+                    ]
+                }
             ],
         });
     }
     async run(interaction, member, options, subOptions) {
         const guild = await this.client.getRESTGuild(interaction.guildID);
         const guildData = (await this.client.utils.getGuildSchema(interaction.guildID))!!;
-        const c = subOptions.get(`channel`);
+        const c: string = subOptions.get(`channel`);
         const channel = await this.client.getRESTChannel(c);
+
+        const commandName = interaction.data.options[0].name;
+        console.log(commandName)
+        
+        if(commandName.toLowerCase() === "ignore") {
+            console.log("ignore sub-command")
+            if(guildData?.Moderation?.loggingIgnore.length && guildData?.Moderation?.loggingIgnore.includes(c)) {
+               let log = guildData.Moderation;
+               let current =  guildData.Moderation.loggingIgnore;
+               // @ts-ignore
+            current.pull(c);
+            console.log(current);
+            log.loggingIgnore = current;
+                await guildData.updateOne({
+                    Moderation: log
+                });
+
+                return interaction.createMessage(`Successfully **removed** <#${c}> from the logging ignore list.`);
+            } else {
+                let log = guildData.Moderation;
+                let current =  guildData.Moderation.loggingIgnore;
+             current.push(c);
+             console.log(current);
+             log.loggingIgnore = current;
+                 await guildData.updateOne({
+                     Moderation: log
+                 });
+ 
+                 return interaction.createMessage(`Successfully **added** <#${c}> to the logging ignore list.`);
+            }
+        }
 
       if(!channel) {
         return interaction.createFollowup(`Oops! Looks like you didn't provide a channel!`);
