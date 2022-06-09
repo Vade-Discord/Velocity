@@ -57,6 +57,7 @@ export interface IGuild extends mongoose.Document {
         antiSpam?: boolean;
         spamMessageAmount?: number;
         spamMessageInterval?: number;
+        loggingIgnore: string[];
     },
     Actions: {
         phishing?: string;
@@ -147,6 +148,7 @@ const guildSchema = new mongoose.Schema({
         antiSpam: Boolean,
         spamMessageAmount: Number,
         spamMessageInterval: Number,
+        loggingIgnore: Array
     },
     Actions: {
         emoteSpam: String,
