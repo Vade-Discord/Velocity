@@ -57,7 +57,7 @@ export interface IGuild extends mongoose.Document {
         antiSpam?: boolean;
         spamMessageAmount?: number;
         spamMessageInterval?: number;
-        loggingIgnore: string[];
+        loggingIgnore: Array<string>;
     },
     Actions: {
         phishing?: string;
