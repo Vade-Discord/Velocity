@@ -17,7 +17,7 @@ export default class MessageEditEvent extends Event {
         }
         const guild = (await this.client.getRESTGuild(newMessage.guildID));
         const member = newMessage.member;
-
+        if(guild.id === this.client.config.GUILDS.testing) {
             const newContent = oldMessage?.content !== newMessage?.content ? newMessage?.content ?? "No Content" : oldMessage?.content;
             if(newContent === oldMessage?.content) {
                 return;
@@ -32,9 +32,9 @@ export default class MessageEditEvent extends Event {
                 .setColor(`#00C09A`)
                 .setTimestamp();
 
-            const logChannel = (await this.client.utils.loggingChannel(guild, "message"));
+                const logChannel = (await this.client.utils.loggingChannel(guild, "message", newMessage?.channel.id));
             logChannel?.createMessage({ embeds: [embed] });
-        
+        }
 
     }
 
