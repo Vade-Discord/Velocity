@@ -15,9 +15,6 @@ export default class MessageDeleteEvent extends Event {
         const guild = (await this.client.getRESTGuild(message.guildID))!!;
         const member = (await guild.getRESTMember(message.author.id));
 
-        if(member.bot) {
-            return;
-        }
 
 
 
@@ -32,7 +29,7 @@ export default class MessageDeleteEvent extends Event {
 
 
         message.attachments.length ? embed.setImage(message.attachments[0].url) : null;
-        const logChannel = (await this.client.utils.loggingChannel(guild, "message"));
+        const logChannel = (await this.client.utils.loggingChannel(guild, "message", message?.channel.id));
         logChannel?.createMessage({ embeds: [embed] });
 
     }
